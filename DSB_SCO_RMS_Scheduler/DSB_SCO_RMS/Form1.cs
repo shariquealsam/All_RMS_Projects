@@ -57,6 +57,10 @@ namespace DSB_SCO_RMS
 
                     string strDate = DateTime.Now.AddDays(-1).ToString("yyyy-MM-dd");
                     //string strDate = "2022-04-30";
+                    //git check
+                    //string strDate = "2022-04-30";
+                    //string strDate = "2022-04-30";
+                    //end check
 
                     dsSCO = objcls.GetDSBSCO(strDate);
 
