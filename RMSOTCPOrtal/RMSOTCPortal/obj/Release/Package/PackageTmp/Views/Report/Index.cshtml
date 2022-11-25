@@ -1,0 +1,413 @@
+﻿@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/Master.cshtml";
+}
+
+
+<!DOCTYPE HTML>
+<html>
+
+<head>
+    <title>Report Page</title>
+    <link href="~/Css/BootNew.css" rel="stylesheet" />
+    <script src="~/Js/BootNew.js"></script>
+    <script src="~/Js/jquery-1.10.0.min.js"></script>
+    <script src="~/Js/bootstrap-multiselect.js"></script>
+    <link href="~/Css/bootstrap-multiselect.css" rel="stylesheet" />
+    <link href="~/Css/fontawesome.min.css" rel="stylesheet" />
+    <script src="~/Js/jquery.dataTables.min.js"></script>
+    <link href="~/Css/InteractiveDatatable.css" rel="stylesheet" />
+    <script src="~/Js/InteractiveDataTable.js"></script>
+    <meta name="viewport" content="120" http-equiv="refresh">
+</head>
+<body>
+
+    @using (Html.BeginForm())
+    {
+        @Html.AntiForgeryToken()
+        <pre style="visibility: hidden"></pre>
+        //Consolidated Reports
+        <div class="container">
+            <h4>Consolidated Reports</h4>
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    <div class="row">
+                        <div class="col-sm-3">
+                            <label for="uFromDate">From Date</label>
+                            <input type="date" id="txtFromDate" name="txtFromDate" class="form-control" value="@ViewBag.Date" />
+                        </div>
+                        <div class="col-sm-3">
+                            <label for="uToDate">To Date</label>
+                            <input type="date" id="txtToDate" name="txtToDate" class="form-control" value="@ViewBag.Date" />
+                        </div>
+                        <div class="col-sm-3">
+                            <label for="uSearch">&nbsp;</label>
+                            <button type="submit" class="btn btn-success btn-block" name="action" formaction="Report/Download" disabled="disabled">Export Indent Report</button>
+                        </div>
+                        <div class="col-sm-3">
+                            <label for="uOtcReport">&nbsp;</label>
+                            <button type="submit" class="btn btn-warning btn-block" name="action" formaction="Report/OTC">OTC Report</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        //User Wise Report
+        <div class="container">
+            <h4>User Wise Report</h4>
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    <form method="post" action="Report/UserWiseReoprt">
+                        <div class="row">
+                            <div class="col-sm-3">
+                                <label for="uFromDate">From Date</label>
+                                <input type="date" id="txtUserFromDate" name="txtUserFromDate" class="form-control" value="@ViewBag.Date" />
+                            </div>
+                            <div class="col-sm-3">
+                                <label for="uToDate">To Date</label>
+                                <input type="date" id="txtUserToDate" name="txtUserToDate" class="form-control" value="@ViewBag.Date" />
+                            </div>
+                            <div class="col-sm-3">
+                                <label for="uUserName">UserName</label>
+                                <select class="form-control " name="ddlUserID" id="ddlUserID" multiple="multiple">
+                                    @foreach (var item1 in ViewBag.UserDetails)
+                                    {
+                                        <option value="@item1.UserID">@item1.UserName</option>
+                                    }
+                                </select>
+                                <input type="hidden" id="txtUserids" name="txtUserids" class="form-control" />
+                            </div>
+                            <div class="col-sm-3">
+                                <label for="uOtcReport">&nbsp;</label>
+                                <button type="submit" class="btn btn-warning btn-block">Download</button>
+                            </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+
+        //ATM Wise Report
+        <div class="container">
+            <h4>ATM Wise Report</h4>
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    <div class="row">
+                        <form method="post" action="Report/ATMWiseReoprt">
+                            <div class="col-sm-3">
+                                <label for="uFromDate">From Date</label>
+                                <input type="date" id="txtUserFromDateATM" name="txtUserFromDateATM" class="form-control" value="@ViewBag.Date" />
+                            </div>
+                            <div class="col-sm-3">
+                                <label for="uToDate">To Date</label>
+                                <input type="date" id="txtUserToDateATM" name="txtUserToDateATM" class="form-control" value="@ViewBag.Date" />
+                            </div>
+                            <div class="col-sm-3">
+                                <label for="uUserName">ATM ID</label>
+                                <input type="text" id="ATMID" name="ATMID" class="form-control" required />
+                            </div>
+                            <div class="col-sm-3">
+                                <label for="uOtcReport">&nbsp;</label>
+                                <button type="submit" class="btn btn-warning btn-block">Download</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        //Branch Wise Report
+        <div class="container">
+            <h4>Branch Wise Report</h4>
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    <div class="row">
+                        <form method="post" action="Report/BranchWiseReoprt">
+                            <div class="col-sm-2">
+                                <label for="uFromDate">From Date</label>
+                                <input type="date" id="txtUserFromDateBranch" name="txtUserFromDateBranch" class="form-control" value="@ViewBag.Date" />
+                            </div>
+                            <div class="col-sm-2">
+                                <label for="uToDate">To Date</label>
+                                <input type="date" id="txtUserToDateBranch" name="txtUserToDateBranch" class="form-control" value="@ViewBag.Date" />
+                            </div>
+                            <div class="col-sm-3">
+                                <label for="uUserName">Branch</label>
+                                <select class="form-control" name="ddlBranchId" id="ddlBranchId" required>
+                                    <option value="">Select Branch</option>
+                                    @foreach (var item1 in ViewBag.BranchDelts)
+                                    {
+                                        <option value="@item1.Branch_Id">@item1.Branch</option>
+                                    }
+                                </select>
+
+                            </div>
+                            <div class="col-sm-3">
+                                <label for="uUserName">Route</label>
+                                <select class="form-control" name="ddlRouteId" id="ddlRouteId" required>
+                                    <option>Select Route No</option>
+                                </select>
+
+                            </div>
+                            <div class="col-sm-2">
+                                <label for="uOtcReport">&nbsp;</label>
+                                <button type="submit" class="btn btn-warning btn-block" name="action">Download</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="container">
+            <h4>Incident Report</h4>
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    <div class="row">
+                        <div class="col-sm-3">
+                            <label for="uFromDate">From Date</label>
+                            <input type="date" id="txtIncidentFromDate" name="txtIncidentFromDate" class="form-control" value="@ViewBag.Date" />
+                        </div>
+                        <div class="col-sm-3">
+                            <label for="uToDate">To Date</label>
+                            <input type="date" id="txtIncidenttoDate" name="txtIncidenttoDate" class="form-control" value="@ViewBag.Date" />
+                        </div>
+                        <div class="col-sm-3">
+                            <label for="uOtcReport">&nbsp;</label>
+                            <button type="submit" class="btn btn-warning btn-block" name="action" formaction="Report/IncidentDetails">Download</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        //Random Question Report
+        <div class="container">
+            <h4>Random Question Report</h4>
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    <div class="row">
+                        <div class="col-sm-3">
+                            <label for="uFromDate">From Date</label>
+                            <input type="date" id="txtRandomFromDate" name="txtRandomFromDate" class="form-control" value="@ViewBag.Date" />
+                        </div>
+                        <div class="col-sm-3">
+                            <label for="uToDate">To Date</label>
+                            <input type="date" id="txtRandomToDate" name="txtRandomToDate" class="form-control" value="@ViewBag.Date" />
+                        </div>
+                        <div class="col-sm-3">
+                            <label for="uOtcReport">&nbsp;</label>
+                            <button type="submit" class="btn btn-warning btn-block" name="action" formaction="Report/RandomQuestion">Download</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        //Incident Report
+        <div class="container">
+            <h4>Incident Report</h4>
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    <div class="row">
+                        <div class="col-sm-3">
+                            <label for="uFromDate">From Date</label>
+                            <input type="date" id="txtIncidentFromDate" name="txtIncidentFromDate" class="form-control" value="@ViewBag.Date" />
+                        </div>
+                        <div class="col-sm-3">
+                            <label for="uToDate">To Date</label>
+                            <input type="date" id="txtIncidenttoDate" name="txtIncidenttoDate" class="form-control" value="@ViewBag.Date" />
+                        </div>
+                        <div class="col-sm-3">
+                            <label for="uOtcReport">&nbsp;</label>
+                            <button type="submit" class="btn btn-warning btn-block" name="action" formaction="Report/IncidentDetails">Download</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        //Random Question Custodian Check Report
+        <div class="container">
+            <h4>Custodian Check Status</h4>
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    <div class="row">
+                        <div class="col-sm-3">
+                            <label for="uFromDate">Custodian Pat ID</label>
+                            <input type="text" id="txtCustodianId" name="txtCustodianId" class="form-control" placeholder="Enter Custodian PAT ID" />
+                        </div>
+                        <div class="col-sm-6">
+                            <label for="uToDate">Status</label>
+                            <input type="text" id="txtStauts" name="txtStauts" class="form-control" placeholder="Satus  For Available/Not Available" />
+                        </div>
+                        <div class="col-sm-3">
+                            <label for="uOtcReport">&nbsp;</label>
+                            <button type="button" class="btn btn-warning btn-block" name="action" id="btnSearchCustodian">Search Custodian Details</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        //Dashboard
+        <div class="container">
+            <h4>Dashboard</h4>
+            <span style="float: right;">
+                <button class="btn btn-primary" id="dbDown" type="button"><i class="fa fa-arrow-down" aria-hidden="true"></i></button>
+                <button class="btn btn-primary" id="dbUpShow" type="button" style="display: none;"><i class="fa fa-arrow-up" aria-hidden="true"></i></button>
+            </span>
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    <div class="row" id="TechDiv" style="display: none;">
+                        <table class="table table-hover table-borderd table-striped" id="TechTable">
+                            <thead>
+                                <tr>
+                                    <th title="Click Me To Order">User Name</th>
+                                    <th title="Click Me To Order">User ID</th>
+                                    <th title="Click Me To Order">Total Count Value </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var item1 in ViewBag.UserCountDetails)
+                                {
+                                    <tr>
+                                        <td>@item1.UserName</td>
+                                        <td>@item1.UserID</td>
+                                        <td>@item1.TotalCount</td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    }
+</body>
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('[id*=ddlUserID]').multiselect({
+            enableFiltering: true,
+            enableCaseInsensitiveFiltering: true,
+            includeSelectAllOption: true,
+            includeSelectAllDivider: true,
+            maxHeight: 260,
+            buttonWidth: '280px',
+            onChange: function () {
+                var UserId = $("#ddlUserID option:selected").map(function () { return this.value }).get().join(', ');
+                $("#txtUserids").val(UserId);
+            },
+            onSelectAll: function () {
+                var UserId = $("#ddlUserID option:selected").map(function () { return this.value }).get().join(', ');
+                $("#txtUserids").val(UserId);
+            },
+            onDeselectAll: function () {
+                var UserId = $("#ddlUserID option:selected").map(function () { return this.value }).get().join(', ');
+                $("#txtUserids").val(UserId);
+            }
+        });
+    });
+</script>
+@*<script type="text/javascript">
+    $(document).ready(function () {
+        $('[id*=ddlRouteId]').multiselect({
+            enableFiltering: true,
+            enableCaseInsensitiveFiltering: true,
+            includeSelectAllOption: true,
+            includeSelectAllDivider: true,
+            maxHeight: 260,
+            buttonWidth: '280px',
+            onChange: function () {
+                var UserId = $("#ddlRouteId option:selected").map(function () { return this.value }).get().join(', ');
+                //$("#txtUserids").val(UserId);
+            },
+            onSelectAll: function () {
+                var UserId = $("#ddlRouteId option:selected").map(function () { return this.value }).get().join(', ');
+                //$("#txtUserids").val(UserId);
+            },
+            onDeselectAll: function () {
+                var UserId = $("#ddlRouteId option:selected").map(function () { return this.value }).get().join(', ');
+                //$("#txtUserids").val(UserId);
+            }
+        });
+    });
+</script>*@
+
+<script>
+    $("#dbDown").click(function () {
+        $("#TechDiv").show();
+        $("#dbUpShow").show();
+        $("#dbDown").hide();
+    });
+    $("#dbUpShow").click(function () {
+
+        $("#TechDiv").hide();
+        $("#dbUpShow").hide();
+        $("#dbDown").show();
+    });
+</script>
+
+<script>
+        $(document).ready(function () {
+            $('#TechTable').DataTable( {
+                "pageLength": 50,
+                "order": [[2, "asc"]]
+            });
+        });
+    </script>
+
+<script>
+    $(document).ready(function () {
+        $("#btnSearchCustodian").click(function () {
+            $.ajax({
+                url: '@Url.Action("GetCustodianStatus")',
+                data: {
+                    CustodianId: $("#txtCustodianId").val(),
+                },
+                dataType: "json",
+                type: "POST",
+                traditional: true,
+                success: function (data) {
+                    if (data.match('Custodian Details Available')) {
+                        $('#txtStauts').val(data);
+                        $('#txtStauts').css("color", "green");
+                        $('#txtStauts').css("font-weight", "bold");
+                    }
+                    else {
+                        $('#txtStauts').val(data);
+                        $('#txtStauts').css("color", "red");
+                        $('#txtStauts').css("font-weight", "bold");
+                    }
+                },
+                complete: function () {
+                },
+                error: function (response) {
+                    alert(response.responseText);
+                },
+                failure: function (response) {
+                    alert(response.responseText);
+                }
+            });
+        });
+
+        $("#ddlBranchId").change(function () {
+            $.ajax({
+                url: '@Url.Action("RouteDetails")',
+                data: {
+                    BranchId: $("#ddlBranchId").val()
+                },
+                dataType: "json",
+                type: "POST",
+                success: function (res) {
+                    console.log(res);
+                    $("#ddlRouteId").empty();
+                    $.each(res, function (i) {
+                        $("#ddlRouteId").append('<option value="' + res[i].Route_No + '">' + res[i].Route_Name+'</option>')
+                    });
+                }
+            })
+        })
+    })
+</script>
+</html>

@@ -1,0 +1,74 @@
+﻿@{
+    ViewBag.Title = "Index";
+}
+
+<html>
+<head>
+    <link rel="icon" href="~/Image/download.jfif" type="image/gif" sizes="50x50">
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css">
+
+    <!-- jQuery library -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
+    <!-- Latest compiled JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
+    <!------ Include the above in your HEAD tag ---------->
+    <link href="~/Css/Login.css" rel="stylesheet" />
+    <style>
+        body#LoginForm{ background-image:url("/Image/blur-26347-27038-hd-wallpapers.jpg"); background-repeat:no-repeat; background-position:center; background-size:cover; padding:10px;}
+
+    </style>
+</head>
+<body id="LoginForm">
+    <div class="container">
+        <pre style="visibility: hidden"></pre>
+        <pre style="visibility: hidden"></pre>
+        <pre style="visibility: hidden"></pre>
+        <pre style="visibility: hidden"></pre>
+        <h1 class="form-heading"></h1>
+        <div class="login-form">
+            <div class="main-div">
+                <div class="panel">
+                    <h2>RMS OTC Portal</h2>
+                    <p>Please enter your email and password</p>
+                </div>
+                @using (Html.BeginForm("UserLogin", "Login", FormMethod.Post))
+                {
+
+                    <form id="Login">
+                        <div class="form-group">
+                            <input type="text" class="form-control" name="UserId" id="UserId" placeholder="User ID">
+                        </div>
+
+                        <div class="form-group">
+                            <input type="password" class="form-control" name="Password" id="Password" placeholder="Password">
+                        </div>
+                        <div class="forgot">
+                            <input type="checkbox" id="ShowPassword" onclick="showPassword()" />
+                            Show Password
+                            @*<a href="reset.html">Forgot password?</a>*@
+                        </div>
+                        <button type="submit" class="btn btn-primary">Login</button>
+                    </form>
+                }
+            </div>
+            <p class="botto-text"></p>
+        </div>
+    </div>
+</body>
+<script>
+    function showPassword() {
+        var key_attr = $('#Password').attr('type');
+        if (key_attr != 'text') {
+            $('.checkbox').addClass('show');
+            $('#Password').attr('type', 'text');
+        } else {
+            $('.checkbox').removeClass('show');
+            $('#Password').attr('type', 'password');
+        }
+    }
+</script>
+</html>
+
+

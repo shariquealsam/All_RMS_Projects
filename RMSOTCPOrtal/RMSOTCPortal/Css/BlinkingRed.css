@@ -1,0 +1,15 @@
+﻿.blink_me {
+    animation: blinker 2s linear infinite;
+    color:red;
+    background-color:yellow;
+}
+
+@keyframes blinker {
+    50% {
+        opacity: 0;
+    }
+}
+
+.lblsuccess {
+    background-color: #90ee90 !important;
+}

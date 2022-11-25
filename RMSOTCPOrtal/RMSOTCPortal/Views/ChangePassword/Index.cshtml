@@ -1,0 +1,141 @@
+﻿@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/Master.cshtml";
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Index</title>
+    <style type="text/css">
+        body {
+            font-family: Arial;
+            font-size: 10pt;
+        }
+    </style>
+</head>
+<body>
+    <br />
+    <br />
+    <br />
+    <div class="container bootstrap snippet">
+        <div class="row">
+            <div class="col-xs-12 col-sm-12 col-md-6 col-md-offset-3">
+
+                <div class="panel panel-info">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">
+                            <i class="fa fa-briefcase" aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;&nbsp;
+                        Change password
+                        </h3>
+                    </div>
+                    <div class="panel-body">
+                        <div class="row">
+                            <div class="col-sm-1"></div>
+                            <div class="col-sm-10">
+                                <div class="form-group">
+                                    <div class="input-group">
+                                        <div class="input-group-addon"><i class="fa fa-unlock-alt" aria-hidden="true"></i></div>
+                                        <input class="form-control" type="password" placeholder="Current Password" id="txtCurrentPassword">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="input-group">
+                                        <div class="input-group-addon"><i class="fa fa-unlock-alt" aria-hidden="true"></i></div>
+                                        <input class="form-control" type="password" placeholder="New Password" id="txtNewPassword">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="input-group">
+                                        <div class="input-group-addon"><i class="fa fa-unlock-alt" aria-hidden="true"></i></div>
+                                        <input class="form-control" type="password" placeholder="Confirm Password" id="txtConfirmPassword">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-1"></div>
+                            @* <div class="col-xs-6 col-sm-6 col-md-6 separator social-login-box">
+                                <br>
+                                <img alt="" class="img-thumbnail" src="https://bootdey.com/img/Content/avatar/avatar1.png">
+                            </div>
+                            <div style="margin-top: 80px;" class="col-xs-6 col-sm-6 col-md-6 login-box">*@
+
+                            @*</div>*@
+                        </div>
+                    </div>
+                    <div class="panel-footer">
+                        <div class="row">
+                            <div class="col-sm-4"></div>
+                            <div class="col-sm-4">
+                                <button class="btn icon-btn-save btn-success btn-block" type="submit" id="btnChangePassword"><span class="btn-save-label"><i class="fa fa-floppy-o" aria-hidden="true"></i>&nbsp;&nbsp; </span>save</button>
+                            </div>
+                            <div class="col-sm-4">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+<script type="text/javascript">
+    $(document).ready(function () {
+
+        var UserID = '@Session["UserId"]';
+
+        $("#btnChangePassword").click(function () {
+            if ($("#txtCurrentPassword").val() == "") {
+                alert("Please Enter Current Password");
+                $("#txtCurrentPassword").focus();
+                return;
+            }
+            if ($("#txtNewPassword").val() == "") {
+                alert("Please Enter New Password");
+                $("#txtNewPassword").focus();
+                return;
+            }
+            if ($("#txtConfirmPassword").val() == "") {
+                alert("Please Enter Confirm Password");
+                $("#txtConfirmPassword").focus();
+                return;
+            }
+            if ($("#txtCurrentPassword").val() == $("#txtNewPassword").val()) {
+                alert("Current Password and New Password Can't Be Same");
+                $("#txtNewPassword").focus();
+                return;
+            }
+            if ($("#txtNewPassword").val() != $("#txtConfirmPassword").val()) {
+                alert("New Password and Confirm Password Does Not Match");
+                return;
+            }
+            $.ajax({
+                url: '@Url.Action("CheckUserExistSave")',
+                data: {
+                    CurrentPassword: $("#txtCurrentPassword").val(),
+                    NewPassword: $("#txtNewPassword").val(),
+                    UserID: UserID
+                },
+                dataType: "json",
+                type: "POST",
+                traditional: true,
+                success: function (data) {
+                    if (data == "Data Sucessfully Update") {
+                        alert("Password Changed Sucessfully! Click On Home");
+                        return;
+                    }
+                    else {
+                        alert("Invalid Current Password !");
+                    }
+                },
+                error: function (response) {
+                    alert(response.responseText);
+                },
+                failure: function (response) {
+                    alert(response.responseText);
+                }
+            });
+        });
+    });
+</script>
+</html>

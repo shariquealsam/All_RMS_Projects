@@ -1,0 +1,145 @@
+D:\ashish_projects_23012021\RMSOTCPOrtal\RMSOTCPortal\bin\RMSOTCPortal.dll.config
+D:\ashish_projects_23012021\RMSOTCPOrtal\RMSOTCPortal\bin\RMSOTCPortal.dll
+D:\ashish_projects_23012021\RMSOTCPOrtal\RMSOTCPortal\bin\RMSOTCPortal.pdb
+D:\ashish_projects_23012021\RMSOTCPOrtal\RMSOTCPortal\bin\Microsoft.Web.Infrastructure.dll
+D:\ashish_projects_23012021\RMSOTCPOrtal\RMSOTCPortal\bin\Newtonsoft.Json.dll
+D:\ashish_projects_23012021\RMSOTCPOrtal\RMSOTCPortal\bin\System.Net.Http.Formatting.dll
+D:\ashish_projects_23012021\RMSOTCPOrtal\RMSOTCPortal\bin\System.Web.Helpers.dll
+D:\ashish_projects_23012021\RMSOTCPOrtal\RMSOTCPortal\bin\System.Web.Http.dll
+D:\ashish_projects_23012021\RMSOTCPOrtal\RMSOTCPortal\bin\System.Web.Http.WebHost.dll
+D:\ashish_projects_23012021\RMSOTCPOrtal\RMSOTCPortal\bin\System.Web.Mvc.dll
+D:\ashish_projects_23012021\RMSOTCPOrtal\RMSOTCPortal\bin\System.Web.Razor.dll
+D:\ashish_projects_23012021\RMSOTCPOrtal\RMSOTCPortal\bin\System.Web.WebPages.Deployment.dll
+D:\ashish_projects_23012021\RMSOTCPOrtal\RMSOTCPortal\bin\System.Web.WebPages.dll
+D:\ashish_projects_23012021\RMSOTCPOrtal\RMSOTCPortal\bin\System.Web.WebPages.Razor.dll
+D:\ashish_projects_23012021\RMSOTCPOrtal\RMSOTCPortal\bin\Newtonsoft.Json.xml
+D:\ashish_projects_23012021\RMSOTCPOrtal\RMSOTCPortal\bin\System.Net.Http.Formatting.xml
+D:\ashish_projects_23012021\RMSOTCPOrtal\RMSOTCPortal\bin\System.Web.Helpers.xml
+D:\ashish_projects_23012021\RMSOTCPOrtal\RMSOTCPortal\bin\System.Web.Http.xml
+D:\ashish_projects_23012021\RMSOTCPOrtal\RMSOTCPortal\bin\System.Web.Http.WebHost.xml
+D:\ashish_projects_23012021\RMSOTCPOrtal\RMSOTCPortal\bin\System.Web.Mvc.xml
+D:\ashish_projects_23012021\RMSOTCPOrtal\RMSOTCPortal\bin\System.Web.Razor.xml
+D:\ashish_projects_23012021\RMSOTCPOrtal\RMSOTCPortal\bin\System.Web.WebPages.xml
+D:\ashish_projects_23012021\RMSOTCPOrtal\RMSOTCPortal\bin\System.Web.WebPages.Deployment.xml
+D:\ashish_projects_23012021\RMSOTCPOrtal\RMSOTCPortal\bin\System.Web.WebPages.Razor.xml
+D:\ashish_projects_23012021\RMSOTCPOrtal\RMSOTCPortal\obj\Release\RMSOTCPortal.csprojAssemblyReference.cache
+D:\ashish_projects_23012021\RMSOTCPOrtal\RMSOTCPortal\obj\Release\RMSOTCPortal.csproj.CoreCompileInputs.cache
+D:\ashish_projects_23012021\RMSOTCPOrtal\RMSOTCPortal\obj\Release\RMSOTCPortal.csproj.CopyComplete
+D:\ashish_projects_23012021\RMSOTCPOrtal\RMSOTCPortal\obj\Release\RMSOTCPortal.dll
+D:\ashish_projects_23012021\RMSOTCPOrtal\RMSOTCPortal\obj\Release\RMSOTCPortal.pdb
+D:\ShariqueFolder\LiveProject\All Live Project\RMSOTCPOrtal\RMSOTCPortal\bin\RMSOTCPortal.dll.config
+D:\ShariqueFolder\LiveProject\All Live Project\RMSOTCPOrtal\RMSOTCPortal\bin\RMSOTCPortal.dll
+D:\ShariqueFolder\LiveProject\All Live Project\RMSOTCPOrtal\RMSOTCPortal\bin\RMSOTCPortal.pdb
+D:\ShariqueFolder\LiveProject\All Live Project\RMSOTCPOrtal\RMSOTCPortal\bin\Microsoft.Web.Infrastructure.dll
+D:\ShariqueFolder\LiveProject\All Live Project\RMSOTCPOrtal\RMSOTCPortal\bin\Newtonsoft.Json.dll
+D:\ShariqueFolder\LiveProject\All Live Project\RMSOTCPOrtal\RMSOTCPortal\bin\System.Net.Http.Formatting.dll
+D:\ShariqueFolder\LiveProject\All Live Project\RMSOTCPOrtal\RMSOTCPortal\bin\System.Web.Helpers.dll
+D:\ShariqueFolder\LiveProject\All Live Project\RMSOTCPOrtal\RMSOTCPortal\bin\System.Web.Http.dll
+D:\ShariqueFolder\LiveProject\All Live Project\RMSOTCPOrtal\RMSOTCPortal\bin\System.Web.Http.WebHost.dll
+D:\ShariqueFolder\LiveProject\All Live Project\RMSOTCPOrtal\RMSOTCPortal\bin\System.Web.Mvc.dll
+D:\ShariqueFolder\LiveProject\All Live Project\RMSOTCPOrtal\RMSOTCPortal\bin\System.Web.Razor.dll
+D:\ShariqueFolder\LiveProject\All Live Project\RMSOTCPOrtal\RMSOTCPortal\bin\System.Web.WebPages.Deployment.dll
+D:\ShariqueFolder\LiveProject\All Live Project\RMSOTCPOrtal\RMSOTCPortal\bin\System.Web.WebPages.dll
+D:\ShariqueFolder\LiveProject\All Live Project\RMSOTCPOrtal\RMSOTCPortal\bin\System.Web.WebPages.Razor.dll
+D:\ShariqueFolder\LiveProject\All Live Project\RMSOTCPOrtal\RMSOTCPortal\bin\Newtonsoft.Json.xml
+D:\ShariqueFolder\LiveProject\All Live Project\RMSOTCPOrtal\RMSOTCPortal\bin\System.Net.Http.Formatting.xml
+D:\ShariqueFolder\LiveProject\All Live Project\RMSOTCPOrtal\RMSOTCPortal\bin\System.Web.Helpers.xml
+D:\ShariqueFolder\LiveProject\All Live Project\RMSOTCPOrtal\RMSOTCPortal\bin\System.Web.Http.xml
+D:\ShariqueFolder\LiveProject\All Live Project\RMSOTCPOrtal\RMSOTCPortal\bin\System.Web.Http.WebHost.xml
+D:\ShariqueFolder\LiveProject\All Live Project\RMSOTCPOrtal\RMSOTCPortal\bin\System.Web.Mvc.xml
+D:\ShariqueFolder\LiveProject\All Live Project\RMSOTCPOrtal\RMSOTCPortal\bin\System.Web.Razor.xml
+D:\ShariqueFolder\LiveProject\All Live Project\RMSOTCPOrtal\RMSOTCPortal\bin\System.Web.WebPages.xml
+D:\ShariqueFolder\LiveProject\All Live Project\RMSOTCPOrtal\RMSOTCPortal\bin\System.Web.WebPages.Deployment.xml
+D:\ShariqueFolder\LiveProject\All Live Project\RMSOTCPOrtal\RMSOTCPortal\bin\System.Web.WebPages.Razor.xml
+D:\ShariqueFolder\LiveProject\All Live Project\RMSOTCPOrtal\RMSOTCPortal\obj\Release\RMSOTCPortal.csproj.AssemblyReference.cache
+D:\ShariqueFolder\LiveProject\All Live Project\RMSOTCPOrtal\RMSOTCPortal\obj\Release\RMSOTCPortal.csproj.CoreCompileInputs.cache
+D:\ShariqueFolder\LiveProject\All Live Project\RMSOTCPOrtal\RMSOTCPortal\obj\Release\RMSOTCPortal.csproj.CopyComplete
+D:\ShariqueFolder\LiveProject\All Live Project\RMSOTCPOrtal\RMSOTCPortal\obj\Release\RMSOTCPortal.dll
+D:\ShariqueFolder\LiveProject\All Live Project\RMSOTCPOrtal\RMSOTCPortal\obj\Release\RMSOTCPortal.pdb
+D:\Sharique Project\Project\RMSOTCPOrtal\RMSOTCPortal\bin\RMSOTCPortal.dll.config
+D:\Sharique Project\Project\RMSOTCPOrtal\RMSOTCPortal\bin\RMSOTCPortal.dll
+D:\Sharique Project\Project\RMSOTCPOrtal\RMSOTCPortal\bin\RMSOTCPortal.pdb
+D:\Sharique Project\Project\RMSOTCPOrtal\RMSOTCPortal\bin\Microsoft.Web.Infrastructure.dll
+D:\Sharique Project\Project\RMSOTCPOrtal\RMSOTCPortal\bin\Newtonsoft.Json.dll
+D:\Sharique Project\Project\RMSOTCPOrtal\RMSOTCPortal\bin\System.Net.Http.Formatting.dll
+D:\Sharique Project\Project\RMSOTCPOrtal\RMSOTCPortal\bin\System.Web.Helpers.dll
+D:\Sharique Project\Project\RMSOTCPOrtal\RMSOTCPortal\bin\System.Web.Http.dll
+D:\Sharique Project\Project\RMSOTCPOrtal\RMSOTCPortal\bin\System.Web.Http.WebHost.dll
+D:\Sharique Project\Project\RMSOTCPOrtal\RMSOTCPortal\bin\System.Web.Mvc.dll
+D:\Sharique Project\Project\RMSOTCPOrtal\RMSOTCPortal\bin\System.Web.Razor.dll
+D:\Sharique Project\Project\RMSOTCPOrtal\RMSOTCPortal\bin\System.Web.WebPages.Deployment.dll
+D:\Sharique Project\Project\RMSOTCPOrtal\RMSOTCPortal\bin\System.Web.WebPages.dll
+D:\Sharique Project\Project\RMSOTCPOrtal\RMSOTCPortal\bin\System.Web.WebPages.Razor.dll
+D:\Sharique Project\Project\RMSOTCPOrtal\RMSOTCPortal\bin\Newtonsoft.Json.xml
+D:\Sharique Project\Project\RMSOTCPOrtal\RMSOTCPortal\bin\System.Net.Http.Formatting.xml
+D:\Sharique Project\Project\RMSOTCPOrtal\RMSOTCPortal\bin\System.Web.Helpers.xml
+D:\Sharique Project\Project\RMSOTCPOrtal\RMSOTCPortal\bin\System.Web.Http.xml
+D:\Sharique Project\Project\RMSOTCPOrtal\RMSOTCPortal\bin\System.Web.Http.WebHost.xml
+D:\Sharique Project\Project\RMSOTCPOrtal\RMSOTCPortal\bin\System.Web.Mvc.xml
+D:\Sharique Project\Project\RMSOTCPOrtal\RMSOTCPortal\bin\System.Web.Razor.xml
+D:\Sharique Project\Project\RMSOTCPOrtal\RMSOTCPortal\bin\System.Web.WebPages.xml
+D:\Sharique Project\Project\RMSOTCPOrtal\RMSOTCPortal\bin\System.Web.WebPages.Deployment.xml
+D:\Sharique Project\Project\RMSOTCPOrtal\RMSOTCPortal\bin\System.Web.WebPages.Razor.xml
+D:\Sharique Project\Project\RMSOTCPOrtal\RMSOTCPortal\obj\Release\RMSOTCPortal.csprojAssemblyReference.cache
+D:\Sharique Project\Project\RMSOTCPOrtal\RMSOTCPortal\obj\Release\RMSOTCPortal.csproj.CoreCompileInputs.cache
+D:\Sharique Project\Project\RMSOTCPOrtal\RMSOTCPortal\obj\Release\RMSOTCPortal.csproj.CopyComplete
+D:\Sharique Project\Project\RMSOTCPOrtal\RMSOTCPortal\obj\Release\RMSOTCPortal.dll
+D:\Sharique Project\Project\RMSOTCPOrtal\RMSOTCPortal\obj\Release\RMSOTCPortal.pdb
+D:\Sharique Project\Live Project_SSR_SCHEDULARE\Project\RMSOTCPOrtal\RMSOTCPortal\bin\RMSOTCPortal.dll.config
+D:\Sharique Project\Live Project_SSR_SCHEDULARE\Project\RMSOTCPOrtal\RMSOTCPortal\bin\RMSOTCPortal.dll
+D:\Sharique Project\Live Project_SSR_SCHEDULARE\Project\RMSOTCPOrtal\RMSOTCPortal\bin\RMSOTCPortal.pdb
+D:\Sharique Project\Live Project_SSR_SCHEDULARE\Project\RMSOTCPOrtal\RMSOTCPortal\bin\Microsoft.Web.Infrastructure.dll
+D:\Sharique Project\Live Project_SSR_SCHEDULARE\Project\RMSOTCPOrtal\RMSOTCPortal\bin\Newtonsoft.Json.dll
+D:\Sharique Project\Live Project_SSR_SCHEDULARE\Project\RMSOTCPOrtal\RMSOTCPortal\bin\System.Net.Http.Formatting.dll
+D:\Sharique Project\Live Project_SSR_SCHEDULARE\Project\RMSOTCPOrtal\RMSOTCPortal\bin\System.Web.Helpers.dll
+D:\Sharique Project\Live Project_SSR_SCHEDULARE\Project\RMSOTCPOrtal\RMSOTCPortal\bin\System.Web.Http.dll
+D:\Sharique Project\Live Project_SSR_SCHEDULARE\Project\RMSOTCPOrtal\RMSOTCPortal\bin\System.Web.Http.WebHost.dll
+D:\Sharique Project\Live Project_SSR_SCHEDULARE\Project\RMSOTCPOrtal\RMSOTCPortal\bin\System.Web.Mvc.dll
+D:\Sharique Project\Live Project_SSR_SCHEDULARE\Project\RMSOTCPOrtal\RMSOTCPortal\bin\System.Web.Razor.dll
+D:\Sharique Project\Live Project_SSR_SCHEDULARE\Project\RMSOTCPOrtal\RMSOTCPortal\bin\System.Web.WebPages.Deployment.dll
+D:\Sharique Project\Live Project_SSR_SCHEDULARE\Project\RMSOTCPOrtal\RMSOTCPortal\bin\System.Web.WebPages.dll
+D:\Sharique Project\Live Project_SSR_SCHEDULARE\Project\RMSOTCPOrtal\RMSOTCPortal\bin\System.Web.WebPages.Razor.dll
+D:\Sharique Project\Live Project_SSR_SCHEDULARE\Project\RMSOTCPOrtal\RMSOTCPortal\bin\Newtonsoft.Json.xml
+D:\Sharique Project\Live Project_SSR_SCHEDULARE\Project\RMSOTCPOrtal\RMSOTCPortal\bin\System.Net.Http.Formatting.xml
+D:\Sharique Project\Live Project_SSR_SCHEDULARE\Project\RMSOTCPOrtal\RMSOTCPortal\bin\System.Web.Helpers.xml
+D:\Sharique Project\Live Project_SSR_SCHEDULARE\Project\RMSOTCPOrtal\RMSOTCPortal\bin\System.Web.Http.xml
+D:\Sharique Project\Live Project_SSR_SCHEDULARE\Project\RMSOTCPOrtal\RMSOTCPortal\bin\System.Web.Http.WebHost.xml
+D:\Sharique Project\Live Project_SSR_SCHEDULARE\Project\RMSOTCPOrtal\RMSOTCPortal\bin\System.Web.Mvc.xml
+D:\Sharique Project\Live Project_SSR_SCHEDULARE\Project\RMSOTCPOrtal\RMSOTCPortal\bin\System.Web.Razor.xml
+D:\Sharique Project\Live Project_SSR_SCHEDULARE\Project\RMSOTCPOrtal\RMSOTCPortal\bin\System.Web.WebPages.xml
+D:\Sharique Project\Live Project_SSR_SCHEDULARE\Project\RMSOTCPOrtal\RMSOTCPortal\bin\System.Web.WebPages.Deployment.xml
+D:\Sharique Project\Live Project_SSR_SCHEDULARE\Project\RMSOTCPOrtal\RMSOTCPortal\bin\System.Web.WebPages.Razor.xml
+D:\Sharique Project\Live Project_SSR_SCHEDULARE\Project\RMSOTCPOrtal\RMSOTCPortal\obj\Release\RMSOTCPortal.csproj.CoreCompileInputs.cache
+D:\Sharique Project\Live Project_SSR_SCHEDULARE\Project\RMSOTCPOrtal\RMSOTCPortal\obj\Release\RMSOTCPortal.csproj.CopyComplete
+D:\Sharique Project\Live Project_SSR_SCHEDULARE\Project\RMSOTCPOrtal\RMSOTCPortal\obj\Release\RMSOTCPortal.dll
+D:\Sharique Project\Live Project_SSR_SCHEDULARE\Project\RMSOTCPOrtal\RMSOTCPortal\obj\Release\RMSOTCPortal.pdb
+D:\Sharique Project\Live Project_SSR_SCHEDULARE\Project\RMSOTCPOrtal\RMSOTCPortal\obj\Release\RMSOTCPortal.csproj.AssemblyReference.cache
+D:\Sharique Project\Live Project_SSR_SCHEDULARE\Project\OTC Portal\RMSOTCPOrtal\RMSOTCPortal\bin\RMSOTCPortal.dll.config
+D:\Sharique Project\Live Project_SSR_SCHEDULARE\Project\OTC Portal\RMSOTCPOrtal\RMSOTCPortal\bin\RMSOTCPortal.dll
+D:\Sharique Project\Live Project_SSR_SCHEDULARE\Project\OTC Portal\RMSOTCPOrtal\RMSOTCPortal\bin\RMSOTCPortal.pdb
+D:\Sharique Project\Live Project_SSR_SCHEDULARE\Project\OTC Portal\RMSOTCPOrtal\RMSOTCPortal\bin\Microsoft.Web.Infrastructure.dll
+D:\Sharique Project\Live Project_SSR_SCHEDULARE\Project\OTC Portal\RMSOTCPOrtal\RMSOTCPortal\bin\Newtonsoft.Json.dll
+D:\Sharique Project\Live Project_SSR_SCHEDULARE\Project\OTC Portal\RMSOTCPOrtal\RMSOTCPortal\bin\System.Net.Http.Formatting.dll
+D:\Sharique Project\Live Project_SSR_SCHEDULARE\Project\OTC Portal\RMSOTCPOrtal\RMSOTCPortal\bin\System.Web.Helpers.dll
+D:\Sharique Project\Live Project_SSR_SCHEDULARE\Project\OTC Portal\RMSOTCPOrtal\RMSOTCPortal\bin\System.Web.Http.dll
+D:\Sharique Project\Live Project_SSR_SCHEDULARE\Project\OTC Portal\RMSOTCPOrtal\RMSOTCPortal\bin\System.Web.Http.WebHost.dll
+D:\Sharique Project\Live Project_SSR_SCHEDULARE\Project\OTC Portal\RMSOTCPOrtal\RMSOTCPortal\bin\System.Web.Mvc.dll
+D:\Sharique Project\Live Project_SSR_SCHEDULARE\Project\OTC Portal\RMSOTCPOrtal\RMSOTCPortal\bin\System.Web.Razor.dll
+D:\Sharique Project\Live Project_SSR_SCHEDULARE\Project\OTC Portal\RMSOTCPOrtal\RMSOTCPortal\bin\System.Web.WebPages.Deployment.dll
+D:\Sharique Project\Live Project_SSR_SCHEDULARE\Project\OTC Portal\RMSOTCPOrtal\RMSOTCPortal\bin\System.Web.WebPages.dll
+D:\Sharique Project\Live Project_SSR_SCHEDULARE\Project\OTC Portal\RMSOTCPOrtal\RMSOTCPortal\bin\System.Web.WebPages.Razor.dll
+D:\Sharique Project\Live Project_SSR_SCHEDULARE\Project\OTC Portal\RMSOTCPOrtal\RMSOTCPortal\bin\Newtonsoft.Json.xml
+D:\Sharique Project\Live Project_SSR_SCHEDULARE\Project\OTC Portal\RMSOTCPOrtal\RMSOTCPortal\bin\System.Net.Http.Formatting.xml
+D:\Sharique Project\Live Project_SSR_SCHEDULARE\Project\OTC Portal\RMSOTCPOrtal\RMSOTCPortal\bin\System.Web.Helpers.xml
+D:\Sharique Project\Live Project_SSR_SCHEDULARE\Project\OTC Portal\RMSOTCPOrtal\RMSOTCPortal\bin\System.Web.Http.xml
+D:\Sharique Project\Live Project_SSR_SCHEDULARE\Project\OTC Portal\RMSOTCPOrtal\RMSOTCPortal\bin\System.Web.Http.WebHost.xml
+D:\Sharique Project\Live Project_SSR_SCHEDULARE\Project\OTC Portal\RMSOTCPOrtal\RMSOTCPortal\bin\System.Web.Mvc.xml
+D:\Sharique Project\Live Project_SSR_SCHEDULARE\Project\OTC Portal\RMSOTCPOrtal\RMSOTCPortal\bin\System.Web.Razor.xml
+D:\Sharique Project\Live Project_SSR_SCHEDULARE\Project\OTC Portal\RMSOTCPOrtal\RMSOTCPortal\bin\System.Web.WebPages.xml
+D:\Sharique Project\Live Project_SSR_SCHEDULARE\Project\OTC Portal\RMSOTCPOrtal\RMSOTCPortal\bin\System.Web.WebPages.Deployment.xml
+D:\Sharique Project\Live Project_SSR_SCHEDULARE\Project\OTC Portal\RMSOTCPOrtal\RMSOTCPortal\bin\System.Web.WebPages.Razor.xml
+D:\Sharique Project\Live Project_SSR_SCHEDULARE\Project\OTC Portal\RMSOTCPOrtal\RMSOTCPortal\obj\Release\RMSOTCPortal.csproj.AssemblyReference.cache
+D:\Sharique Project\Live Project_SSR_SCHEDULARE\Project\OTC Portal\RMSOTCPOrtal\RMSOTCPortal\obj\Release\RMSOTCPortal.csproj.CoreCompileInputs.cache
+D:\Sharique Project\Live Project_SSR_SCHEDULARE\Project\OTC Portal\RMSOTCPOrtal\RMSOTCPortal\obj\Release\RMSOTCPortal.csproj.CopyComplete
+D:\Sharique Project\Live Project_SSR_SCHEDULARE\Project\OTC Portal\RMSOTCPOrtal\RMSOTCPortal\obj\Release\RMSOTCPortal.dll
+D:\Sharique Project\Live Project_SSR_SCHEDULARE\Project\OTC Portal\RMSOTCPOrtal\RMSOTCPortal\obj\Release\RMSOTCPortal.pdb

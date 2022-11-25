@@ -1,0 +1,410 @@
+﻿@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/Master.cshtml";
+}
+
+<link href="~/Css/BootNew.css" rel="stylesheet" />
+@*<script src="~/Js/BootNew.js"></script>
+<script src="~/Js/BootminNew.js"></script>*@
+<script src="~/Js/jquery.dataTables.min.js"></script>
+<script src="~/Js/dataTables.bootstrap.min.js"></script>
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.2.0/css/all.css" integrity="sha384-hWVjflwFxL6sNzntih27bfxkr27PmbbK/iSvJ+a4+0owXq79v+lsFkW54bOGbiDQ" crossorigin="anonymous">
+<br />
+<style>
+    .input-group .fa-search {
+        display: table-cell;
+    }
+</style>
+<div class="Container">
+    <form method="post" action="User/InactiveUser" id="OTC_UserList">
+        <p>
+            &nbsp;&nbsp;&nbsp;&nbsp;
+            <button class="btn btn-primary btn-xs add-user" data-toggle="modal" data-target="#myModal">
+                <i class="fa fa-user-plus " style="font-size: 20px" id="AddUser"></i>
+
+            </button>
+            <button class="btn btn-primary btn-xs add-user" style="float:right">
+                <i class="fa fa-lock " style="font-size: 20px" id="inActiveBtn"></i>
+                InActive User
+            </button>
+
+        </p>
+        <script>
+            $(document).ready(function () {
+                $('#myDatatable').dataTable();
+            });
+        </script>
+
+        <table id="myDatatable" class="table table-striped table-bordered" style="font-family: Calibri; font-size: 14px;">
+            <thead>
+                <tr class="bg bg-primary">
+                    <th>Inactive</th>
+                    <th>UserId</th>
+                    <th>User Name</th>
+                    <th>Status</th>
+                    <th>EmailId</th>
+                    <th>Contact No</th>
+                    <th>User Type</th>
+                    <th>Company</th>
+                    <th>Department</th>
+                    <th>Created On</th>
+                    <th>Edit</th>
+
+                    <th style="display: none">Password</th>
+
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item1 in ViewBag.UserDetails)
+                {
+                    <tr>
+                        <td><input type="checkbox"  name="UserId[]" value="1" /></td>
+                        <td>@item1.UserId</td>
+                        <td>@item1.UserName</td>
+                        <td>@item1.Status</td>
+                        <td>@item1.EmailId</td>
+                        <td>@item1.ContactNos</td>
+                        <td>@item1.UserType</td>
+                        <td>@item1.Company</td>
+                        <td>@item1.Department</td>
+                        <td>@item1.CreatedOn</td>
+                        <td style="display: none">@item1.Password</td>
+                        <td style="text-align: center">
+                            <p data-placement="top" data-toggle="tooltip" title="Edit">
+                                <button class="btn btn-primary btn-xs edit-user" data-title="Edit" data-toggle="modal" data-target="#myModal" id="Edit"><i class="fa fa-edit"></i></button>
+                            </p>
+                        </td>
+                    </tr>
+                }
+
+            </tbody>
+        </table>
+    </form>
+    <form>
+        <!-- The Modal -->
+        <div class="modal fade" id="myModal" data-backdrop="static">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+
+                    <!-- Modal Header -->
+                    <div class="modal-header">
+                        <h4 id="header">User Creation</h4>
+                        <input type="hidden" id="txtRecID" />
+                    </div>
+
+                    <!-- Modal body -->
+                    <div class="modal-body">
+                        <div class="row">
+                            <div class="col-sm-4">
+                                <label for="ucompany">Company</label>
+                                <select class="form-control" id="cmbCompany" name="cmbCompany" required>
+                                    <option value="SIS">SIS PSG</option>
+                                    <option value="SISCO">SISCO</option>
+                                </select>
+                            </div>
+                            <div class="col-sm-4">
+                                <label for="name" class="control-label">PAT Id</label>
+                                <input type="text" class="form-control" placeholder="Enter User ID" id="txtUserId" name="txtUserId" required="required" />
+                            </div>
+
+                            <div class="col-sm-4">
+                                <label for="name" class="control-label">Name</label>
+                                <input type="text" class="form-control" placeholder="Enter User Name" id="txtUserName" name="txtUserName" required="required" />
+                            </div>
+                        </div>
+                        <p></p>
+                        <div class="row">
+                            <div class="col-sm-4">
+                                <label for="name" class="control-label">Contact Nos</label>
+                                <input type="text" class="form-control" placeholder="Enter Contact Nos" id="txtContactNos" name="txtContactNos" required="required" maxlength="10" onkeypress="return IsNumeric(event);" />
+                            </div>
+
+                            <div class="col-sm-4">
+                                <label for="name" class="control-label">Email Id</label>
+                                <input type="text" class="form-control" placeholder="Enter Email" id="txtEmailId" name="txtEmailId" required="required" />
+                            </div>
+
+                            <div class="col-sm-4">
+                                <label for="name" class="control-label">Password</label>
+                                <div class="form-group">
+                                    <div class="input-group">
+                                        <span class="input-group-addon" id="basic-addon2">
+                                            <button id="btnpls" type="button" class="fa fa-eye" onclick="showPassword()"></button>
+                                        </span>
+                                        <input type="password" class="form-control" placeholder="Enter Password" id="txtPassword" name="txtPassword" required="required" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-sm-4">
+                                <label for="name" class="control-label">Confirm Password</label>
+                                <div class="input-group">
+                                    <span class="input-group-addon" id="basic-addon3">
+                                        <button id="btnmin" type="button" class="fa fa-eye" onclick="showPassword1()"></button>
+                                    </span>
+                                    <input type="password" class="form-control" placeholder="Enter Confirm Password" id="txtConfirmPassword" name="txtConfirmPassword" required="required" />
+                                </div>
+                            </div>
+
+                            <div class="col-sm-4">
+                                <label for="uUserTypes">User Type</label>
+                                <select class="form-control" id="cmbUserTypes" name="cmbUserTypes" required>
+                                    <option value="NA">Select</option>
+                                    <option value="Admin">Admin</option>
+                                    <option value="Supervisor">Supervisor</option>
+                                    <option value="Operator">Operator</option>
+                                </select>
+                            </div>
+                            <div class="col-sm-4">
+                                <label for="uactive">Status</label>
+                                <select class="form-control" id="cmbActive" name="cmbActive" required>
+                                    <option value="ACTIVE" selected="selected">Active</option>
+                                    <option value="INACTIVE">InActive</option>
+                                </select>
+                            </div>
+                            <div class="col-sm-4">
+                                <label for="uactive">Department</label>
+                                <select class="form-control" id="cmbDepartment" name="Department" required>
+                                    <option value="OTC">OTC</option>
+                                    <option value="FLM">FLM</option>
+                                    <option value="RECON">RECON</option>
+                                    <option value="AUDIT">AUDIT</option>
+                                    <option value="OTHERS">OTHERS</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Modal footer -->
+                    <div class="modal-footer">
+                        <button type="button" id="btnSaveUserDetails" class="btn btn-primary">Save</button>
+                        <button type="button" id="btnclose" class="btn btn-warning" data-dismiss="modal" onclick="location.href='@Url.Action("Index", "User")'">Close</button>
+                        <button type="reset" id="btnReset" class="btn btn-secondary" style="display: none">Reset</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+    @*Show Password*@
+    <script>
+        function showPassword() {
+            var key_attr = $('#txtPassword').attr('type');
+            if (key_attr != 'text') {
+                $('.checkbox').addClass('show');
+                $('#txtPassword').attr('type', 'text');
+            } else {
+                $('.checkbox').removeClass('show');
+                $('#txtPassword').attr('type', 'password');
+            }
+        }
+    </script>
+
+    @*Show Confirm Password*@
+    <script>
+        function showPassword1() {
+            var key_attr = $('#txtConfirmPassword').attr('type');
+            if (key_attr != 'text') {
+                $('.checkbox').addClass('show');
+                $('#txtConfirmPassword').attr('type', 'text');
+            } else {
+                $('.checkbox').removeClass('show');
+                $('#txtConfirmPassword').attr('type', 'password');
+            }
+        }
+    </script>
+
+    @* Login Check *@
+    <script type="text/javascript">
+    $(document).ready(function () {
+        var UserID = '@Session["UserId"]';
+
+            $("#btnSaveUserDetails").click(function () {
+
+                if ($("#txtUserId").val() == "") {
+                    alert('Please enter User ID!');
+                    $("#txtUserId").focus();
+                    return;
+                }
+
+                if ($("#txtUserName").val() == "") {
+                    alert('Please enter User Name!');
+                    $("#txtUserName").focus();
+                    return;
+                }
+
+                if ($("#txtContactNos").val() == "" || $("#txtContactNos").val() == null) {
+                    alert('Please Enter Contact Number!');
+                    $("#txtContactNos").focus();
+                    return;
+                }
+
+                var sEmail = $('#txtEmailId').val();
+                var filter = /^([\w-\.]+)@@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([\w-]+\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\]?)$/;
+                if ($.trim(sEmail).length == 0) {
+                    alert('Please enter valid email address');
+                    return;
+                }
+                if (filter.test(sEmail)) {
+                    //alert('Email is valid');
+                }
+                else {
+                    alert('Invalid Email Address');
+                    $("#txtEmailId").focus();
+                    return;
+                }
+                if ($("#txtPassword").val() == "") {
+                    alert('Please enter password!');
+                    $("#txtPassword").focus();
+                    return;
+                }
+
+                if ($("#txtConfirmPassword").val() == "") {
+                    alert('Please enter Confirm password!');
+                    $("#txtConfirmPassword").focus();
+                    return;
+                }
+
+                if ($("#txtPassword").val() != $("#txtConfirmPassword").val()) {
+                    alert('Password and confirm password not matching!');
+                    $("#txtConfirmPassword").focus();
+                    return;
+                }
+
+                if ($("#cmbUserTypes").val() == "Select") {
+                    alert('Please enter User Type!');
+                    $("#cmbUserTypes").focus();
+                    return;
+                }
+
+                $.ajax({
+                    url: '@Url.Action("SaveUserDetails")',
+                    data: {
+                        Rec_id: $("#txtRecID").val(),
+                        Company: $("#cmbCompany").val(),
+                        UserId: $("#txtUserId").val(),
+                        UserName: $("#txtUserName").val(),
+                        ContactNos: $("#txtContactNos").val(),
+                        EmailId: $("#txtEmailId").val(),
+                        Password: $("#txtPassword").val(),
+                        UserType: $("#cmbUserTypes").val(),
+                        Active: $("#cmbActive").val(),
+                        Created_By: UserID,
+                        LastModified_By: UserID,
+                        Department: $("#cmbDepartment").val()
+                    },
+                    dataType: "json",
+                    type: "POST",
+                    traditional: true,
+                    success: function (data) {
+                        alert(data);
+                        $("#btnReset").click();
+                        $("#btnclose").click();
+                    }
+                });
+            })
+        });
+    </script>
+
+    @* Find Table details Value *@
+    <script type="text/javascript">
+        $("#myDatatable").on("click", "tr", function () {
+            $("#header").text('Update User');
+            $("#cmbCompany").val($(this).closest('tr').find('td').eq(6).text());
+            $("#txtUserId").val($(this).closest('tr').find('td').eq(0).text());
+            $("#txtUserName").val($(this).closest('tr').find('td').eq(1).text());
+            $("#txtContactNos").val($(this).closest('tr').find('td').eq(4).text());
+            $("#txtEmailId").val($(this).closest('tr').find('td').eq(3).text());
+            $("#txtPassword").val($(this).closest('tr').find('td').eq(8).text());
+            $("#txtConfirmPassword").val($(this).closest('tr').find('td').eq(8).text());
+            $("#cmbUserTypes").val($(this).closest('tr').find('td').eq(5).text());
+            $("#cmbDepartment").val($(this).closest('tr').find('td').eq(7).text());
+            if ($(this).closest('tr').find('td').eq(2).text() == 0) {
+                $("#cmbActive").val("ACTIVE");
+            }
+            else {
+                ("#cmbActive").val("INACTIVE");
+            }
+
+            $("#txtPassword").attr('readOnly', 'true');
+            $("#txtConfirmPassword").attr('readOnly', 'true');
+            $("#txtUserId").attr('readOnly', 'true');
+        });
+    </script>
+
+    @* Button Reset *@
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $("#btnclose").click(function () {
+                $("#btnReset").click();
+            });
+        });
+    </script>
+
+    @* Button Header *@
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $("#AddUser").click(function () {
+                $("#header").text('User Creation');
+                $("#txtPassword").removeAttr('readOnly', 'false');
+                $("#txtConfirmPassword").removeAttr('readOnly', 'false');
+                $("#txtUserId").removeAttr('readOnly', 'false');
+            });
+        });
+    </script>
+
+    @* Button Edit *@
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $("#Edit").click(function () {
+                $("#header").text('Update User');
+                //$("#txtPassword").attr('readOnly', 'true');
+                //$("#txtConfirmPassword").attr('readOnly', 'true');
+                $("#txtUserId").attr('readOnly', 'true');
+            });
+        });
+    </script>
+    @*Inactive User*@
+    @*<script>
+            $(document).ready(function () {
+                ("#inActiveBtn").click(function () {
+                    $('#OTC_UserList').submit();
+                })
+            });
+        </script>*@
+
+    @*Email Validation*@
+    <script>
+        function validateEmail(sEmail) {
+            function validateEmail(sEmail) {
+                var filter = /^([\w-\.]+)@@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([\w-]+\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\]?)$/;
+                if (filter.test(sEmail)) {
+                    return true;
+                }
+                else {
+                    return false;
+                }
+            }
+        }
+    </script>
+
+    @* Only Numeric *@
+    <script>
+        var specialKeys = new Array();
+        specialKeys.push(8); //Backspace
+        function IsNumeric(e) {
+            var keyCode = e.which ? e.which : e.keyCode
+            var ret = ((keyCode >= 48 && keyCode <= 57) || specialKeys.indexOf(keyCode) != -1);
+            //document.getElementById("error").style.display = ret ? "none" : "inline";
+            return ret;
+        }
+
+        function isDecimal(evt) {
+            var charCode = (evt.which) ? evt.which : event.keyCode
+            if (charCode != 46 && charCode > 31 && (charCode < 48 || charCode > 57))
+                return false;
+
+            return true;
+        }
+
+    </script>
