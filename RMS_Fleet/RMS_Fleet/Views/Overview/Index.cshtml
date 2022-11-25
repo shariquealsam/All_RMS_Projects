@@ -1,0 +1,1214 @@
+﻿@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/Master.cshtml";
+}
+
+
+<!-- Latest compiled and minified CSS -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+
+<!-- jQuery library -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
+<!-- Latest compiled JavaScript -->
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.css">
+
+<script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.js"></script>
+
+<link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" />
+<link href="~/Css/bootstrap-multiselect.css" rel="stylesheet" />
+
+<script src="~/Js/bootstrap-multiselect.js"></script>
+
+<link href="~/Graph/style.css" rel="stylesheet" />
+<link href="~/Css/style.css" rel="stylesheet" />
+<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+@*<link href="~/Graph/style2.css" rel="stylesheet" />*@
+<style>
+    .col-sm-3 {
+        /*width: 21%!important;*/
+    }
+
+    .multiselect {
+        width: 95%!important;
+    }
+
+    .row.firstRow {
+        border: 1px solid #e6e3e3;
+            padding-top: 10px;
+                border-top: 0px;
+    }
+
+    .row.secondRow {
+        border: 1px solid #e6e3e3;
+        margin-top: 5px;
+        text-align: center;
+    }
+
+    .row.thirdrow {
+        border: 1px solid #e6e3e3;
+        margin-top: 12px;
+        text-align: center;
+        border-top:0px;
+    }
+
+     .row.fourthRow {
+        border: 1px solid #e6e3e3;
+        margin-top: 5px;
+        text-align: center;
+        
+    }
+
+    .col-sm-5 {
+        width: 41.66666667%;
+        border-right: 1px solid #e6e3e3;
+        height: 315px;
+        background-color: #0000ff05;
+    }
+
+    .col-sm-1 {
+        width: 16.333333%;
+    }
+
+    .well {
+            height: 75px!important;
+       padding-top: 3px;
+    }
+    .lead {
+        padding-top: 20px!important;
+    }
+    #divMsg {
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        z-index: 1;
+        position: fixed;
+        background: #f5f5f5ab;
+    }
+    table#GraphTable {
+        margin-top:100px;
+    }
+
+    div#divMsg img {
+        margin-left: 40%;
+        margin-top: 10%;
+    }
+</style>
+<script>
+    $(document).ready(function () {
+            
+        $("#divMsg").show();
+        setTimeout(function () {
+            $("#divMsg").hide(); 
+            $("#row").css({ "display": "block" });
+
+        }, 2000);
+        $("#row").css({ "display": "none" });
+            
+
+    })
+</script>
+<script>
+    $(document).ready(function(){
+        var GraphForRepairAndMaintenance=' <svg><p></p></svg>'+
+                '<div class="tooltip"></div>'+
+                '<table id="GraphTable" style="margin-left: 69%!important; margin-top: -18%!important;">'+
+                 '   <tr>'+
+                  '      <td><span style="background-color: #07af07; height: 20px;">&nbsp &nbsp &nbsp</span></td>'+
+                   '     <td style="padding-left: 12px;">&nbsp <b>Per KM Cost(₹1.4)</b><br />'+
+                    '        (Need to be done)</td>'+
+                   ' </tr>'+
+                   ' <tr>'+
+                   '     <td style="height: 10px"></td>'+
+                   ' </tr>'+
+                   ' <tr>'+
+                   '     <td><span style="background-color: #ec0808; height: 20px;">&nbsp &nbsp &nbsp</span></td>'+
+                   '     <td style="padding-left: 12px;">&nbsp <b>Per KM Cost(₹<span id="TotalKMCost"></span>)</b><br />'+
+                   '         (Actually occured)</td>'+
+                   ' </tr>'+
+               ' </table>';
+
+        var GraphForKPL=' <svg><p></p></svg>'+
+                '<div class="tooltip"></div>'+
+                '<table id="GraphTable" style="margin-left: 69%!important; margin-top: -18%!important;">'+
+                 '   <tr>'+
+                  '      <td><span style="background-color: #07af07; height: 20px;">&nbsp &nbsp &nbsp</span></td>'+
+                   '     <td style="padding-left: 12px;">&nbsp <b>STD KMPL(₹<span id="StdKMPL"></span>)</b><br />'+
+                    '        (Need to be done)</td>'+
+                   ' </tr>'+
+                   ' <tr>'+
+                   '     <td style="height: 10px"></td>'+
+                   ' </tr>'+
+                   ' <tr>'+
+                   '     <td><span style="background-color: #ec0808; height: 20px;">&nbsp &nbsp &nbsp</span></td>'+
+                   '     <td style="padding-left: 12px;">&nbsp <b>KMPL(₹<span id="TotalKMCost"></span>)</b><br />'+
+                   '         (Actually occured)</td>'+
+                   ' </tr>'+
+               ' </table>';
+
+        $("#RepairMaintenance").html(GraphForRepairAndMaintenance);
+
+
+        $("#RepairTab").click(function(){
+            $("#RepairMaintenance").html(GraphForRepairAndMaintenance);
+            $("#FleetOverviewKPL").html('');
+            //alert(Graph);
+        });
+
+        $("#KPLTab").click(function(){
+            $("#FleetOverviewKPL").html(GraphForKPL);
+            $("#RepairMaintenance").html('');
+            //alert(Graph);
+        });
+    })
+</script>
+<div class="container">
+    <div id="divMsg" style="display: none;">
+        @*<img src="~/Image/loader.gif" alt="Please wait.." />*@
+        <div class="loader">Loading</div>
+    </div>
+
+    <ul class="nav nav-tabs" style="margin-left: -15px;margin-top: -15px;">
+    <li class="active" id="RepairTab"><a data-toggle="tab" href="#home">Repair & Maintenance</a></li>
+    <li id="KPLTab"><a data-toggle="tab" href="#menu1">KPL Overview</a></li>
+  </ul>
+
+      <div class="tab-content">
+    @*Repair & Maintenance Segment*@
+    <div id="home" class="tab-pane fade in active">
+      <div class="row firstRow">
+        <form action="@Url.Action("Download")" method="post">
+            <div class="col-sm-4">
+                <div class="well" style="height: 99px">
+                    <div class="col-sm-6">
+                        <label for="FromDate">From Month</label>
+                        <select name="FromMonth" id="FromMonth" class="form-control">
+                            <option value="01">Jan</option>
+                            <option value="02">Feb</option>
+                            <option value="03">Mar</option>
+                            <option value="04">Apr</option>
+                            <option value="05">May</option>
+                            <option value="06">Jun</option>
+                            <option value="07">Jul</option>
+                            <option value="08">Aug</option>
+                            <option value="09">Sep</option>
+                            <option value="10">Oct</option>
+                            <option value="11">Nov</option>
+                            <option value="12">Dec</option>
+                        </select>
+                    </div>
+                    <div class="col-sm-6">
+                        <label for="ToDate">From Year</label>
+                        <select name="FromYear" id="FromYear" class="form-control">
+                            <option value="2019">2019</option>
+                            <option value="2020">2020</option>
+                            <option value="2021">2021</option>
+                            <option value="2022">2022</option>
+                            <option value="2023">2023</option>
+                            <option value="2024">2024</option>
+                            <option value="2025">2025</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-sm-4">
+                <div class="well" style="height: 99px">
+                    <div class="col-sm-6">
+                        <label for="FromDate">To Month</label>
+                        <select name="ToMonth" id="ToMonth" class="form-control">
+                            <option value="01">Jan</option>
+                            <option value="02">Feb</option>
+                            <option value="03">Mar</option>
+                            <option value="04">Apr</option>
+                            <option value="05">May</option>
+                            <option value="06">Jun</option>
+                            <option value="07">Jul</option>
+                            <option value="08">Aug</option>
+                            <option value="09">Sep</option>
+                            <option value="10">Oct</option>
+                            <option value="11">Nov</option>
+                            <option value="12">Dec</option>
+                        </select>
+                    </div>
+                    <div class="col-sm-6">
+                        <label for="ToDate">To Year</label>
+                        <select name="ToYear" id="ToYear" class="form-control">
+                            <option value="2019">2019</option>
+                            <option value="2020">2020</option>
+                            <option value="2021">2021</option>
+                            <option value="2022">2022</option>
+                            <option value="2023">2023</option>
+                            <option value="2024">2024</option>
+                            <option value="2025">2025</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-sm-4">
+                <div class="well">
+                    <label for="cmbRegion" class="control-label">Region</label><br />
+                    <input type="hidden" id="hfRegion" name="cmbRegion" />
+                    <select name="cmbRegion1" id="cmbRegion" class="form-control" multiple>
+                        <script type="text/javascript">
+                            $(document).ready(function () {
+                                //Bank Dropdown Selectedchange event    
+                                $('[id=cmbRegion]').multiselect({
+                                    enableFiltering: true,
+                                    enableCaseInsensitiveFiltering: true,
+                                    includeSelectAllOption: true,
+                                    includeSelectAllDivider: false,
+                                    maxHeight: 260,
+                                    buttonWidth: '100%',
+                                    onChange: function () {
+                                        var Region = $("#cmbRegion option:selected").map(function () { return this.value }).get().join(', ');
+                                        $("#hfRegion").val(Region);
+
+                                        //alert(Region);
+
+                                    },
+                                    onSelectAll: function () {
+                                        var Region = $("#cmbRegion option:selected").map(function () { return this.value }).get().join(', ');
+                                        $("#hfRegion").val(Region);
+                                        //alert(Region);
+
+                                    },
+                                    onDeselectAll: function () {
+                                        var Region = $("#cmbRegion option:selected").map(function () { return this.value }).get().join(', ');
+                                        $("#hfRegion").val(Region);
+                                        //alert(Region);
+
+                                    },
+                                });
+                            });
+                        </script>
+
+                    </select>
+
+                </div>
+            </div>
+            <div class="col-sm-4">
+                <div class="well">
+                    <label for="cmbBranch">Branch</label><br />
+                    <input type="hidden" id="hfBranch" name="cmbBranch" />
+                    <select name="cmbBranch1" id="cmbBranch" class="form-control" multiple>
+                        <script type="text/javascript">
+                            $(document).ready(function () {
+                                //Bank Dropdown Selectedchange event    
+                                $('[id=cmbBranch]').multiselect({
+                                    enableFiltering: true,
+                                    enableCaseInsensitiveFiltering: true,
+                                    includeSelectAllOption: true,
+                                    includeSelectAllDivider: false,
+                                    maxHeight: 260,
+                                    buttonWidth: '100%',
+                                    onChange: function () {
+                                        Branch = $("#cmbBranch option:selected").map(function () { return this.value }).get().join(', ');
+                                        $("#hfBranch").val(Branch);
+                                        //alert(Branch);
+                                    },
+                                    onSelectAll: function () {
+                                        Branch = $("#cmbBranch option:selected").map(function () { return this.value }).get().join(', ');
+                                        $("#hfBranch").val(Branch);
+                                        //alert(Branch);
+                                    },
+                                    onDeselectAll: function () {
+                                        Branch = $("#cmbBranch option:selected").map(function () { return this.value }).get().join(', ');
+                                        $("#hfBranch").val(Branch);
+                                        //alert(Branch);
+                                    },
+
+                                });
+                            });
+                        </script>
+                    </select>
+                </div>
+            </div>
+
+
+            <div class="col-sm-4">
+                <div class="well">
+                    <label for="cmbVechile">Vehicle Number</label>
+                    <input type="hidden" id="hfVehicle" name="cmbVechile" />
+                    <select name="cmbVechile1" id="cmbVechile" class="form-control" multiple>
+                    </select>
+                </div>
+            </div>
+
+            <div class="col-sm-4">
+                <div class="well" style="height: 100px">
+                    <div style="margin-top: 24px;">
+                        <button type="button" class="btn btn-success" id="Search" style="width: 48%">Search</button>
+                        <button type="submit" class="btn btn-danger" style="width: 48%">Download</button>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+
+
+        <div id="GraphMaster" style="display:none">
+            
+        </div>
+
+
+    <div class="row secondRow">
+        <div class="col-sm-5">
+            <h4>Graph</h4>
+            <hr style="margin:0px!important"  />
+            @*<div id="chart"></div>
+            <div class="line" style="border: ridge;
+    margin-top: -75px;"></div>*@
+            <div class="graph-container" id="RepairMaintenance" >
+               
+            </div>
+        </div>
+        <div class="col-sm-5">
+            <h4>Data Representation</h4>
+            <hr style="margin:0px!important;margin-bottom:20px!important;" />
+            <div class="col-sm-6">
+                <label>Total Exp. (Need to be done)</label>
+                <button type="button" class="btn btn-default" style="width: 227px; margin-bottom: 10px"><i class="fa fa-inr"> <span id="TotalExpenditureNeed" style="font-weight: bold"></span></i></button>
+                <br /><br />
+                <label>Total Exp. (Actually occured)</label>
+                <button type="button" class="btn btn-default" style="width: 227px; margin-bottom: 10px"><i class="fa fa-inr"> <span id="TotalExpenditureActually" style="font-weight: bold"></span></i></button>
+                <br /><br />
+                <label style="margin-top: 15px;">Total no. of Vehicles :-</label>
+
+            </div>
+            <div class="col-sm-6">
+                <label>Difference Amount</label>
+                <button type="button" class="btn btn-default" style="width: 180px; margin-bottom: 10px"><i class="fa fa-inr"> <span id="DiffAmount" style="font-weight: bold"></span></i></button>
+                <br /><br />
+                <label>Total KM</label>
+                <button type="button" class="btn btn-default" style="width: 180px;"><i class="fa fa-road"> <span id="TotalKm" style="font-weight: bold"></span></i></button>
+                <br /><br />
+                <button type="button"class="btn btn-default" style="width: 180px; margin-top: 16px;" style="font-weight: bold"><i class="fa fa-car"> <span  id="TotalVehicles" style="font-weight:bold" ></span></i></button>
+            </div>
+        </div>
+        <div class="col-sm-1">
+            <center>
+            <h4>Annotation</h4>
+                <hr style="margin:0px!important"  />
+                <div style="padding-top:65%">
+            <i class="fa fa-thumbs-up" id="thumbsUp" style="font-size: 48px; color: green; display:none"><br /><span style="font-size:28px">Good</span></i>
+            <i class="fa fa-thumbs-down" id="thumbsDown" style="font-size: 48px; color: red; display: none"><br /><span style="font-size:28px">Bad</span></i>
+                    </div>
+                </center>
+        </div>
+    </div>
+    </div>
+
+
+
+      
+
+    @*KPL Segment*@
+    <div id="menu1" class="tab-pane fade">
+         @RenderPage("FleetOverviewKPL.cshtml")
+  </div>
+
+
+
+    @*<div class="row thirdRow">
+        <div class="col-sm-5">
+            <h4>Graph Explanation</h4>
+
+        </div>
+        <div class="col-sm-5">
+            <h4>Data Rept. Explanation</h4>
+        </div>
+        <div class="col-sm-2">
+            <h4>Icons Explation</h4>
+        </div>
+    </div>*@
+</div>
+
+
+
+@*Populating Region*@
+<script>
+    $(document).ready(function () {
+        $.ajax({
+            url: '@Url.Action("GetAllRegions", "Overview")',
+            type: "post",
+            data: {},
+            dataType: "json",
+            traditional: true,
+            success: function (data) {
+
+                //For Repair & Maintenance
+                var mySelect = $('#cmbRegion');
+
+                mySelect.empty();
+                var selectOption = '<option value="">Select Region</option';
+                //$("#cmbVechile").append(selectOption);
+                $.each(data, function (i) {
+                    var optionhtml = '';
+                    optionhtml = '<option value="' + data[i].Region_id + '">' + data[i].Region_Name + '</option>';
+
+                    $("#cmbRegion").append(optionhtml);
+
+                });
+
+                mySelect.multiselect('rebuild');
+
+
+
+
+
+                //For KPL
+                var mySelectKPL = $('#cmbRegion1KPL');
+
+                mySelectKPL.empty();
+                var selectOptionKPL = '<option value="">Select Region</option';
+                //$("#cmbVechile").append(selectOption);
+                $.each(data, function (i) {
+                    var optionhtmlKPL = '';
+                    optionhtmlKPL = '<option value="' + data[i].Region_id + '">' + data[i].Region_Name + '</option>';
+
+                    $("#cmbRegion1KPL").append(optionhtmlKPL);
+                });
+
+                mySelectKPL.multiselect('rebuild');
+            }
+        })
+    })
+</script>
+
+@*Getting all the branch by Region_id*@
+<script>
+    $(document).ready(function () {
+        $("#cmbRegion").change(function () {
+            //var Region_id = $("#cmbRegion").val();
+
+            //var Branch = $("#cmbBranch");
+            //Branch.empty();
+            //var OptionForBranch = '<option value="">Select Branch</option>';
+            //$("#cmbBranch").append(OptionForBranch);
+
+            //var Vechile = $("#cmbVechile");
+            //Vechile.empty();
+            //var OptionForVechile = '<option value="">Select Vechile</option>';
+            //$("#cmbVechile").append(OptionForVechile);
+
+            //alert(Region_id);
+            var Region=$("#hfRegion").val();
+            //alert(Region);
+            $.ajax({
+                url: '@Url.Action("GetBranch", "Overview")',
+                type: "post",
+                data: { RegionId: Region },
+                dataType: "json",
+                traditional: true,
+                success: function (data) {
+                    var mySelect = $('#cmbBranch');
+
+                    mySelect.empty();
+                    var selectOption = '<option value="">Select Branch</option';
+                    //$("#cmbVechile").append(selectOption);
+                    $.each(data, function (i) {
+                        var optionhtml = '';
+                        optionhtml = '<option value="' + data[i].BranchId + '">' + data[i].BranchName + '</option>';
+
+                        $("#cmbBranch").append(optionhtml);
+                    });
+
+                    mySelect.multiselect('rebuild');
+                    $("#hfBranch").val("");
+                    $("#hfVehicle").val("");
+                },
+                error: function (response) {
+                    alert(response.responseText);
+                },
+                failure: function (response) {
+                    alert(response.responseText);
+                }
+
+
+            })
+        })
+    })
+</script>
+
+@*Getting all the branch by Region_id for KPL Segment*@
+<script>
+    $(document).ready(function () {
+        $("#cmbRegion1KPL").change(function () {
+            //var Region_id = $("#cmbRegion").val();
+
+            //var Branch = $("#cmbBranch");
+            //Branch.empty();
+            //var OptionForBranch = '<option value="">Select Branch</option>';
+            //$("#cmbBranch").append(OptionForBranch);
+
+            //var Vechile = $("#cmbVechile");
+            //Vechile.empty();
+            //var OptionForVechile = '<option value="">Select Vechile</option>';
+            //$("#cmbVechile").append(OptionForVechile);
+
+            //alert(Region_id);
+            var Region=$("#hfRegionKPL").val();
+            //alert(Region);
+            $.ajax({
+                url: '@Url.Action("GetBranch", "Overview")',
+                type: "post",
+                data: { RegionId: Region },
+                dataType: "json",
+                traditional: true,
+                success: function (data) {
+                    var mySelect = $('#cmbBranch1KPL');
+
+                    mySelect.empty();
+                    var selectOption = '<option value="">Select Branch</option';
+                    //$("#cmbVechile").append(selectOption);
+                    $.each(data, function (i) {
+                        var optionhtml = '';
+                        optionhtml = '<option value="' + data[i].BranchId + '">' + data[i].BranchName + '</option>';
+
+                        $("#cmbBranch1KPL").append(optionhtml);
+                    });
+
+                    mySelect.multiselect('rebuild');
+                    $("#hfBranchKPL").val("");
+                    $("#hfVehicleKPL").val("");
+                },
+                error: function (response) {
+                    alert(response.responseText);
+                },
+                failure: function (response) {
+                    alert(response.responseText);
+                }
+
+
+            })
+        })
+    })
+</script>
+
+
+@*On Branch Change for Repair & Maintenance*@
+<script>
+    $(document).ready(function () {
+
+        $("#cmbBranch").change(function () {
+            var BranchId = $("#hfBranch").val();
+            var RegionId = $("#hfRegion").val();
+            //alert(BranchId);
+            //alert(RegionId);
+
+            $.ajax({
+                url: '@Url.Action("GetVechileList")',
+                data: {
+                    BranchId: BranchId,
+                    RegionId: RegionId
+                },
+                dataType: "json",
+                type: "POST",
+                traditional: true,
+                success: function (data) {
+                    var mySelect = $('#cmbVechile');
+
+                    mySelect.empty();
+                    var selectOption = '<option value="">Select Vehicle</option';
+                    //$("#cmbVechile").append(selectOption);
+                    $.each(data, function (i) {
+                        var optionhtml = '';
+                        optionhtml = '<option value="' + data[i].VehicleNumber + '">' + data[i].VehicleNumber + '</option>';
+
+                        $("#cmbVechile").append(optionhtml);
+                    });
+
+                    mySelect.multiselect('rebuild');
+                },
+                error: function (response) {
+                    alert(response.responseText);
+                },
+                failure: function (response) {
+                    alert(response.responseText);
+                }
+            });
+
+        });
+    });
+</script>
+
+@*On Branch Change for KPL*@
+<script>
+    $(document).ready(function () {
+
+        $("#cmbBranch1KPL").change(function () {
+            var BranchId = $("#hfBranchKPL").val();
+            var RegionId = $("#hfRegionKPL").val();
+            //alert(BranchId);
+            //alert(RegionId);
+
+            $.ajax({
+                url: '@Url.Action("GetVechileList")',
+                data: {
+                    BranchId: BranchId,
+                    RegionId: RegionId
+                },
+                dataType: "json",
+                type: "POST",
+                traditional: true,
+                success: function (data) {
+                    var mySelect = $('#cmbVechile1KPL');
+
+                    mySelect.empty();
+                    var selectOption = '<option value="">Select Vehicle</option';
+                    //$("#cmbVechile").append(selectOption);
+                    $.each(data, function (i) {
+                        var optionhtml = '';
+                        optionhtml = '<option value="' + data[i].VehicleNumber + '">' + data[i].VehicleNumber + '</option>';
+
+                        $("#cmbVechile1KPL").append(optionhtml);
+                    });
+
+                    mySelect.multiselect('rebuild');
+                },
+                error: function (response) {
+                    alert(response.responseText);
+                },
+                failure: function (response) {
+                    alert(response.responseText);
+                }
+            });
+
+        });
+    });
+</script>
+
+
+@*Multiselect Vehicle Number Repair & Maintenance*@
+<script type="text/javascript">
+    $(document).ready(function () {
+        //Bank Dropdown Selectedchange event    
+        $('[id=cmbVechile]').multiselect({
+            enableFiltering: true,
+            enableCaseInsensitiveFiltering: true,
+            includeSelectAllOption: true,
+            includeSelectAllDivider: false,
+            maxHeight: 260,
+            buttonWidth: '100%',
+            onChange: function () {
+                var Vechile = $("#cmbVechile option:selected").map(function () { return this.value }).get().join(', ');
+                $("#hfVehicle").val(Vechile);
+                //alert(Vechile);
+            },
+            onSelectAll: function () {
+                var Vechile = $("#cmbVechile option:selected").map(function () { return this.value }).get().join(', ');
+                $("#hfVehicle").val(Vechile);
+                //alert(Vechile);
+            },
+            onDeselectAll: function () {
+                var Vechile = $("#cmbVechile option:selected").map(function () { return this.value }).get().join(', ');
+                $("#hfVehicle").val(Vechile);
+                //alert(Vechile);
+            },
+        });
+
+
+    });
+</script>
+
+@*Multiselect Vehicle Number KPL*@
+<script type="text/javascript">
+    $(document).ready(function () {
+        //Bank Dropdown Selectedchange event    
+        $('[id=cmbVechile1KPL]').multiselect({
+            enableFiltering: true,
+            enableCaseInsensitiveFiltering: true,
+            includeSelectAllOption: true,
+            includeSelectAllDivider: false,
+            maxHeight: 260,
+            buttonWidth: '100%',
+            onChange: function () {
+                var Vechile = $("#cmbVechile1KPL option:selected").map(function () { return this.value }).get().join(', ');
+                $("#hfVehicleKPL").val(Vechile);
+                //alert(Vechile);
+            },
+            onSelectAll: function () {
+                var Vechile = $("#cmbVechile1KPL option:selected").map(function () { return this.value }).get().join(', ');
+                $("#hfVehicleKPL").val(Vechile);
+                //alert(Vechile);
+            },
+            onDeselectAll: function () {
+                var Vechile = $("#cmbVechile1KPL option:selected").map(function () { return this.value }).get().join(', ');
+                $("#hfVehicleKPL").val(Vechile);
+                //alert(Vechile);
+            },
+        });
+
+
+    });
+</script>
+
+
+@*Search Repair Maintenance Report*@
+<script>
+    $(document).ready(function () {
+       
+        $("#Search").click(function () {
+            $("#divMsg").show();
+            var FromMonth = $("#FromMonth").val();
+            var FromYear = $("#FromYear").val();
+            var ToMonth = $("#ToMonth").val();
+            var ToYear = $("#ToYear").val();
+
+            var cmbRegion = $("#hfRegion").val();
+            var cmbBranch = $("#hfBranch").val();
+            var cmbVechile = $("#hfVehicle").val();
+
+            if((FromMonth>ToMonth && FromYear==ToYear) || (FromMonth>=ToMonth && FromYear>ToYear))
+            {
+                    swal("Alert", "Invalid date range!", "warning").then((value)=>{ 
+                   
+                    })
+                    $("#divMsg").hide();
+                    return;
+            }
+
+
+            $.ajax({
+                type: "post",
+                url: "@Url.Action("Search_Repair_Maintenance_Overview")",
+                data: { FromMonth: FromMonth, FromYear: FromYear, ToMonth: ToMonth, ToYear: ToYear, cmbRegion: cmbRegion, cmbBranch: cmbBranch, cmbVechile: cmbVechile },
+                dataType: "json",
+                success: function (data1)
+                {
+                    if(data1.length==0)
+                    {
+                        swal("Alert", "No data found in selected date range!", "warning").then((value)=>{ 
+                                //    window.location.href="/MyOrder/Index";
+                                     })
+                        $("#divMsg").hide();
+                        return;
+                    }
+                    $("#TotalKMCost").text(data1[0].PerKMCost);
+                    $("#TotalExpenditureNeed").text(data1[0].TotalExpenditureMaster);
+                    $("#TotalExpenditureActually").text(data1[0].TotalAmount);
+                    $("#DiffAmount").text(data1[0].Difference);
+                    $("#TotalKm").text(data1[0].TotalKM);
+                    $("#TotalVehicles").text(data1[0].TotalVehicles);
+                    console.log(data1);
+
+                    if(parseFloat(data1[0].Difference)>0)
+                    {
+                        $("#thumbsDown").css({"display":"block"});
+                        $("#thumbsUp").css({"display":"none"});
+                    }
+                    else
+                    {
+                        $("#thumbsDown").css({"display":"none"});
+                        $("#thumbsUp").css({"display":"block"});
+                    }
+                    var TotalKMCost=data1[0].PerKMCost;
+                    
+
+
+                    $(".graph").text("");
+
+                    // Function to create random data in format: [date, amount]
+
+                   
+                    let tKM=data1[0].PerKMCost;
+                    //let data = [];
+                    //let cat=['BB','dd'];
+                    //for (var i = 0; i < 2; i++) {
+     
+                    //  const randomNum = [1.4,tKM];
+                    //    let d = new Date();
+                    //    d.setDate(d.getDate() - i * 30);
+                    //    // alert(d);
+                    //    // alert(cat[i]);
+                    //    data.push({
+                    //        date: cat[i],
+                    //        amount: randomNum[i] });
+                    //    alert(randomNum[i]);
+                    //}
+
+                    //return data;
+                    
+                    //ClearGraph();
+
+                    // Create + Format data
+                    let data = createData(2,tKM,1.4).sort(function (a, b) {return a.date - b.date;});
+
+                    // what are these and are they things that someone should edit
+const margin = { top: 30, right: 20, bottom: 30, left: 65 };
+const width = 250 - (margin.left + margin.right);
+const height = 280 - (margin.top + margin.bottom);
+const labelOffset = 50;
+const axisOffset = 16;
+
+                    // Set Time Format (JAN, FEB, etc..)
+const timeFormat = d3.timeFormat('%b');
+
+                    // Set the scales
+const x = d3.scaleBand().
+
+rangeRound([0, width]).
+domain(data.map(d => d.date)).
+padding(0.5);
+                    // alert(x);
+const y = d3.scaleLinear().
+range([height, 0]).
+domain([0, d3.max(data, d => d.amount)]);
+
+                    // // Set the axes
+const xAxis = d3.axisBottom().
+scale(x).
+tickSize(0).
+tickFormat(timeFormat);
+
+const yAxis = d3.axisLeft().
+ticks(5).
+tickSize(-width).
+scale(y.nice());
+
+                    // // Set up SVG with initial transform to avoid repeat positioning
+const svg = d3.select('svg').
+attr('class', 'graph').
+attr('width', width + (margin.left + margin.right)).
+attr('height', height + (margin.top + margin.bottom)).
+append('g').
+attr('class', 'group-container').
+attr('transform', `translate(${margin.left}, ${margin.top})`).
+            attr('font-family', 'ibm-plex-sans');
+
+            // // Add Y axis
+            svg.append('g').
+            attr('class', 'axis y').
+            attr('stroke-dasharray', '4').
+            call(yAxis).
+            selectAll('text').
+            attr("x", -axisOffset).
+            attr('font-family', 'ibm-plex-sans');
+
+            // // Add Y axis label
+const yLabel = svg.select('.y').
+append('text').
+text('Expense (₹)').
+attr('class', 'label').
+attr('transform', `translate(${-labelOffset}, ${height / 2}) rotate(-90)`).
+    attr('font-family', 'ibm-plex-sans');
+
+    // // Add X axis
+    svg.append('g').
+    attr('class', 'axis x').
+    attr('transform', `translate(0, ${height})`).
+    call(xAxis).
+    selectAll('text').
+    attr("y", axisOffset).
+    attr('font-family', 'ibm-plex-sans');
+
+    // // Add X axis label
+const xLabel = svg.select('.x').
+append('text').
+text('').
+attr('class', 'label').
+attr('transform', `translate(${width / 2}, ${labelOffset})`).
+attr('font-family', 'ibm-plex-sans');
+
+    svg.append('g').
+    attr('class', 'bar-container').
+    selectAll('rect').
+    data(data).
+    enter().append('rect').
+    attr('class', 'bar').
+    attr('x', d => x(d.date)).
+    attr('y', d => height).
+    attr('height', 0).
+    attr('width', x.bandwidth()).
+    attr('fill', '#00A78F').
+    transition().
+    duration(500).
+    delay((d, i) => i * 50).
+    attr('height', d => height - y(d.amount)).
+    attr('y', d => y(d.amount));
+
+    // Select Tooltip
+const tooltip = d3.select('.tooltip');
+
+const bars = svg.selectAll('.bar').
+on('mouseover', function (d) {
+    let color = d3.color('#00A78F').darker();
+    d3.select(this).
+    attr('fill', color);
+    tooltip.
+    style('display', 'inherit').
+    text(`₹${d.amount}`).
+  style('top', `${y(d.amount) - axisOffset}px`);
+
+    let bandwidth = x.bandwidth();
+    let tooltipWidth = tooltip.nodes()[0].getBoundingClientRect().width;
+    let offset = (tooltipWidth - bandwidth) / 2;
+
+    tooltip.
+    style('left', `${x(d.date) + margin.left - offset}px`);
+    }).
+    on('mouseout', function (d) {
+        d3.select(this).
+        transition().
+        duration(250).
+        attr('fill', '#00A78F');
+        tooltip.
+        style('display', 'none');
+    });
+
+
+
+    $("#divMsg").hide();
+
+    },
+    error: function ()
+    {
+        $("#divMsg").hide();
+    }
+    })
+    })
+    })
+
+</script>
+
+
+    @*Search KPL*@
+<script>
+    $(document).ready(function () {
+       
+        $("#SearchKPL").click(function () {
+            $("#divMsg").show();
+            var FromMonth = $("#FromMonthKPL").val();
+            var FromYear = $("#FromYearKPL").val();
+            var ToMonth = $("#ToMonthKPL").val();
+            var ToYear = $("#ToYearKPL").val();
+
+            var cmbRegion = $("#hfRegionKPL").val();
+            var cmbBranch = $("#hfBranchKPL").val();
+            var cmbVechile = $("#hfVehicleKPL").val();
+
+            if((FromMonth>ToMonth && FromYear==ToYear) || (FromMonth>=ToMonth && FromYear>ToYear))
+            {
+                swal("Alert", "Invalid date range!", "warning").then((value)=>{ 
+                   
+                })
+                $("#divMsg").hide();
+                return;
+            }
+
+            $.ajax({
+                type: "post",
+                url: "@Url.Action("Search_KPL_Overview")",
+                data: { FromMonth: FromMonth, FromYear: FromYear, ToMonth: ToMonth, ToYear: ToYear, cmbRegion: cmbRegion, cmbBranch: cmbBranch, cmbVechile: cmbVechile },
+                dataType: "json",
+                success: function (data1)
+                {
+                    if(data1.length==0)
+                    {
+                        swal("Alert", "No data found in selected date range!", "warning").then((value)=>{ 
+                            //    window.location.href="/MyOrder/Index";
+                        })
+                        $("#divMsg").hide();
+                        return;
+                    }
+
+                    $("#StdKMPL").text(data1[0].StdKmpl);
+                    $("#TotalKMCost").text(data1[0].KMPL);
+
+                    $("#ExpectedFuleExpense").text(data1[0].ExpectedFuleExpense);
+                    $("#ActualFuelExpense").text(data1[0].ActualFuelExpense);
+                    $("#Difference").text(data1[0].Difference);
+                    $("#TotalKM").text(data1[0].TotalKM);
+                    $("#FuelRatePerltr").text(data1[0].FuelRatePerltr);
+                    $("#TotalVehicle").text(data1[0].TotalVehicles);
+                    console.log(data1);
+
+                    if(parseFloat(data1[0].KMPL)<parseFloat(data1[0].StdKmpl))
+                    {
+                        $("#thumbsDownKPL").css({"display":"block"});
+                        $("#thumbsUpKPL").css({"display":"none"});
+                    }
+                    else
+                    {
+                        $("#thumbsDownKPL").css({"display":"none"});
+                        $("#thumbsUpKPL").css({"display":"block"});
+                    }
+                    var KMPL=data1[0].KMPL;
+                    
+
+
+                    $(".graph").text("");
+
+                    // Function to create random data in format: [date, amount]
+
+                   
+                    let stdKMPL=data1[0].StdKmpl;
+                    //let data = [];
+                    //let cat=['BB','dd'];
+                    //for (var i = 0; i < 2; i++) {
+     
+                    //  const randomNum = [1.4,tKM];
+                    //    let d = new Date();
+                    //    d.setDate(d.getDate() - i * 30);
+                    //    // alert(d);
+                    //    // alert(cat[i]);
+                    //    data.push({
+                    //        date: cat[i],
+                    //        amount: randomNum[i] });
+                    //    alert(randomNum[i]);
+                    //}
+
+                    //return data;
+                    
+                    //ClearGraph();
+
+                    // Create + Format data
+                    let data = createData(2,KMPL,stdKMPL).sort(function (a, b) {return a.date - b.date;});
+
+                    // what are these and are they things that someone should edit
+const margin = { top: 30, right: 20, bottom: 30, left: 65 };
+const width = 250 - (margin.left + margin.right);
+const height = 280 - (margin.top + margin.bottom);
+const labelOffset = 50;
+const axisOffset = 16;
+
+                    // Set Time Format (JAN, FEB, etc..)
+const timeFormat = d3.timeFormat('%b');
+
+                    // Set the scales
+const x = d3.scaleBand().
+
+rangeRound([0, width]).
+domain(data.map(d => d.date)).
+padding(0.5);
+                    // alert(x);
+const y = d3.scaleLinear().
+range([height, 0]).
+domain([0, d3.max(data, d => d.amount)]);
+
+                    // // Set the axes
+const xAxis = d3.axisBottom().
+scale(x).
+tickSize(0).
+tickFormat(timeFormat);
+
+const yAxis = d3.axisLeft().
+ticks(10).
+tickSize(-width).
+scale(y.nice());
+
+                    // // Set up SVG with initial transform to avoid repeat positioning
+const svg = d3.select('svg').
+attr('class', 'graph').
+attr('width', width + (margin.left + margin.right)).
+attr('height', height + (margin.top + margin.bottom)).
+append('g').
+attr('class', 'group-container').
+attr('transform', `translate(${margin.left}, ${margin.top})`).
+            attr('font-family', 'ibm-plex-sans');
+
+            // // Add Y axis
+            svg.append('g').
+            attr('class', 'axis y').
+            attr('stroke-dasharray', '4').
+            call(yAxis).
+            selectAll('text').
+            attr("x", -axisOffset).
+            attr('font-family', 'ibm-plex-sans');
+
+            // // Add Y axis label
+const yLabel = svg.select('.y').
+append('text').
+text('Expense (₹)').
+attr('class', 'label').
+attr('transform', `translate(${-labelOffset}, ${height / 2}) rotate(-90)`).
+    attr('font-family', 'ibm-plex-sans');
+
+    // // Add X axis
+    svg.append('g').
+    attr('class', 'axis x').
+    attr('transform', `translate(0, ${height})`).
+    call(xAxis).
+    selectAll('text').
+    attr("y", axisOffset).
+    attr('font-family', 'ibm-plex-sans');
+
+    // // Add X axis label
+const xLabel = svg.select('.x').
+append('text').
+text('').
+attr('class', 'label').
+attr('transform', `translate(${width / 2}, ${labelOffset})`).
+attr('font-family', 'ibm-plex-sans');
+
+    svg.append('g').
+    attr('class', 'bar-container').
+    selectAll('rect').
+    data(data).
+    enter().append('rect').
+    attr('class', 'bar').
+    attr('x', d => x(d.date)).
+    attr('y', d => height).
+    attr('height', 0).
+    attr('width', x.bandwidth()).
+    attr('fill', '#00A78F').
+    transition().
+    duration(500).
+    delay((d, i) => i * 50).
+    attr('height', d => height - y(d.amount)).
+    attr('y', d => y(d.amount));
+
+    // Select Tooltip
+const tooltip = d3.select('.tooltip');
+
+const bars = svg.selectAll('.bar').
+on('mouseover', function (d) {
+    let color = d3.color('#00A78F').darker();
+    d3.select(this).
+    attr('fill', color);
+    tooltip.
+    style('display', 'inherit').
+    text(`₹${d.amount}`).
+  style('top', `${y(d.amount) - axisOffset}px`);
+
+    let bandwidth = x.bandwidth();
+    let tooltipWidth = tooltip.nodes()[0].getBoundingClientRect().width;
+    let offset = (tooltipWidth - bandwidth) / 2;
+
+    tooltip.
+    style('left', `${x(d.date) + margin.left - offset}px`);
+    }).
+    on('mouseout', function (d) {
+        d3.select(this).
+        transition().
+        duration(250).
+        attr('fill', '#00A78F');
+        tooltip.
+        style('display', 'none');
+    });
+
+
+
+    $("#divMsg").hide();
+
+    },
+    error: function ()
+    {
+        $("#divMsg").hide();
+    }
+    })
+    })
+    })
+
+</script>
+
+
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/4.7.3/d3.min.js"></script>
+<script src="~/Graph/script.js"></script>

@@ -1,0 +1,1578 @@
+﻿@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/Master.cshtml";
+}
+
+@*<h2>Index</h2>*@
+
+<!-- Latest compiled and minified CSS -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+
+<!-- jQuery library -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
+<!-- Latest compiled JavaScript -->
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.css">
+
+<script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.js"></script>
+
+<link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" />
+
+<link href="~/Css/bootstrap-multiselect.css" rel="stylesheet" />
+
+<script src="~/Js/bootstrap-multiselect.js"></script>
+
+<link href="~/Css/style.css" rel="stylesheet" />
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Sales </title>
+</head>
+
+<body>
+
+    <style>
+        #top .col-sm-1 {
+            padding: 0px!important;
+        }
+
+        button.btn.btn-primary.upload {
+            margin-left: 2px;
+            float: left;
+        }
+
+        button.btn.btn-primary.edit {
+            float: left;
+        }
+
+        #divMsg {
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            position: fixed;
+            background: #f5f5f5ab;
+        }
+
+        div#divMsg img {
+            margin-left: 40%;
+            margin-top: 10%;
+        }
+    </style>
+    <script type="text/javascript">
+        @*  $(document).ready(function () {
+           $('#loader').click(function () {
+               alert("cc");
+               $(this).attr('disabled', 'disabled');
+               $('#top').find('input, textarea, button, select,a').attr('disabled', 'disabled');
+               $('#divMsg').show();
+               //your client side validation here
+               //if (valid)
+               //    return true;
+               //else {
+               //    $(this).removeAttr('disabled');
+               //    $('#divMsg').hide();
+               //    return false;
+               //}
+           });
+       })
+       *@
+    </script>
+
+    @*Showing Loader for 2 s on load*@
+    <script>
+        $(document).ready(function () {
+
+            $("#divMsg").show();
+            setTimeout(function () {
+                $("#divMsg").hide();
+                $("#top").css({ "display": "block" });
+                $("#vechiledownloadbutton").css({ "display": "block" });
+                $("#MasterDetails .row").css({ "display": "block" });
+                $("#BranchDetails .row").css({ "display": "block" });
+                $("#TbleHead ").css({ "display": "block" });
+                $("#Calculations ").css({ "display": "none" });
+            }, 2000);
+            $("#top").css({ "display": "none" });
+            $("#vechiledownloadbutton").css({ "display": "none" });
+            $("#MasterDetails .row").css({ "display": "none" });
+            $("#BranchDetails .row").css({ "display": "none" });
+            $("#TbleHead ").css({ "display": "none" });
+            $("#Calculations").css({ "display": "none" });
+
+
+        })
+    </script>
+
+    <div class="container">
+        <div id="divMsg" style="display: none;">
+            @*<img src="~/Image/loader.gif" alt="Please wait.." />*@
+            <div class="loader">Loading</div>
+        </div>
+        <div class="row" id="top">
+            <div class="" id="R">
+                @*<button type="button" class="btn btn-primary" id="loader">Loader</button>*@
+                <label for="uRegion" class="control-label">Region</label>
+                <input type="text" class="form-control" placeholder="Region Name" id="txtRegion" name="txtRegion" required="required" value="@ViewBag.RegionName" disabled/>
+            </div>
+            <div class="col-sm-2">
+                <label for="uBranch">Branch</label>
+                <select class="form-control" id="cmbBranch" name="cmbBranch" required>
+                    <option value="">-- Select Branch --</option>
+                    @if (ViewBag.BranchDetails != null)
+                    {
+                        foreach (var item1 in ViewBag.BranchDetails)
+                        {
+                        <option value="@item1.BranchId">@item1.BranchName</option>
+                        }
+                    }
+
+                </select>
+
+            </div>
+            <div class="col-sm-3">
+                <label for="uVechile">Vehicle Number</label>
+                <select class="form-control" id="cmbVechile" name="cmbVechile" required>
+                </select>
+                <script type="text/javascript">
+                    $(document).ready(function () {
+                        var UserType = '@Session["UserType"]';
+                        //Bank Dropdown Selectedchange event    
+                        $('[id=cmbVechile]').multiselect({
+                            enableFiltering: true,
+                            enableCaseInsensitiveFiltering: true,
+                            includeSelectAllOption: false,
+                            includeSelectAllDivider: false,
+                            maxHeight: 230,
+                            buttonWidth: '230px',
+                            onChange: function () {
+                                $.ajax({
+                                    type: "POST",
+                                    url: '@Url.Action("GetVechileDetails")',
+                                    data: { VehicleNumber: $('#cmbVechile').val() },
+                                    dataType: "JSON",
+                                    success: function (data) {
+                                        $("#myDatatable").find("tr:not(:first)").remove();
+                                        var trHTML = '';
+                                        $.each(data, function (i, item) {
+
+                                            trHTML += '<tr><td>' + data[i].RegionName + '</td>' +
+                                                            '<td>' + data[i].BranchName + '</td>' +
+                                                            '<td>' + data[i].ChesisNo + '</td>' +
+                                                            '<td>' + data[i].VehicleNo + '</td>' +
+                                                            '<td>' + data[i].Make + '</td>' +
+                                                            '<td>' + data[i].Manufacturing_Year + '</td>' +
+                                                            '<td>' + data[i].FuelType + '</td>' +
+                                                            '<td>' + data[i].PetroCardNumber + '</td>' +
+                                                      '</tr>';
+                                        });
+
+                                        $('#myDatatable').append(trHTML);//To add the table row to table
+
+                                        $.ajax({
+                                            type: "POST",
+                                            url: '@Url.Action("GetSalesDetails")',
+                                            data: { VehicleNumber: $('#cmbVechile').val(), BranchID: $('#cmbBranch').val() },
+                                            dataType: "JSON",
+                                            success: function (data) {
+                                                if (data != "") {
+
+                                                }
+                                                else {
+
+                                                }
+
+                                                console.log(data);
+                                            },
+
+                                            error: function (result) {
+                                                alert(result.error.toString());
+                                            }
+                                        });
+
+                                    },
+
+                                    error: function (result) {
+                                        alert(result.error.toString());
+                                    }
+                                });
+
+                                //Getting all the details for MasterDetails div
+                                var VechileNumber = $('#cmbVechile').val();
+                                
+                                   
+
+                                $.ajax({
+                                    type: "POST",
+                                    url: '@Url.Action("GetMasterDetails")',
+                                    data: { VechileNumber: VechileNumber },
+                                    dataType: "json",
+                                    success: function (data) {
+                                        // alert(data.MessageForBranch);
+                                        //alert(data.MessageForMaster);
+                                        //alert(data.lstRouteServiceDetails[0].RouteNo);
+                                        //alert(data.lstRouteServiceDetails[0].ServiceType);
+                                        //Disbale all the the field of  Branch div if there is a data for master but not for Branch in database for vechile
+                                        if (data.MessageForBranch == "NoDataInKPLBranchDetails") {
+                                            $('#BranchDetails').find('input:text').val('');
+                                            $("#SaveSalesDetails").text("Save");
+                                            $("#txtTotalKM").val("");
+                                            $("#txtKMPL").val("");
+                                            $("#txtTotalKM").css({ "font-size": "13px" });
+                                            $("#txtKMPL").css({ "font-size": "13px" });
+                                        }
+                                        else {
+                                            var UserType = '@Session["RegionName"]';
+                                            if (UserType == "Admin") {
+                                                $('#BranchDetails').find('input, textarea, button, select,a').attr('disabled', false);
+                                                $("#SaveSalesDetails").text("Update");
+                                            }
+                                            //else {
+                                            //    $('#BranchDetails').find('input, textarea, button, select,a').attr('disabled', 'disabled');
+                                            //}
+                                        }
+
+
+                                        //filling last  RouteNo and Service Type assigned to vechile on BranchDiv
+                                        if (data.lstRouteServiceDetails[0].RouteNo != "" && data.lstRouteServiceDetails[0].ServiceType != "") {
+                                            $("#txtRouteNumber").val(data.lstRouteServiceDetails[0].RouteNo);
+                                            //console.log(data.lstRouteServiceDetails[0].RouteNo);
+                                            //alert(data.lstRouteServiceDetails[0].RouteNo);
+                                            $("#cmbServices").val(data.lstRouteServiceDetails[0].ServiceType);
+                                        }
+
+
+                                        //Disbale all the the field of Master div and Branch div if there is no data found in database for vechile
+                                        if (data.MessageForMaster == "NoDataInKPLBulkUploadForFuelConsumptionFuelPuchased") {
+                                            alert("Data not available for this Vechile");
+                                            $('#MasterDetails').find('input:text').val('');
+                                            $('#BranchDetails').find('input:text').val('');
+                                            $('#BranchDetails').find('input, textarea, button, select,a').attr('disabled', 'disabled');
+                                        }
+
+                                        else {
+
+                                            //filling MasterDetails textboxes
+                                            $("#txtOpeningKM").val(data.lstVechileMasterDetails[0].OpeningKM);
+                                            $("#txtOpeningFuelLiter").val(data.lstVechileMasterDetails[0].OpeningFuelLiter);
+                                            $("#txtSTDKMPL").val(data.lstVechileMasterDetails[0].StdKMPL);
+                                            $("#txtBPNONBP").val(data.lstVechileMasterDetails[0].BpNonBp);
+                                            $("#txtFuelCombustion").val(data.lstVechileMasterDetails[0].FuelConsumption);
+                                            $("#txtFuelPetroCard").val(data.lstVechileMasterDetails[0].FuelPurchasedThroughPetroCard);
+
+
+
+                                            //Delaying .3 second to show alert after populating of data into the textbox
+                                            //Make branchDetails textbox disable if MasterDetails textboxes have an null or empty value
+                                            blurTimeout = setTimeout(function () {
+                                                var showAlert = true;
+                                                $('#MasterDetails input:text').each(function () {
+                                                    if ($(this).val().length == 0) {
+                                                        if (showAlert) {
+                                                            alert("All the fields of Master Details must be filled.");
+                                                            showAlert = false;
+                                                            $('#BranchDetails').find('input:text').val('');
+                                                            $('#BranchDetails').find('input, textarea, button, select,a').attr('disabled', 'disabled');
+                                                        }
+                                                    }
+                                                });
+                                            }, 300);
+
+                                            //Checking if all the textbox of MasterDetails have the value then BranchDetails textbox will be enabled || Works only for else condition
+                                            $("#MasterDetails input").each(function () {
+                                                var element = $(this);
+                                                if (!$(this).val()) {
+                                                }
+                                                else {
+                                                    $('#BranchDetails').find('input, textarea, button, select,a').attr('disabled', false);
+                                                }
+                                            });
+
+
+                                            //filling of BranchDetails textboxes if it has previous month values by vechile
+                                            var Utype = '@Session["UserType"]';
+                                            if (Utype == "Admin") {
+                                                $("#txtFuelCombustion").attr("disabled", false);
+                                                $("#txtFuelPetroCard").attr("disabled", false);
+                                            }
+                                            $("#txtClosingKM").val(data.lstVechileBranchDetails[0].ClosingKM);
+                                            $("#txtClosingFuelLiter").val(data.lstVechileBranchDetails[0].ClosingFuelLtr);
+                                            $("#txtNonBillingKilometer").val(data.lstVechileBranchDetails[0].NonBillingKM);
+                                            $("#txtRouteNumber").val(data.lstVechileBranchDetails[0].RouteNumber);
+                                            $("#txtUnitName").val(data.lstVechileBranchDetails[0].UnitName);
+                                            $("#txtFuelPurchased").val(data.lstVechileBranchDetails[0].FuelPurchasedInCash);
+                                            $("#txtFuelPurchasedInLtr").val(data.lstVechileBranchDetails[0].FuelPuchasedInLtr);
+                                            $("#cmbVendorName").val(data.lstVechileBranchDetails[0].VendorName);
+                                            $("#txtDriverName").val(data.lstVechileBranchDetails[0].DriverName);
+                                            $("#txtDriverPatID").val(data.lstVechileBranchDetails[0].DriverPatId);
+                                            $("#cmbServices").val(data.lstVechileBranchDetails[0].TypeOfServices);
+                                            $("#txtRemarks").val(data.lstVechileBranchDetails[0].Remarks);
+
+
+                                            $("#txtTotalKM").val(data.lstVechileBranchDetails[0].TotalKM);
+                                            $("#txtKMPL").val(data.lstVechileBranchDetails[0].KMPL);
+
+
+                                            //styling the calculations div 
+                                            var StandardKMPL = parseFloat($("#txtSTDKMPL").val());
+                                            var KMPL = data.lstVechileBranchDetails[0].KMPL;
+                                            $("#txtTotalKM").css({ "font-size": "20px", "font-weight": "bold" });
+                                            if (KMPL <= StandardKMPL) {
+                                                $("#txtKMPL").css({ "color": "red", "font-weight": "bold", "font-size": "20px" });
+                                            }
+                                            else {
+                                                $("#txtKMPL").css({ "color": "green", "font-weight": "bold", "font-size": "20px" });
+                                            }
+
+                                            if ($("#txtTotalKM").val().length > 5) {
+
+                                                $("#txtClosingKM").val("");
+                                                alert("Please check closing KM");
+                                                return;
+                                            }
+
+                                              @*Change driver patid to angency name*@
+                                            var vendorName = $("#cmbVendorName").val();
+                                            //alert(vendorName);
+                                            if (vendorName == "Hired") {
+                                                $("#lbldriverPatId").text("Agency Name");
+                                                $("#txtDriverPatID").attr("placeholder", "Agency Name");
+                                            }
+                                            else {
+                                                $("#lbldriverPatId").text("Driver PatID");
+                                                $("#txtDriverPatID").attr("placeholder", "Driver PatID");
+                                            }
+
+
+                                            //Making Branch div textbox disabled if it have the previous month value  after on change of vechile
+                                            //alert(data.MessageForBranch);
+                                            if (data.lstVechileBranchDetails[0].ClosingKM != "") {
+                                                var UserType = '@Session["RegionName"]';
+                                                if (UserType == "Admin") {
+                                                    $('#BranchDetails').find('input, textarea, button, select,a').attr('disabled', false);
+                                                    $("#SaveSalesDetails").text("Update");
+                                                }
+                                                else {
+                                                    $('#BranchDetails').find('input, textarea, button, select,a').attr('disabled', 'disabled');
+                                                }
+                                            }
+                                            else {
+                                                $("#SaveSalesDetails").text("Save");
+                                                $('#BranchDetails').find('input, textarea, button, select,a').attr('disabled', false);
+                                            }
+
+                                        }
+                                        if (UserType == "Admin") {
+                                            $("#txtFuelCombustion").attr("disabled", false);
+                                            $("#txtFuelPetroCard").attr("disabled", false);
+                                        }
+
+
+
+                                    },
+                                    error: function (response) {
+                                        alert(response.responseText);
+                                    },
+                                    failure: function (response) {
+                                        alert(response.responseText);
+                                    }
+                                })
+
+
+                            },
+                        });
+                    });
+                </script>
+
+            </div>
+            <div class="col-sm-3">
+                <div id="div3" style="margin-top: 24px">
+                    <button class="btn btn-primary" id="countbtn" data-toggle="modal" data-target="#showingNotInsertedVechile"><span id="count"></span></button>
+                    <button class="btn btn-primary" data-toggle="modal" data-target="#ModalForOpeningClosingDetails" id="OpeningDetailsButton">Opening Details</button>
+                </div>
+            </div>
+            <div class="col-sm-1" style="margin-top: 5px">
+                <br />
+                <button type="button" class="btn btn-primary" id="EditVehicleData" title="Edit Branch Details"><i class="fa fa-pencil" id="pencil" title="Edit Branch Details"></i></button>
+                <button type="button" class="btn btn-primary" id="UploadVehicleData" title="Upload Vechle Consumption fuel and fuel purchased through Petro Card"><i class="fa fa-upload" id="upload" title="Upload Vechle Consumption fuel and fuel purchased through Petro Card"></i></button>
+            </div>
+            <div class="col-sm-1">
+                <label for="uType" class="control-label" style="visibility: hidden">Save Detail</label>
+                <button class="btn btn-primary" id="SaveSalesDetails" style="width: 85%;">Save</button>
+            </div>
+             <div class="col-sm-1"></div>
+             @using (Html.BeginForm("DownloadPendency", "Kpi", FormMethod.Post))
+             {
+                <div class="col-sm-1">
+                    <label for="uType" class="control-label" style="visibility: hidden">Save Detail</label>
+                    <button type="submit" class="btn btn-primary" id="" title="Edit Branch Details"><i class="fa fa-download" id="" title="Download Pendency KPL Report"></i></button>
+                </div>
+             }
+        </div>
+        <pre style="visibility: hidden"></pre>
+        <div class="row">
+            <div class="col-sm-12" id="TbleHead">
+                <table class="table table-responsive table-bordered table-hover table-striped" id="myDatatable" style="font-size: 13px;">
+                    <thead class="bg-primary">
+                        <tr>
+                            <th>Region</th>
+                            <th>Branch</th>
+                            <th>Chassis Number</th>
+                            <th>Vehicle Number</th>
+                            <th>Make</th>
+                            <th>Manufacturing Year</th>
+                            <th>Fuel Type</th>
+                            <th>Petro Card Number</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <p></p>
+    <div class="container">
+
+        @*Bulk Upload*@
+        <div style="border: 1px solid #ccc; border-radius: 4px; display: none" id="BulkUpload">
+
+            @using (Html.BeginForm("UploadKPL", "KPI", FormMethod.Post, new { enctype = "multipart/form-data" }))
+            {
+                @Html.AntiForgeryToken();
+                @Html.ValidationSummary();
+                <table class="table table">
+                    <tr>
+                        <th>Bulk Upload</th>
+                        <th></th>
+                        <th></th>
+                    </tr>
+                    <tr>
+                        <td>
+                            <input type="file" class="form-control" id="fileKPL" name="fileKPL">
+                            &nbsp &nbsp</td>
+                        <td>
+                            <select class="form-control" id="month" name="month">
+                                <option id="firstOption"></option>
+                                <option value="January">January</option>
+                                <option value="February">February</option>
+                                <option value="March">March</option>
+                                <option value="April">April</option>
+                                <option value="May">May</option>
+                                <option value="June">June</option>
+                                <option value="July">July</option>
+                                <option value="August">August</option>
+                                <option value="September">September</option>
+                                <option value="October">October</option>
+                                <option value="November">November</option>
+                                <option value="December">December</option>
+                            </select></td>
+                        <td>
+                            <button type="button" id="btnSubmitBulkUpload" class="btn btn-info">Upload</button>
+                            &nbsp 
+                        @*<a href="@Url.Action("SaveKPLData", "Kpi")">*@
+                            <button type="button" id="btnSaveForBulkUpload" class="btn btn-primary">Submit</button>
+                            @*</a>*@
+                            &nbsp &nbsp <a href="@Url.Action("Download", "Kpi")" class="fa">
+                                <button type="button" class="btn btn-primary" id="vechiledownloadbutton"><i class="fa fa-file-excel-o " id="excelicon"></i></button>
+                            </a>
+                            @*<label for="email;" style="margin-top: 10px">&nbsp <i class="fa fa-upload fa-2x"></i></label>*@
+
+                        </td>
+
+                    </tr>
+                </table>
+            }
+
+            <div style="height: 280px; overflow-x: auto; margin-top: -39px;" id="BulkUploadData">
+                <table class="table table" id="KPLDataTable">
+                    <tr style="background-color: #337ab7; color: white">
+                        <th>Vechile Number</th>
+                        <th>Fuel Consumption</th>
+                        <th>Fuel Purchased through Petro Card</th>
+                        <th>Remarks</th>
+                    </tr>
+
+                    @if (ViewBag.KPL != null)
+                    {
+                        foreach (var i in ViewBag.KPL)
+                        {
+                            if (@i.Remarks != "Matching")
+                            {
+                        <tr>
+                            <td>@i.VechileNumber</td>
+                            <td>@i.FuelConsumptionInLtr</td>
+                            <td>@i.FuelPurchasedThroughPetroCard</td>
+                            <td style="color: red">@i.Remarks</td>
+                        </tr>
+                            }
+                            else
+                            {
+                        <tr>
+                            <td>@i.VechileNumber</td>
+                            <td>@i.FuelConsumptionInLtr</td>
+                            <td>@i.FuelPurchasedThroughPetroCard</td>
+                            <td style="color: green">@i.Remarks</td>
+                        </tr>
+                            }
+                        }
+                    }
+                </table>
+
+            </div>
+
+        </div>
+
+        <div style="padding: 9.5px; margin: 0 0 10px; line-height: 1.42857143; color: #333; border: 1px solid #ccc; border-radius: 4px;" id="MasterDetails">
+            <legend><span style="font-weight: bold; font-style: bold; font-size: 15px; color: black;">Master Details Below (By Corporate Team):</span></legend>
+            <div class="row">
+                <div class="col-sm-2">
+                    <label for="uOpeningKM" class="control-label">Opening KM</label>
+                    <input type="text" class="form-control" placeholder="Opening KM" id="txtOpeningKM" name="txtOpeningKM" required="required" disabled />
+                </div>
+                <div class="col-sm-2">
+                    <label for="uOpeningFuelLiter" class="control-label">Opening Fuel Liter</label>
+                    <input type="text" class="form-control" placeholder="Opening Fuel Liter" id="txtOpeningFuelLiter" name="txtOpeningFuelLiter" required="required" disabled />
+                </div>
+                <div class="col-sm-2">
+                    <label for="uSTDKMPL" class="control-label">STD KMPL</label>
+                    <input type="text" class="form-control" placeholder="STD KMPL" id="txtSTDKMPL" name="txtSTDKMPL" required="required" disabled />
+                </div>
+                <div class="col-sm-2">
+                    <label for="uBPNONBP" class="control-label">BP/NON BP</label>
+                    <input type="text" class="form-control" placeholder="BP/NON BP" id="txtBPNONBP" name="txtBPNONBP" required="required" disabled />
+                </div>
+                <div class="col-sm-2">
+                    <label for="uFuelCombustion" class="control-label">Fuel Combustion Ltr</label>
+                    <input type="text" class="form-control" placeholder="Fuel Combustion" id="txtFuelCombustion" name="txtFuelCombustion" required="required" disabled />
+                </div>
+                <div class="col-sm-2">
+                    <label for="uFuelPetroCard" class="control-label">Fuel Petro Card</label>
+                    <input type="text" class="form-control" placeholder="Fuel Purchased" id="txtFuelPetroCard" name="txtFuelPetroCard" required="required" disabled />
+                </div>
+            </div>
+        </div>
+
+
+
+
+
+
+
+
+        <p></p>
+        <div style="padding: 9.5px; margin: 0 0 10px; line-height: 1.42857143; color: #333; border: 1px solid #ccc; border-radius: 4px;" id="BranchDetails">
+            <legend><span style="font-weight: bold; font-style: bold; font-size: 15px; color: black;">Branch Details Below (Need to be filled by user):</span></legend>
+            <div class="row">
+                <div class="col-sm-2">
+                    <label for="uClosingKM" class="control-label">Closing KM</label>
+                    <input type="text" class="form-control " placeholder="Closing KM" id="txtClosingKM" name="txtClosingKM" required="required" />
+                </div>
+                <div class="col-sm-2">
+                    <label for="uClosingFuelLiter" class="control-label">Closing Fuel Ltr</label>
+                    <input type="text" class="form-control" placeholder="Closing Fuel Liter" id="txtClosingFuelLiter" name="txtClosingFuelLiter" required="required" />
+                </div>
+                <div class="col-sm-2">
+                    <label for="uNonBillingKilometer" class="control-label">Non Billing KM</label>
+                    <input type="text" class="form-control" placeholder="Non Billing KM" id="txtNonBillingKilometer" name="txtNonBillingKilometer" required="required" />
+                </div>
+                <div class="col-sm-2">
+                    <label for="txtRouteNumber" class="control-label">Route ID </label>
+                    <input type="text" class="form-control" placeholder="Route ID " id="txtRouteNumber" name="txtRouteNumber" required="required" />
+                </div>
+                <div class="col-sm-2">
+                    <label for="uUnitName" class="control-label">Unit Name</label>
+                    <input type="text" class="form-control" placeholder="Unit Name" id="txtUnitName" name="txtUnitName" required="required" />
+                </div>
+                <div class="col-sm-2">
+                    <label for="uFuelPurchased" class="control-label">Fuel Amount (If Cash)</label>
+                    <input type="text" class="form-control" placeholder="Fuel Purchase InCash" id="txtFuelPurchased" name="txtFuelPurchased" required="required" />
+                </div>
+            </div>
+            <p></p>
+            <div class="row">
+                <div class="col-sm-2">
+                    <label for="txtFuelPurchasedInLtr" class="control-label">Fuel Litre (If Cash)</label>
+                    <input type="text" class="form-control" placeholder="Fuel Purchase In Ltr" id="txtFuelPurchasedInLtr" name="txtFuelPurchasedInLtr" required="required" />
+                </div>
+                <div class="col-sm-2">
+                    <label for="uVendorName" class="control-label">Vendor Name</label>
+                    <select class="form-control" id="cmbVendorName" name="cmbVendorName" required>
+                        <option value="">-- Select -- </option>
+                        <option value="Own">Own</option>
+                        <option value="Hired">Hired</option>
+                    </select>
+                </div>
+                <div class="col-sm-2">
+                    <label for="uDriverName" class="control-label">Driver Name</label>
+                    <input type="text" class="form-control" placeholder="Driver Name" id="txtDriverName" name="txtDriverName" required="required" />
+                </div>
+                <div class="col-sm-2">
+                    <label for="uDriverPatID" class="control-label" id="lbldriverPatId">Driver PatID</label>
+                    <input type="text" class="form-control" placeholder="Driver PatID" id="txtDriverPatID" name="txtDriverPatID" required="required" />
+                </div>
+                <div class="col-sm-2">
+                    <label for="uTypeofServices" class="control-label">Type of Services</label>
+                    <select class="form-control" id="cmbServices" name="cmbServices" required>
+                        <option value="">-- Select -- </option>
+                        <option value="CIT">CIT</option>
+                        <option value="DSB">DSB</option>
+                        <option value="ATM">ATM</option>
+                        <option value="BULLION">BULLION</option>
+                        <option value="SURPLUS">SURPLUS</option>
+                        <option value="SIS India(Billing)">SIS INDIA(BILLING)</option>
+                        <option value="SIS India(Non-Billing)">SIS INDIA(NON-BILLING)</option>
+                        <option value="Merge(CIT-DSB)">MERGE(CIT-DSB)</option>
+                        <option value="Merge(DSB-ATM)">MERGE(DSB-ATM)</option>
+                        <option value="SCRAP">SCRAP</option>
+                    </select>
+                </div>
+                <div class="col-sm-2">
+                    <label for="uRemarks" class="control-label">Remarks</label>
+                    <input type="text" class="form-control" placeholder="Remarks" id="txtRemarks" name="txtRemarks" required="required" />
+                </div>
+            </div>
+        </div>
+
+
+
+        <div style="padding: 9.5px; margin: 0 0 10px; line-height: 1.42857143; color: #333; border: 1px solid #ccc; border-radius: 4px;" id="Calculations">
+            <legend><span style="font-weight: bold; font-style: italic; font-size: 14px; color: #808080;">Calculation details below:</span></legend>
+            <div class="row">
+                <div class="col-sm-2">
+                    <label for="txtTotalKM" class="control-label">Total KM</label>
+                    <input type="text" class="form-control" placeholder="Total KM" id="txtTotalKM" name="txtTotalKM" required="required" disabled />
+                </div>
+                <div class="col-sm-2">
+                    <label for="txtKMPL" class="control-label">KMPL</label>
+                    <input type="text" class="form-control" placeholder="Opening Fuel Liter" id="txtKMPL" name="txtKMPL" required="required" disabled />
+                </div>
+
+            </div>
+        </div>
+
+        <script>
+            $(document).ready(function () {
+                $("#txtTotalKM").val("");
+                $("#txtKMPL").val("");
+
+                $("#txtClosingKM").focusout(function () {
+                    CalculationTotalKmAndKMPL();
+                })
+
+                $("#txtClosingFuelLiter").focusout(function () {
+                    CalculationTotalKmAndKMPL();
+                })
+            })
+        </script>
+        <script>
+            function CalculationTotalKmAndKMPL() {
+                var openingKM = parseInt($("#txtOpeningKM").val());
+                var closingKM = parseInt($("#txtClosingKM").val());
+                var OpeningFuelLiter = parseFloat($("#txtOpeningFuelLiter").val());
+                var FuelPurchasedInLtr = parseFloat($("#txtFuelCombustion").val());
+                var ClosingFuelLiter = parseFloat($("#txtClosingFuelLiter").val());
+                var StandardKMPL = parseFloat($("#txtSTDKMPL").val());
+
+                var totalKM = closingKM - openingKM;
+                var FuelConbustion = OpeningFuelLiter + FuelPurchasedInLtr;
+                var a = FuelConbustion - ClosingFuelLiter;
+                var KMPL = totalKM / a;
+                //alert(KMPL);
+                //alert(totalKM);
+                $("#txtTotalKM").val(totalKM);
+                $("#txtKMPL").val(KMPL.toFixed(2));
+
+                $("#txtTotalKM").css({ "font-size": "20px", "font-weight": "bold" });
+                if (KMPL <= StandardKMPL) {
+                    $("#txtKMPL").css({ "color": "red", "font-weight": "bold", "font-size": "20px" });
+                }
+                else {
+                    $("#txtKMPL").css({ "color": "green", "font-weight": "bold", "font-size": "20px" });
+                }
+
+                if ($("#txtTotalKM").val().length > 5) {
+
+                    $("#txtClosingKM").val("");
+                    alert("Please check closing KM");
+                    return;
+                }
+            }
+        </script>
+    </div>
+    <!--end of container-->
+
+
+    <!-- Modal -->
+    <div class="modal fade" id="ModalForOpeningClosingDetails" role="dialog">
+        <div class="modal-dialog modal-lg">
+
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Revised Opening Details</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-sm-2">
+                            <label for="cmbOpeningClosingRegionId" class="control-label">Region</label>
+                            <select class="form-control" id="cmbOpeningClosingRegionId" name="cmbOpeningClosingRegionId" required>
+                                <option>Select Region</option>
+                                @if (ViewBag.AllRegion != null)
+                                {
+                                    foreach (var i in ViewBag.AllRegion)
+                                    { 
+                                    <option value="@i.Region_id" >@i.Region_Name</option>
+                                    }
+                                }
+                            </select>
+                        </div>
+                        <div class="col-sm-3">
+                            <label for="cmbOpeningClosingBranchId">Branch</label>
+                            <select class="form-control" id="cmbOpeningClosingBranchId" name="cmbOpeningClosingBranchId" required>
+                                <option value="">-- Select Branch --</option>
+
+                            </select>
+
+                        </div>
+                        <div class="col-sm-3">
+                            <label for="uVechile">Vechile Number</label>
+                            <select class="form-control" id="cmbOpeningClosingVechileNumber" name="cmbOpeningClosingVechileNumber" required>
+                            </select>
+                             <script type="text/javascript">
+                                $(document).ready(function () {
+                                    //Bank Dropdown Selectedchange event    
+                                    $('[id=cmbOpeningClosingVechileNumber]').multiselect({
+                                        enableFiltering: true,
+                                        enableCaseInsensitiveFiltering: true,
+                                        includeSelectAllOption: false,
+                                        includeSelectAllDivider: false,
+                                        maxHeight: 200,
+                                        buttonWidth: '200px',
+                                    });
+                                });
+                            </script>
+
+                        </div>
+                        <div class="col-sm-2">
+                            <label for="OpeningKM" class="control-label">OpeningKM</label>
+                            <input type="number" class="form-control" placeholder="Opening KM" id="OpeningKM" name="OpeningKM" required="required" />
+
+                        </div>
+                        <div class="col-sm-2">
+                            <label for="txtOpeningFuel" class="control-label">Opening Fuel</label>
+                            <input type="number" class="form-control" placeholder="Opening Fuel" id="txtOpeningFuel" name="txtOpeningFuel" required="required" />
+
+                        </div>
+
+                    </div>
+                </div>@* end of modal body*@
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" id="btnSaveOpeningClosingDetails">Save</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+    <style>
+        .btn-group > .btn:first-child {
+            margin-left: 0;
+            width: 210%;
+        }
+
+        #cmbVechileNotInserted label {
+            width: 10px;
+        }
+
+        .open > .dropdown-menu {
+            display: block;
+            width: 18.9em;
+            /* margin-left: 10px; */
+        }
+    </style>
+    <!-- Modal for showing not inserted vechile-->
+    <div class="modal fade" id="showingNotInsertedVechile" role="dialog">
+        <div class="modal-dialog modal-sm">
+
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Not Inserted Vehicles</h4>
+                </div>
+                <div class="modal-body">
+                    <div>
+                        <label for="cmbVechileNotInserted">Vehicle Number</label><br>
+                        <select class="form-control" id="cmbVechileNotInserted" name="cmbVechileNotInserted" required>
+                        </select>
+                    </div>
+                </div>
+                @* <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        </div>*@
+            </div>
+
+        </div>
+    </div>
+    <script>
+        $(document).ready(function () {
+
+            $("#cmbVechileNotInserted").change(function () {
+
+            })
+        })
+    </script>
+
+    @*    <script src="~/Material/mdb.min.js"></script>
+    <script src="~/Material/function.js"></script>*@
+</body>
+</html>
+
+@*showing or hiding Master div and Branch Div according the admin and user*@
+<script>
+    $(document).ready(function () {
+        if ('@Session["RegionName"]' == "Admin") {
+            $("#R").addClass("col-sm-1");
+
+            $("#MyDatatable").hide();
+            $("#MasterDetails").hide();
+            $("#BranchDetails").hide();
+            $("#BulkUpload").hide();
+        }
+        else {
+            $("#R").addClass("col-sm-1");
+            $("#EditVehicleData").hide();
+            $("#UploadVehicleData").hide();
+        }
+    })
+</script>
+
+@*On Branch Change*@
+<script>
+    $(document).ready(function () {
+
+        $("#countbtn").hide();
+        $("#cmbBranch").change(function () {
+            var BranchId = $("#cmbBranch").val();
+            var RegionId = '@Session["RegionIds"]';
+            // alert(RegionId);
+            $("#myDatatable").show();
+            $("#MasterDetails").show();
+            $("#BranchDetails").show();
+            $("#Calculations").show();
+
+            $("#BulkUpload").hide();
+            $.ajax({
+                url: '@Url.Action("GetVechileList")',
+                data: {
+                    BranchId: $("#cmbBranch").val(),
+                    RegionId: RegionId
+                },
+                dataType: "json",
+                type: "POST",
+                traditional: true,
+                success: function (data) {
+                    var mySelect = $('#cmbVechile');
+
+                    mySelect.empty();
+                    var selectOption = '<option value="">Select Vehicle</option';
+                    $("#cmbVechile").append(selectOption);
+                    $.each(data, function (i) {
+                        var optionhtml = '';
+
+                        optionhtml = '<option id="option" value="' + data[i].VehicleNumber + '">' + data[i].VehicleNumber + '</option>';
+
+                        $("#cmbVechile").append(optionhtml);
+                    });
+
+                    mySelect.multiselect('rebuild');
+                },
+                error: function (response) {
+                    alert(response.responseText);
+                },
+                failure: function (response) {
+                    alert(response.responseText);
+                }
+            });
+
+
+
+            //getting all the vechile list which is not inserted in kpl branch details of previous month
+            $.ajax({
+                url: '@Url.Action("GetVechileListWhichIsNotInsertedInKPLBranch")',
+                data: {
+                    BranchId: $("#cmbBranch").val(),
+                    RegionId: RegionId
+                },
+                dataType: "json",
+                type: "POST",
+                traditional: true,
+                success: function (data) {
+                    $("#cmbVechileNotInserted").empty();
+                    var selectOption = '<option value="">Select Vechile</option';
+                    $("#cmbVechileNotInserted").append(selectOption);
+                    $.each(data, function (i) {
+                        var optionhtml = '';
+
+                        optionhtml = '<option id="option" value="' + data[i].VehicleNumber + '">' + data[i].VehicleNumber + '</option>';
+
+                        $("#cmbVechileNotInserted").append(optionhtml);
+                    });
+
+                    $("#cmbVechileNotInserted").multiselect('rebuild');
+                },
+                error: function (response) {
+                    alert(response.responseText);
+                },
+                failure: function (response) {
+                    alert(response.responseText);
+                }
+            });
+
+
+            $.ajax({
+                url: '@Url.Action("CountDetailsOfVechileByBranch")',
+                type: 'post',
+                data: { BranchId: BranchId, RegionId: RegionId },
+                dataType: 'json',
+                success: function (data) {
+                    // alert(data.errorMessage);
+                    if (data.errorMessage == "NoDataInThisBranch") {
+                        $("#countbtn").show();
+                        $("#count").text(data.Month + "  0" + ' / ' + '0');
+                        $("#countbtn").css({ width: "109px" });
+                    }
+                    else {
+                        $("#countbtn").show();
+                        $("#count").text(data.Month + "  " + data.lstCount[0].TotalVechileByBranch + ' / ' + data.lstCount[0].ModifiedVechileByBranch);
+                        $("#countbtn").css({ width: "109px" });
+                    }
+                    $("#countbtn").show();
+                    $("#count").text(data.Month + "  " + data.lstCount[0].TotalVechileByBranch + ' / ' + data.lstCount[0].ModifiedVechileByBranch);
+                    $("#countbtn").css({ width: "109px" });
+                },
+                error: function (response) {
+                    alert(response.responseText);
+                },
+                failure: function (response) {
+                    alert(response.responseText);
+                }
+            })
+        });
+    });
+</script>
+
+@*Hide Master Details & Branch Details When user is Admin*@
+<script>
+    $(document).ready(function () {
+        var user = '@Session["UserType"].ToString()';
+
+        if (user == "Admin") {
+            $("#myDatatable").hide();
+            $("#MasterDetails").hide();
+            $("#BranchDetails").hide();
+        }
+        if (user != "Admin") {
+            $("#BulkUpload").hide();
+            $("#myDatatable").show();
+            $("#MasterDetails").show();
+            $("#BranchDetails").show();
+        }
+    });
+</script>
+
+@*Submit Button of Bulk Upload for KPL*@
+<script>
+    $(document).ready(function () {
+
+        $("#btnSubmitBulkUpload").click(function () {
+            if ($("#fileKPL").val() == "") {
+                alert("Please select excel file for Bulk Upload");
+            }
+            else {
+
+                $("form").submit();
+                // $("#BulkUploadData").show();
+                $("#divMsg").show();
+
+            }
+        })
+    })
+</script>
+
+@*//Disable all the element of Bulk upload if the current date is not 1 or 2*@
+<script>
+    $(document).ready(function () {
+        var UserType = '@Session["RegionName"]';
+        //if (UserType == "Admin") {
+        //    $('#BulkUpload').find('input, textarea, button, select,a').attr('disabled', false);
+        //    $('.fa').click(function (e) { return false; });
+        //}
+        //else {
+        var CurrentDate = '@Session["CurrentDate"]';
+        if (CurrentDate == 1 || CurrentDate == 2 || CurrentDate == 3) {
+            $('#BulkUpload').find('input, textarea, button, select,a').attr('disabled', false);
+            $('.fa').click(function (e) { return true; });
+        }
+        else {
+            $('#BulkUpload').find('input, textarea, button, select,a').attr('disabled', 'disabled');
+            $('.fa').click(function (e) { return false; });
+        }
+        $(document).ready(function () {
+
+        })
+        // }
+    })
+</script>
+
+@*Saving the bulk data for KPL*@
+<script>
+    $("#btnSaveForBulkUpload").click(function () {
+        var PreviouseMonthFromBackend = '@Session["PreviousMonth"]';
+        var SelectedMonth = '@Session["SelectedMonth"]';
+        if (PreviouseMonthFromBackend == SelectedMonth) {
+
+            $("#BulkUpload").show();
+
+            $("#myDatatable").hide();
+            $("#MasterDetails").hide();
+            $("#BranchDetails").hide();
+
+
+            //disabling all the button and textbox and enabling page loader
+            $("#vechiledownloadbutton").hide();
+
+            $(this).attr('disabled', 'disabled');
+            $('#top').find('input, textarea, button, select,a').attr('disabled', 'disabled');
+            $('#divMsg').show();
+
+            $.ajax({
+                url: '@Url.Action("SaveKPLData", "Kpi")',
+                type: "post",
+                data: {},
+                dataType: "json",
+                traditional: true,
+                success: function (data) {
+                    alert(data);
+                    window.location.href = "index";
+                    $("#KPLDataTable").find("tr:not(:first)").remove();
+                    $("#vechiledownloadbutton").attr('disabled', false);
+                    $(this).attr('disabled', 'disabled');
+                    $('#top').find('input, textarea, button, select,a').attr('disabled', false);
+                    $('#divMsg').hide();
+                },
+                error: function (response) {
+                    alert(response.responseText);
+                },
+                failure: function (response) {
+                    alert(response.responseText);
+                }
+
+
+            })
+        }
+        else {
+            alert("Please select the previous month and Upload again.You have chosen " + SelectedMonth + " month ")
+        }
+    })
+
+</script>
+
+@*Onload Month SelectBox Value*@
+<script>
+    $(document).ready(function () {
+        //$("#KPLDataTable").hide();
+        var selectboxValue = '@Session["SelectedMonth"]';
+        if (selectboxValue != "") {
+            $("#firstOption").text(selectboxValue);
+        }
+        else {
+            $("#firstOption").text("Choose Month");
+        }
+    })
+</script>
+
+@*Getting all the branch by Region_id*@
+<script>
+    $(document).ready(function () {
+        $("#cmbOpeningClosingRegionId").change(function () {
+            var Region_id = $("#cmbOpeningClosingRegionId").val();
+
+            var Branch = $("#cmbOpeningClosingBranchId");
+            Branch.empty();
+            var OptionForBranch = '<option value="">Select Branch</option>';
+            $("#cmbOpeningClosingBranchId").append(OptionForBranch);
+
+            var Vechile = $("#cmbOpeningClosingVechileNumber");
+            Vechile.empty();
+            var OptionForVechile = '<option value="">Select Vechile</option>';
+            $("#cmbOpeningClosingVechileNumber").append(OptionForVechile);
+            //alert(Region_id);
+            $.ajax({
+                url: '@Url.Action("GetBranch", "Kpi")',
+                type: "post",
+                data: { RegionId: Region_id },
+                dataType: "json",
+                traditional: true,
+                success: function (data) {
+
+                    $.each(data, function (i) {
+
+                        var optionhtml = '';
+
+                        optionhtml = '<option value="' + data[i].BranchId + '">' + data[i].BranchName + '</option>';
+
+                        $("#cmbOpeningClosingBranchId").append(optionhtml);
+                    });
+                },
+                error: function (response) {
+                    alert(response.responseText);
+                },
+                failure: function (response) {
+                    alert(response.responseText);
+                }
+
+
+            })
+        })
+    })
+</script>
+
+@*getting all the vechiles by Branch_id*@
+<script>
+    $(document).ready(function () {
+        $("#cmbOpeningClosingBranchId").change(function () {
+            var BranchId = $("#cmbOpeningClosingBranchId").val();
+            var RegionId = $("#cmbOpeningClosingRegionId").val();
+            //var RegionId = '@Session["RegionIds"]';
+            // alert(BranchId);
+            if (BranchId != "" && RegionId != "") {
+                $.ajax({
+                    url: '@Url.Action("GetVechileList")',
+                    type: 'POST',
+                    data: { RegionId: RegionId, BranchId: BranchId },
+                    dataType: 'json',
+                    traditional: true,
+                    success: function (data) {
+                        var selectVechile = $("#cmbOpeningClosingVechileNumber");
+                        selectVechile.empty();
+                        var Option0 = '<option value="">Select Vechile</option>';
+                        $("#cmbOpeningClosingVechileNumber").append(Option0);
+                        $.each(data, function (i) {
+
+                            var option = '<option value="' + data[i].VehicleNumber + '">' + data[i].VehicleNumber + '</option>';
+                            $("#cmbOpeningClosingVechileNumber").append(option);
+                        });
+                        selectVechile.multiselect('rebuild');
+
+                    },
+                    error: function (response) {
+                        alert(response.responseText);
+                    },
+                    failure: function (response) {
+                        alert(response.responseText);
+                    }
+
+
+                })
+            }
+            else {
+
+                $("#cmbOpeningClosingVechileNumber").append("");
+            }
+        })
+    })
+</script>
+
+@*Saving Opening Closing Details*@
+<script>
+    $("#btnSaveOpeningClosingDetails").click(function () {
+        var RegionId = $("#cmbOpeningClosingRegionId").val();
+        var BranchID = $("#cmbOpeningClosingBranchId").val();
+        var VechileNumber = $("#cmbOpeningClosingVechileNumber").val();
+        var OpeningKM = $("#OpeningKM").val();
+        var Openingfuel = $("#txtOpeningFuel").val();
+        //alert("Regionid" + RegionId + "  BranchID=" + BranchID + "   VechileNumber=" + VechileNumber + "     OpeningKM=" + OpeningKM + "    OpeningFuel=" + Openingfuel);
+
+        if (RegionId != "" && BranchID != "" && VechileNumber != "" && OpeningKM != "" && Openingfuel != "") {
+            $.ajax({
+                url: '@Url.Action("SaveOpeningClosingDetails")',
+                type: 'post',
+                data: { RegionId: RegionId, BranchId: BranchID, VechileNumber: VechileNumber, OpeningKM: OpeningKM, OpeningFuel: Openingfuel },
+                dataType: 'json',
+                traditional: true,
+                success: function (data) {
+                    alert(data);
+                },
+                error: function (response) {
+                    alert("Error");
+                },
+                failure: function (response) {
+                    alert("Failure");
+                }
+            })
+        }
+        else {
+            alert("Please fill all the fields");
+        }
+
+    })
+</script>
+
+@*Saving Branch Details*@
+<script>
+    $(document).ready(function () {
+        $("#SaveSalesDetails").click(function () {
+            var UserType = '@Session["RegionName"]';
+
+            var CurrentDate = '@Session["CurrentDate"]';
+            //if (CurrentDate >6 && UserType=='User') {
+            //    alert("Please contact to Fleet Administration. Submittion date is over.");
+            //    return;
+            //}
+
+            var opening = parseFloat($("#txtOpeningKM").val());
+            var closing = parseFloat($("#txtClosingKM").val());
+            var openingFuelLtr = parseFloat($("#txtOpeningFuelLiter").val());
+            var closingFuelLtr = parseFloat($("#txtClosingFuelLiter").val());
+            var FuelCombustion = parseFloat($("#txtFuelCombustion").val());
+
+            if (opening == closing) {
+                // changes implemented on 2019-11-04
+                //if (openingFuelLtr > 0 && FuelCombustion == 0.00) {
+                //    $("#txtClosingFuelLiter").val(openingFuelLtr);
+                //    alert("If Opening KM & Closing KM is equal and if openingFuelLtr is greater than zero(0) & FuelCombustion is equal to 0 than Opening Fuel and Closing Fuel will be same");
+                //    return;
+                //}
+                //else if(){
+                //}
+
+                if (openingFuelLtr > 0 && FuelCombustion == 0.00) {
+                    if (openingFuelLtr == closingFuelLtr) {
+
+                    }
+                    else {
+                        $("#txtClosingFuelLiter").val(openingFuelLtr);
+                        alert("If Opening KM & Closing KM is equal and if openingFuelLtr is greater than zero(0) & FuelCombustion is equal to 0 than Opening Fuel and Closing Fuel will be same");
+                        return;
+                    }
+                }
+            }
+
+            if (closing < opening) {
+                alert("Please enter Closing KM greater than Opening KM");
+                return;
+            }
+
+
+            var isTxtClosingKMDisabled = $("#txtClosingKM").is(":disabled");
+
+            var BranchId = $("#cmbBranch").val();
+            var RegionId = '@Session["RegionIds"]';
+
+
+            var VechileNumber = $("#cmbVechile").val();
+            var ClosingKM = $("#txtClosingKM").val();
+            var ClosingFuelLtr = $("#txtClosingFuelLiter").val();
+            var NonBillingKM = $("#txtNonBillingKilometer").val();
+            var RouteNumber = $("#txtRouteNumber").val();
+            var UnitName = $("#txtUnitName").val();
+            var FuelPurchasedInCash = $("#txtFuelPurchased").val();
+            var FuelPuchasedInLtr = $("#txtFuelPurchasedInLtr").val();
+            var VendorName = $("#cmbVendorName").val();
+            var DriverName = $("#txtDriverName").val();
+            var DriverPatId = $("#txtDriverPatID").val();
+            var TypeOfServices = $("#cmbServices").val();
+            var Remarks = $("#txtRemarks").val();
+            var FuelCombustionInLtr = $("#txtFuelCombustion").val();
+            var FuelPetroCard = $("#txtFuelPetroCard").val();
+
+            //alert(TypeOfServices);
+            if (VechileNumber != "" && ClosingKM != "" && ClosingFuelLtr != "" && NonBillingKM != "" && RouteNumber != "" && UnitName != "" && FuelPurchasedInCash != "" &&
+                FuelPuchasedInLtr != "" && VendorName != "" && DriverName != "" && DriverPatId != "" && TypeOfServices != "" && Remarks != "") {
+
+                if (isTxtClosingKMDisabled == false) {
+
+                    if (CurrentDate > 6 && UserType == 'User') {
+                        alert("Please contact to Fleet Administration. Submittion date is over.");
+                        return;
+                    }
+
+                    if (closing < opening) {
+                        alert("Please enter Closing KM greater than Opening KM");
+                        return;
+                    }
+
+                    $.ajax({
+                        url: '@Url.Action("SaveKPLBranchDetails")',
+                            type: 'post',
+                            data: {
+                                VechileNumber: VechileNumber,
+                                ClosingKM: ClosingKM,
+                                ClosingFuelLtr: ClosingFuelLtr,
+                                NonBillingKM: NonBillingKM,
+                                RouteNumber: RouteNumber,
+                                UnitName: UnitName,
+                                FuelPurchasedInCash: FuelPurchasedInCash,
+                                FuelPuchasedInLtr: FuelPuchasedInLtr,
+                                VendorName: VendorName,
+                                DriverName: DriverName,
+                                DriverPatId: DriverPatId,
+                                TypeOfServices: TypeOfServices,
+                                Remarks: Remarks,
+                                FuelCombustionInLtr: FuelCombustionInLtr,
+                                FuelPetroCard: FuelPetroCard,
+                                OpeningKM: opening
+                            },
+                            dataType: 'json',
+                            traditional: true,
+                            success: function (data) {
+                                if ($('#SaveSalesDetails').text() == "Update") {
+                                    alert("Data has been updated successfully.")
+                                }
+                                if ($('#SaveSalesDetails').text() == "Save") {
+                                    alert(data);
+                                }
+
+                                $('#BranchDetails').find('input:text').val('');
+                                $('#SaveSalesDetails').text("Save");
+
+                                $.ajax({
+                                    url: '@Url.Action("CountDetailsOfVechileByBranch")',
+                                type: 'post',
+                                data: { BranchId: BranchId, RegionId: RegionId },
+                                dataType: 'json',
+                                success: function (data) {
+                                    $("#countbtn").show();
+                                    $("#count").text(data.Month + "  " + data.lstCount[0].TotalVechileByBranch + ' / ' + data.lstCount[0].ModifiedVechileByBranch);
+                                    $("#countbtn").css({ width: "109px" });
+                                },
+                                error: function (response) {
+                                    alert(response.responseText);
+                                },
+                                failure: function (response) {
+                                    alert(response.responseText);
+                                }
+                            })
+
+
+                            //getting all the vechile list which is not inserted in kpl branch details of previous month
+                            $.ajax({
+                                url: '@Url.Action("GetVechileListWhichIsNotInsertedInKPLBranch")',
+                                data: {
+                                    BranchId: $("#cmbBranch").val(),
+                                    RegionId: RegionId
+                                },
+                                dataType: "json",
+                                type: "POST",
+                                traditional: true,
+                                success: function (data) {
+                                    $("#cmbVechileNotInserted").empty();
+                                    var selectOption = '<option value="">Select Vechile</option';
+                                    $("#cmbVechileNotInserted").append(selectOption);
+                                    $.each(data, function (i) {
+                                        var optionhtml = '';
+
+                                        optionhtml = '<option id="option" value="' + data[i].VehicleNumber + '">' + data[i].VehicleNumber + '</option>';
+
+                                        $("#cmbVechileNotInserted").append(optionhtml);
+                                    });
+
+                                    $("#cmbVechileNotInserted").multiselect('rebuild');
+                                },
+                                error: function (response) {
+                                    alert(response.responseText);
+                                },
+                                failure: function (response) {
+                                    alert(response.responseText);
+                                }
+                            });
+
+
+
+
+                        },
+                            error: function (response) {
+                                alert(response.responseText);
+                            },
+                            failure: function (response) {
+                                alert(response.responseText);
+                            }
+
+
+                        })
+                }
+                else {
+                    alert("Please contact admin to update.");
+                }
+
+
+
+            }
+            else {
+                alert("Please fill all the details of Branch");
+            }
+
+        })
+    })
+</script>
+
+@*Loading OpeningKM & Opening Fuel Onchange of VechileNumber*@
+<script>
+    $(document).ready(function () {
+        $("#cmbOpeningClosingVechileNumber").change(function () {
+            var VechileNumber = $("#cmbOpeningClosingVechileNumber").val();
+            //alert(VechileNumber);
+            if (VechileNumber != "") {
+                //alert(VechileNumber);
+                $.ajax({
+                    url: '@Url.Action("GetOpeningKM_OpeningFuel")',
+                    type: 'post',
+                    data: { VechileNumber: VechileNumber },
+                    dataType: 'json',
+                    traditional: true,
+                    success: function (data) {
+                        if (data[0].OpeningKM != "") {
+                            $("#OpeningKM").val(data[0].OpeningKM);
+                        }
+                        else {
+                            $("#OpeningKM").val("");
+                        }
+
+                        if (data[0].OpeningFuel != "") {
+                            $("#txtOpeningFuel").val(data[0].OpeningFuel);
+                        }
+                        else {
+                            $("#txtOpeningFuel").val("");
+                        }
+
+                    },
+                    error: function (response) {
+                        alert(response.responseText);
+                    },
+                    failure: function (response) {
+                        alert(response.responseText);
+                    }
+                })
+            }
+        })
+    })
+</script>
+
+@*Hidding OpeningDetailsButton is usertype is not Admin*@
+<script>
+    $(document).ready(function () {
+        var User = "@Session["UserType"]";
+        if (User != "Admin") {
+            $("#OpeningDetailsButton").hide();
+        }
+        else {
+            $("#OpeningDetailsButton").show();
+        }
+
+    })
+</script>
+
+@*Disable all the element inside id BranchDetails On Onload*@
+<script>
+    $(document).ready(function () {
+        $('#BranchDetails').find('input, textarea, button, select,a').attr('disabled', 'disabled');
+
+    })
+</script>
+
+@*make all textbox blank on click*@
+<script>
+
+    $("#countbtn").click(function () {
+        //alert("cc");
+
+        $('#BranchDetails').find('input:text').val('');
+    })
+</script>
+
+@*showing or hiding onclicking of two buttons*@
+<script>
+    $(document).ready(function () {
+        $("#EditVehicleData,#pencil").click(function () {
+            //  alert("Edit");
+            $("#myDatatable").show();
+            $("#MasterDetails").show();
+            $("#BranchDetails").show();
+            $("#Calculations").show();
+
+            $("#BulkUpload").hide();
+        });
+
+        $("#UploadVehicleData,#upload").click(function () {
+            //  alert("Upload");
+            $("#BulkUpload").show();
+
+            $("#myDatatable").hide();
+            $("#MasterDetails").hide();
+            $("#BranchDetails").hide();
+            $("#Calculations").hide();
+        })
+
+        if ('@Session["ShowUploadDivOnUploadButtonClick"]' == "true") {
+            $("#BulkUpload").show();
+
+            $("#myDatatable").hide();
+            $("#MasterDetails").hide();
+            $("#BranchDetails").hide();
+        }
+        $("#btnSubmitBulkUpload").click(function () {
+            $("#BulkUpload").show();
+
+            $("#myDatatable").hide();
+            $("#MasterDetails").hide();
+            $("#BranchDetails").hide();
+        })
+
+    })
+</script>
+
+@*onmouse out of txtClosingKM*@
+<script>
+    $(document).ready(function () {
+        $("#txtClosingKM").focusout(function () {
+            var txtOpeningKM = parseInt($("#txtOpeningKM").val());
+            var txtClosingKM = $("#txtClosingKM").val();
+            if (txtClosingKM < 0) {
+                alert("ClosingKM value must not be negative");
+                $("#txtClosingKM").val("");
+                return;
+            }
+            else {
+
+            }
+
+        })
+    })
+</script>
+
+@*OnChange of cmbVendorName changing driver patid to angency name*@
+<script>
+    $(document).ready(function () {
+        $("#cmbVendorName").change(function () {
+            var vendorName = $("#cmbVendorName").val();
+            //alert(vendorName);
+            if (vendorName == "Hired") {
+                $("#lbldriverPatId").text("Agency Name");
+                $("#txtDriverPatID").attr("placeholder", "Agency Name");
+            }
+            else {
+                $("#lbldriverPatId").text("Driver PatID");
+                $("#txtDriverPatID").attr("placeholder", "Driver PatID");
+            }
+        })
+    })
+</script>
+
+
+

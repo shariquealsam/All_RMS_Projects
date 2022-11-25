@@ -1,0 +1,253 @@
+﻿@{
+    ViewBag.Title = "RegionWiseMasterVehicle";
+    Layout = "~/Views/Shared/Master.cshtml";
+}
+
+
+@*<h2>RegionWiseMasterVehicle</h2>*@
+<!-- Latest compiled and minified CSS -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+
+<!-- jQuery library -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
+<!-- Latest compiled JavaScript -->
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.css">
+<script src="~/Js/jquery.dataTables.js"></script>
+
+<link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" />
+
+<script src="~/Angular/Angular.js"></script>
+<script src="~/Angular/ReportController.js"></script>
+<script src="~/Js/table2excel.js"></script>
+<link href="~/Css/style.css" rel="stylesheet" />
+@*<script>
+    $(document).ready(function () {
+
+        $("#divMsg").show();
+        setTimeout(function () {
+            $("#divMsg").hide();
+
+        }, 4000);
+
+    })
+</script>*@
+<style type="text/css">
+    /*  Define the background color for all the ODD background rows  */
+    .TFtable tr:nth-child(odd) {
+        /*background: #b8d1f3;*/
+        background: #FFCC00C7;
+    }
+    /*  Define the background color for all the EVEN background rows  */
+    .TFtable tr:nth-child(even) {
+        background: #dae5f4;
+    }
+
+    #divMsg {
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        position: fixed;
+        background: #f5f5f5ab;
+        z-index: 1;
+    }
+
+    div#divMsg img {
+        margin-left: 40%;
+        margin-top: 10%;
+    }
+</style>
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Page Title</title>
+</head>
+<body>
+    <div class="container">
+        <div id="divMsg" style="display: none;">
+            @*<img src="~/Image/loader.gif" alt="Please wait.." />*@
+            <div class="loader">Loading</div>
+        </div>
+        @*<div class="row">
+                <div class="col-md-2" style="float:right">
+                    @using (Html.BeginForm("DownloadReport", "Dashboard", FormMethod.Post))
+                    {
+                        <button type="submit" class="btn btn-success form-control"><i class="fa fa-file-excel"></i>Export</button>
+                    }
+                    </div>
+            </div>*@
+        <div class="row">
+            <form method="post" action="DownloadReport">
+                <div class="col-sm-2">
+                    <label for="FromDate" class="control-label">From Date</label>
+                    <input type="date" id="txtFromDate" name="fromDte" class="form-control" ng-model="FromDate" />
+                </div>
+                <div class="col-sm-2">
+                    <label for="ToDate" class="control-label">To Date</label>
+                    <input type="date" class="form-control" id="txtToDate" name="ToDate" ng-model="ToDate" />
+                </div>
+
+                <div class="col-sm-3">
+                    <label for="Region" class="control-label">Region</label>
+                    <select class="form-control" name="RegionIdd" id="cmbOpeningClosingRegionId">
+                        <option value="">-- Select Region --</option>
+                        @foreach (var item1 in ViewBag.regionList)
+                        {
+                            <option value="@item1.RegionId">@item1.RegionName</option>
+                        }
+                    </select>
+                </div>
+                <div class="col-sm-3">
+                    <label for="cmbOpeningClosingBranchId">Branch</label>
+                    <select class="form-control" id="cmbOpeningClosingBranchId" name="BranchId">
+                        <option value="">-- Select Branch --</option>
+
+                    </select>
+
+                </div>
+
+                <div class="col-sm-2">
+                    <label for="Branch" class="control-label" style="visibility:hidden">Branch Region</label>
+                    <button class="btn btn-success btn-block" style="float: left" type="button"><i class="fa fa-search" id="btnsearch" style="font-size: 20px"> Show </i></button>
+                </div>
+                <div class="col-sm-2">
+                    <label for="Branch" class="control-label" style="visibility:hidden">Branch Region</label>
+                    <button class="btn btn-warning btn-block" style="float: left" type="submit"><i class="fa fa-file-excel-o" style="font-size: 20px"> Export </i></button>
+                </div>
+            </form>
+        </div>
+        <div class="row">
+
+            <div class="col-sm-12" style="margin-top:20px">
+                <table class="table table-responsive table-bordered table-hover table-striped" style="font-size: 13px;" id="DailyReport">
+                    <thead class="bg-primary">
+                        <tr>
+                            <th>S.NO</th>
+                            <th>Vehicle NO</th>
+                            <th>Date</th>
+                            <th>Service Type</th>
+                            <th>Route Id</th>
+                            <th>Region</th>
+                            <th>Branch</th>
+                            <th>Opening KM</th>
+                            <th>Closing KM</th>
+                            <th>Distance</th>
+
+                        </tr>
+                    </thead>
+
+                    <tbody class="TFtable">
+                        @foreach (var item in ViewBag.reportList)
+                        {
+                            <tr>
+                                <td>@item.SrNo</td>
+                                <td>@item.MasterVehicleNo</td>
+                                <td>@item.Report_Date</td>
+                                <td>@item.Service_Type</td>
+                                <td>@item.Route_Id</td>
+                                <td>@item.RegionName</td>
+                                <td>@item.BranchName</td>
+                                <td>@item.OpeningKM</td>
+                                <td>@item.ClosingKM</td>
+                                <td>@item.Distance</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <script>
+        $(document).ready(function () {
+            $("#btnsearch").click(function () {
+                $("#divMsg").show();
+                var FromDate = $("#txtFromDate").val();
+                var ToDate = $("#txtToDate").val();
+                var Branch = $("#cmbOpeningClosingBranchId").val();
+                var Region = $("#cmbOpeningClosingBranchId").val();
+
+                $.ajax({
+                    url: '@Url.Action("TotalVehicleOpeningClosingSearch", "Dashboard")',
+                    type: "Post",
+                    data: { fromDte: FromDate, ToDate: ToDate, BranchId: Branch, RegionIdd: Region },
+                    dataType: "json",
+                    traditional: true,
+                    success: function (res) {
+                        
+                        var trHTML = '';
+                        $('.TFtable').empty();
+                        $.each(res, function (i, item) {
+                            trHTML += '<tr>' +
+                                '<td>' + res[i].SrNo + '</td>' +
+                                '<td>' + res[i].MasterVehicleNo + '</td>' +
+                                '<td>' + res[i].Report_Date + '</td>' +
+                                '<td>' + res[i].Service_Type + '</td>' +
+                                '<td>' + res[i].Route_Id + '</td>' +
+                                '<td>' + res[i].RegionName + '</td>' +
+                                '<td>' + res[i].BranchName + '</td>' +
+                                '<td>' + res[i].OpeningKM + '</td>' +
+                                '<td>' + res[i].ClosingKM + '</td>' +
+                                '<td>' + res[i].Distance + '</td>' +
+                            '</tr >';
+                        })
+                        $('.TFtable').append(trHTML);
+                        $("#divMsg").hide();
+                    }
+                })
+            })
+
+        });
+    </script>
+    @*Getting all the branch by Region_id*@
+    <script>
+    $(document).ready(function () {
+        $("#cmbOpeningClosingRegionId").change(function () {
+            $("#divMsg").show();
+            var Region_id = $("#cmbOpeningClosingRegionId").val();
+
+            var Branch = $("#cmbOpeningClosingBranchId");
+            Branch.empty();
+            var OptionForBranch = '<option value="">Select Branch</option>';
+            $("#cmbOpeningClosingBranchId").append(OptionForBranch);
+
+            var Vechile = $("#cmbOpeningClosingVechileNumber");
+            Vechile.empty();
+            var OptionForVechile = '<option value="">Select Vechile</option>';
+            $("#cmbOpeningClosingVechileNumber").append(OptionForVechile);
+            //alert(Region_id);
+            $.ajax({
+                url: '@Url.Action("GetBranch", "Kpi")',
+                type: "post",
+                data: { RegionId: Region_id },
+                dataType: "json",
+                traditional: true,
+                success: function (data) {
+                    $("#divMsg").hide();
+                    $.each(data, function (i) {
+
+                        var optionhtml = '';
+
+                        optionhtml = '<option value="' + data[i].BranchId + '">' + data[i].BranchName + '</option>';
+
+                        $("#cmbOpeningClosingBranchId").append(optionhtml);
+                    });
+                },
+                error: function (response) {
+                    alert(response.responseText);
+                },
+                failure: function (response) {
+                    alert(response.responseText);
+                }
+
+
+            })
+        })
+    })
+    </script>
+    
+</body>
+</html>

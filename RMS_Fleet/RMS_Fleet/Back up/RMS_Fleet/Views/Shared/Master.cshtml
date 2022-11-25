@@ -1,0 +1,113 @@
+﻿@{
+    ViewBag.Title = "Master";
+}
+
+@*<h2> Master Page Index </h2>*@
+
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <link rel="icon" href="~/Angular/FleetLogo.png" type="image/gif" sizes="50x50">
+    <title>Fleet Application</title>
+
+    <link href="https://netdna.bootstrapcdn.com/bootstrap/3.0.3/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+    <script src="~/Js/jquery.min.js"></script>
+
+    <link href="~/Css/MasterPageDesign.css" rel="stylesheet" />
+    <script src="~/Js/MasterPageJs.js"></script>
+    <link href="~/Css/multilevel-dropdown.css" rel="stylesheet" />
+</head>
+<body>
+    <div class="container-fluid">
+        <div id="wrapper" >
+            <!-- Sidebar -->
+            <!-- Sidebar -->
+            <div id="sidebar-wrapper">
+                <ul id="sidebar_menu" class="sidebar-nav">
+                    <li class="sidebar-brand"><a id="menu-toggle" href="#">Menu<span id="main_icon" class="glyphicon glyphicon-align-justify"></span></a></li>
+                </ul>
+                <ul class="sidebar-nav" id="sidebar">
+                    @try
+                    {
+                        if (Session["UserType"].ToString() == "Admin")
+                        {
+                            <li><a href="~/Dashboard" title="Overall Vehicle Details /Dashboard ">Dashboard<span class="sub_icon glyphicon glyphicon-dashboard"></span></a></li>
+
+                            <li><a href="~/Report" title="Vehicle Report">Report<span class="sub_icon glyphicon glyphicon-save-file"></span></a></li>
+                            @*<li><a href="~/Vechile" title="Vehicle Master Details">Vehicle<span class="sub_icon glyphicon glyphicon-link"></span></a></li>*@
+                            <li><a href="~/Vechile" title="Vehicle Master Details">Vehicle<span class="sub_icon glyphicon glyphicon-bed"></span></a></li>
+                            <li><a href="~/Sales" title=" Repair And Maintance Entry Segment">R & M<span class="sub_icon glyphicon glyphicon-wrench"></span></a></li> 
+                            <li><a href="~/SalesReport" title=" Repair And Maintance / KPL Report">RMReport<span class="sub_icon glyphicon glyphicon-download-alt"></span></a></li> 
+                        
+                            @*<li><a href="~/Kpi" title="Kilometer Per Liters Details">KPL<span class="sub_icon glyphicon glyphicon-modal-window"></span></a></li>*@
+                        
+                            <li><a href="~/User" title="User Management System">User<span class="sub_icon glyphicon glyphicon-user"></span></a></li>
+                            <li><a href="~/ChangePassword" title="Change Your Password">Password<span class="sub_icon glyphicon glyphicon-lock"></span></a></li>
+                        
+                            <li><a href="~/Logout" title="Click To Logout/Signout">Log Out<span class="sub_icon glyphicon glyphicon-log-out"></span></a></li>
+                        }
+
+                        if (Session["UserType"].ToString() == "User")
+                        {
+                             <li><a href="~/Dashboard" title="Overall Vehicle Details /Dashboard ">Dashboard<span class="sub_icon glyphicon glyphicon-dashboard"></span></a></li>
+                             <li><a href="~/Report" title="Vehicle Report">Report<span class="sub_icon glyphicon glyphicon-save-file"></span></a></li>
+                                             
+                             <li><a href="~/Sales" title="Repair And Maintance Entry Segment">R & M<span class="sub_icon glyphicon glyphicon-wrench"></span></a></li>   
+                             <li><a href="~/SalesReport" title="Repair And Maintance / KPL Report">RMReport<span class="sub_icon glyphicon glyphicon-download-alt"></span></a></li> 
+                        
+                             <li><a href="~/ChangePassword" title="Change Your Password">Password<span class="sub_icon glyphicon glyphicon-lock"></span></a></li>
+                        
+                             <li><a href="~/Logout" title="Click To Logout/Signout">Log Out<span class="sub_icon glyphicon glyphicon-log-out"></span></a></li>
+                             
+                        }
+                    }
+                    catch (Exception)
+                    {
+
+                    }
+                </ul>
+            </div>
+
+            <!-- Page content -->
+            <div id="page-content-wrapper">
+                <!-- Keep all page content within the page-content inset div! -->
+                <div class="page-content inset">
+                    <div class="row">
+                        <div class="">
+                            <p class="well lead">
+                               Fleet Web Application 
+                                @try
+                                {
+                                    if (Session["UserName"].ToString() != null || @Session["UserName"].ToString() != "")
+                                    {
+                                    <span style="float: right">
+                                        <i class="fa fa-user" aria-hidden="true"></i>&nbsp; @Session["UserName"].ToString()
+                                    </span>
+                                    }
+                                }
+                                catch (Exception)
+                                {
+                                    <span style="float: right">
+                                        <i class="fa fa-user" aria-hidden="true"></i>&nbsp;
+                                    </span>
+                                }
+                            </p>
+                        </div>
+                        @RenderBody()
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+<script>
+    $(document).ready(function () {
+        $("#menu-toggle").click(function (e) {
+            e.preventDefault();
+            $("#wrapper").toggleClass("active");
+        });
+    });
+</script>
+</html>

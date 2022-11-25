@@ -1,0 +1,962 @@
+﻿@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/Master.cshtml";
+}
+
+
+<!-- Latest compiled and minified CSS -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+
+<!-- jQuery library -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
+<!-- Latest compiled JavaScript -->
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.css">
+
+<script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.js"></script>
+
+<link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" />
+<link href="~/Css/bootstrap-multiselect.css" rel="stylesheet" />
+<script src="~/Js/bootstrap-multiselect.js"></script>
+<link href="~/Css/fixedheader.css" rel="stylesheet" />
+<link href="~/Graph/style.css" rel="stylesheet" />
+<link href="~/Css/style.css" rel="stylesheet" />
+<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+<style>
+    /*.MISDATA input[type=checkbox] {
+        zoom:2;
+    }*/
+    .well {
+    height: 75px!important;
+    padding-top: 3px;
+}
+    #CheckAll {
+    zoom:2;
+    }
+
+
+</style>
+@*<style>
+    .MISDATA tbody{
+  display:block;
+  overflow:auto;
+  height:300px;
+  width:100%;
+}
+.MISDATA thead tr{
+  display:block;
+}
+</style>*@
+
+<script>
+    $("#CheckAll").click(function () {
+        //alert("ljlkj");
+    });
+</script>
+
+<div class="container-fluid">
+
+    <div id="divMsg" style="display: none;">
+@*<img src="~/Image/loader.gif" alt="Please wait.." />*@
+<div class="loader">Loading</div>
+</div>
+     
+    <div class="col-sm-3">
+        <div class="well">
+            <label for="cmbRegion" class="control-label">Region</label><br />
+            <input type="hidden" id="hfRegion" name="cmbRegion" />
+            <select name="cmbRegion1" id="cmbRegion" class="form-control" multiple>
+                <script type="text/javascript">
+                    $(document).ready(function () {
+                        //Bank Dropdown Selectedchange event    
+                        $('[id=cmbRegion]').multiselect({
+                            enableFiltering: true,
+                            enableCaseInsensitiveFiltering: true,
+                            includeSelectAllOption: true,
+                            includeSelectAllDivider: false,
+                            maxHeight: 260,
+                            buttonWidth: '100%',
+                            onChange: function () {
+                                var Region = $("#cmbRegion option:selected").map(function () { return this.value }).get().join(', ');
+                                $("#hfRegion").val(Region);
+                                //alert(Region);
+                            },
+                            onSelectAll: function () {
+                                var Region = $("#cmbRegion option:selected").map(function () { return this.value }).get().join(', ');
+                                $("#hfRegion").val(Region);
+                                //alert(Region);
+                            },
+                            onDeselectAll: function () {
+                                var Region = $("#cmbRegion option:selected").map(function () { return this.value }).get().join(', ');
+                                $("#hfRegion").val(Region);
+                                //alert(Region);
+                            },
+                        });
+                    });
+                </script>
+
+            </select>
+
+        </div>
+    </div>
+    <div class="col-sm-3">
+        <div class="well">
+            <label for="cmbBranch">Branch</label><br />
+            <input type="hidden" id="hfBranch" name="cmbBranch" />
+            <select name="cmbBranch1" id="cmbBranch" class="form-control" multiple>
+                <script type="text/javascript">
+                    $(document).ready(function () {
+                        //Bank Dropdown Selectedchange event    
+                        $('[id=cmbBranch]').multiselect({
+                            enableFiltering: true,
+                            enableCaseInsensitiveFiltering: true,
+                            includeSelectAllOption: true,
+                            includeSelectAllDivider: false,
+                            maxHeight: 260,
+                            buttonWidth: '100%',
+                            onChange: function () {
+                                Branch = $("#cmbBranch option:selected").map(function () { return this.value }).get().join(', ');
+                                $("#hfBranch").val(Branch);
+                                //alert(Branch);
+                            },
+                            onSelectAll: function () {
+                                Branch = $("#cmbBranch option:selected").map(function () { return this.value }).get().join(', ');
+                                $("#hfBranch").val(Branch);
+                                //alert(Branch);
+                            },
+                            onDeselectAll: function () {
+                                Branch = $("#cmbBranch option:selected").map(function () { return this.value }).get().join(', ');
+                                $("#hfBranch").val(Branch);
+                                //alert(Branch);
+                            },
+
+                        });
+                    });
+                </script>
+            </select>
+        </div>
+    </div>
+
+    <div class="col-sm-2">
+        <div class="well" style="    width: 192px;">
+            <label for="cmbRegion" class="control-label">Date of Reporting</label><br />
+            @if (Session["UserType"].ToString() == "User")
+            {
+            <input type="date" class="form-control" id="dateOfReporting" value="@ViewBag.CurrentDate" disabled name="dateOfReporting1" />
+                        
+            }
+            @if (Session["UserType"].ToString() == "Admin")
+            {
+                <input type="date" class="form-control" id="dateOfReportingAdmin" value="@ViewBag.CurrentDate"  name="dateOfReportingAdmin" />
+            }
+        </div>
+</div>
+    <div class="col-sm-4">
+        <div class="well">
+                   
+<center id="buttons" style="margin-top:25px">
+<button type="button" class="btn btn-primary" id="MIS" style="width:150px">Search</button>
+<button type="button" class="btn btn-success" id="GenerateDashboard" style="width:150px">Reports</button>
+</center>
+        </div>
+</div>
+
+    <div class="row">
+<div class="col-sm-12">
+        <span style="float:left;margin-left: 10px;" id="SelectSegment"><input type="checkbox" onclick="CheckAll()" id="CheckAll"><span id="SelectDelect" style="position: absolute;margin-top: 10px;">Select All</span></span>
+        @using (Html.BeginForm("Download", "MIS", FormMethod.Post))
+        {
+            if (Session["UserType"].ToString() == "User")
+            {
+                <input type="hidden" value="@ViewBag.CurrentDate" name="dateOfReporting"/>
+            }
+            if (Session["UserType"].ToString() == "Admin")
+            {
+                <input type="hidden"value="@ViewBag.CurrentDate" name="dateOfReportingAdmin"/>
+            }
+        <button type="submit" id="btnShowMisData" class="btn btn-info" style="float: left; margin-left: 470px; width: 235px; margin-bottom: 3px; margin-top: 5px;"><span id="ShowMisData">Total No. Pending:- 0 / 0</span></button>
+        }
+    <button type="button" class="btn btn-danger" id="SaveMisData" style="float:right;margin-right: 14px;width:200px;margin-bottom: 3px;display:none;margin-top: 5px;">Save</button>
+</div>
+</div>
+
+    <p></p>
+
+    <div class="row" id="MisDataDiv">
+        <div class="col-sm-12" >
+            <div>
+                <div id="tableData" style="overflow-y: auto;height: 395px;" ></div>
+                
+            </div>
+           
+        </div>
+    </div>
+
+</div>
+
+
+@*Fill MIS data*@
+<script>
+    $(function () {
+        $("#datatable").dataTable();
+    })
+</script>
+<script>
+    var Rec_Ids = []
+    $(document).ready(function () {
+
+        // $("#SaveMisData").attr("disabled", true);
+        $("#MIS").click(function () {
+            var AllDataForCheckAll;
+            var CurrentDate = '@Session["CurrentDate"]';
+            var UserType = '@Session["UserType"]';
+            $("#buttons").hide();
+            $(".col-sm-2").hide();
+            $(".col-sm-3").hide();
+            $(".col-sm-4").hide();
+            $("#MisDataDiv").hide();
+            $("#CheckAll").hide();
+            $("#SelectDelect").hide();
+            $("#SaveMisData").hide();
+            $("#btnShowMisData").hide();
+
+            $("#divMsg").show();
+            var Region = $("#hfRegion").val();
+            var Branch = $("#hfBranch").val();
+            var DateOfReporting = $("#dateOfReporting").val();
+
+            //Admin Selection
+            if (UserType == "Admin") {
+                DateOfReporting = $("#dateOfReportingAdmin").val();
+            }
+            if (Region.length == 0) {
+                $("#divMsg").hide();
+                swal("Alert!", "Please select atleast one Region.", "warning");
+                $("#buttons").show();
+                $(".col-sm-2").show();
+                $(".col-sm-3").show();
+                $(".col-sm-4").show();
+                $("#MisDataDiv").show();
+                return;
+            }
+            $.ajax({
+                type: "post",
+                url: '@Url.Action("VehicleMaster","MIS")',
+                data: { Region: Region, Branch: Branch, DateOfReporting: DateOfReporting },
+                dataType: 'json',
+                success: function (data) {
+                    AllDataForCheckAll = data;
+                    var trItems = '';
+                    trItems += '<table id="datatable" class="table table-striped table-bordered MISDATA" style="width:1800px">' +
+              '<thead class="bg-primary">' +
+                          ' <tr>' +
+                              ' <th></th>' +
+                              ' <th >Make</th>' +
+                              '  <th >Chassis Number</th>' +
+                              '  <th >Mfg.Year</th>' +
+                              '  <th >Vehicle Number</th>' +
+                              '  <th style="width:200px !important">Vehicle Running Status  </th>' +
+                              '  <th >Reason</th>' +
+                              '  <th >Vendor Name</th>' +
+                              '  <th >Segment</th>' +
+                              '  <th >P.Running</th>' +
+                              '  <th >Route Id.</th>' +
+                              '  <th >Customer</th>' +
+                              '  <th >Location</th>' +
+                              '  <th >Remarks</th>' +
+                              '  <th >Driver PAT ID</th>' +
+                              '  <th >Driver Name</th>' +
+                              '  <th >Drive MobileNo</th>' +
+                          ' </tr>' +
+                      ' </thead><tbody>';
+
+                    for (i = 0; i < data.length; i++) {
+
+
+                        Rec_Ids.push('CheckBox' + data[i].Recid);
+                        if (data[i].ReportingDate < CurrentDate) {
+                            trItems += '<tr id=' + 'trCheckBox' + data[i].Recid + '>';
+                        }
+                        else {
+                            trItems += '<tr id=' + 'trCheckBox' + data[i].Recid + ' class="AlreadyInserted">';
+                        }
+                        if (UserType == "User") {
+                            if (data[i].MISData == "") {
+                                trItems += '<td><input id=' + data[i].Recid + ' class="Rec_Id_Checkbox" type="checkbox" onchange="OnCheckedUnchecked(' + data[i].Recid + ')"></td>';
+                            }
+                            else {
+                                if (data[i].ReportingDate < CurrentDate) {
+                                    trItems += '<td><input id=' + data[i].Recid + ' class="Rec_Id_Checkbox" type="checkbox" onchange="OnCheckedUnchecked(' + data[i].Recid + ')"></td>';
+                                }
+                                else {
+                                    trItems += '<td></td>';
+                                }
+
+                            }
+                        }
+                        else {
+                            trItems += '<td><input id=' + data[i].Recid + ' class="Rec_Id_Checkbox" type="checkbox" onchange="OnCheckedUnchecked(' + data[i].Recid + ')"></td>';
+                        }
+
+                        trItems += '<td style="display:none">' + data[i].Recid + '</td>' +
+                            '<td style="font-size:10px;"> ' + data[i].Make + '</td>' +
+                            '<td style="font-size:13px;">' + data[i].ChassisNumber + '</td>' +
+                            '<td style="font-size:13px;">' + data[i].ManufacturingYear + '</td>' +
+                            '<td style="font-size:13px;">' + data[i].VehicleNumber + '</td>' +
+                            '<td style="width:200px !important"><select class="form-control" id="MIS' + data[i].Recid + '" onchange="ChangeOfMIS(' + data[i].Recid + ')" disabled style="font-size:10px;width: 80px;">' +
+                            '<option value="">--Select--</option>' +
+                            '<option value="On Road">On Road</option>' +
+                            '<option value="Off Road">Off Road</option>' +
+                            '<option value="UnderFabrication">Under Fabrication</option>' +
+
+                            '<option value="NewVehicleRegistration">New Vehicle Registration</option>';
+                        if (UserType == "Admin") {
+                            trItems += '<option value="Scrap">Scrap</option>';
+                        }
+                        if (UserType == "User") {
+                            trItems += '<option value="Scrap" disabled>Scrap</option>';
+                        }
+
+                        trItems += '</select >' +
+                            '<td class=""><select class="form-control Reason OldReason' + data[i].Recid + '" id="Reason' + data[i].Recid + '" onchange="ChangeOfReason(' + data[i].Recid + ')" disabled style="font-size:10px;width: 90px;">' +
+                        '<option value="">--Select--</option>' +
+                        '<option value="DUE TO MANPOWER">DUE TO MANPOWER</option>' +
+                        '<option value="DUE TO REPAIR">DUE TO REPAIR</option>' +
+                        '<option value="DUE TO DOCUMENT">DUE TO DOCUMENT</option>' +
+                        '<option value="DUE TO ACCIDENT">DUE TO ACCIDENT</option>' +
+                        '<option value="DUE TO IMPOUND">DUE TO IMPOUND</option>' +
+                        '<option value="DUE TO PAYMENT">DUE TO PAYMENT</option>' +
+                        '<option value="SURPLUS">SURPLUS</option>' +
+                        '<option value="DUE TO TYRE">DUE TO TYRE</option>' +
+                        '<option value="DUE TO BATTERY">DUE TO BATTERY</option>' +
+                        '<option value="DUE TO HOLIDAY">DUE TO HOLIDAY</option>' +
+                        '<option value="DUE TO IR ISSUE">DUE TO IR ISSUE</option>' +
+                        '<option value="DUE TO CUSTOMER">DUE TO CUSTOMER</option>' +
+                        '<option value="FOR DEPLOYMENT">FOR DEPLOYMENT</option>' +
+                        '<option value="OnTheWayForBranch">ON THE WAY FOR BRANCH</option>' +
+                            '<option value="FabricationUnderProcess">FABRICATION UNDER PROCESS</option>' +
+                            '<option value="Due to Under Registration">Due to Under Registration</option>' +
+                            '</select>' +
+                            '</td>' +
+                   '<td ><input type="text" name="VendorName" value="' + data[i].VendorName + '" id="VendorName' + data[i].Recid + '" class="form-control VendorName" disabled></td>' +
+
+                            '<td ><select class="form-control" disabled id="Segment' + data[i].Recid + '" style="font-size:10px;width: 70px;">' +
+                        '<option value="CIT">CIT</option>' +
+                        '<option value="DSB">DSB</option>' +
+                        '<option value="ATM">ATM</option>' +
+                        '<option value="BULLION">BULLION</option>' +
+                        '<option value="SURPLUS">SURPLUS</option>' +
+                        '<option value="SIS India(Billing)">SIS INDIA(BILLING)</option>' +
+                        '<option value="SIS India(Non-Billing)">SIS INDIA(NON-BILLING)</option>' +
+                        '<option value="Merge(CIT-DSB)">MERGE(CIT-DSB)</option>' +
+                        '<option value="Merge(DSB-ATM)">MERGE(DSB-ATM)</option>' +
+                            '<option value="SCRAP">SCRAP</option>' +
+                            '<option value="ATM (CASSETTE)">ATM (CASSETTE)</option>' +
+                            '<option value="VALUE CARGO">VALUE CARGO</option>' +
+                            '<option value="ONCALL CIT">ONCALL CIT</option>' +
+                    '</select>' +
+                    '</td>' +
+                     '<td><select class="form-control" id="PresentCompany' + data[i].Recid + '" disabled style="font-size:10px">' +
+
+                        '<option value="SIS(I)LTD">SIS (I) LTD</option>'+
+                        '<option value="SISCASH">SIS CASH</option>'+
+                         '<option value="SISCO">SISCO</option>' +
+                            '<option value="SISCOLP">SISCO/LP</option>' +
+                            '<option value="SMC">SMC</option>' +
+                            '<option value="SLV">SLV</option>' +
+                            '<option value="IPS">I.P.S</option>' +
+                            '<option value="RITURAJSINHA">RITURAJ SINHA</option>' +
+                            '<option value="RKSINHA">R K SINHA</option>' +
+                            '<option value="RITASINHA">RITA SINHA</option>' +
+                            '<option value="VPROTECT">V.PROTECT</option>' +
+                            '<option value="ALBTROSS">ALBTROSS</option>' +
+                            '<option value="Uniq">Uniq</option>' +
+                            '<option value="Adya">Adya</option>' +
+                            '<option value="DTS">DTS</option>' +
+                            '<option value="RARE">RARE</option>' +
+                            '<option value="TECHSIS">TECH SIS</option>' +
+                            '<option value="TERMINIXSIS">TERMINIXSIS</option>' +
+                    '</select>' +
+                    '</td>' +
+                    '<td ><input type="text" name="RouteId" value="' + data[i].RouteId + '" id="RouteId" data-id="' + data[i].RouteId + '" class="form-control RouteIDList RouteID' + data[i].Recid + '" style="width:70px;font-size:10px;" disabled ></td>' +
+                            '<td ><input type="text" name="Customer"  value="' + data[i].Customer + '"  id="Customer" class="form-control" style="width:70px;font-size:10px;" disabled></td>' +
+                            '<td ><input type="text" name="Location"  value="' + data[i].Location + '"  id="Location" class="form-control" style="width:70px;font-size:10px;" disabled></td>' +
+                            '<td ><input type="text" name="Remarks"  value="' + data[i].Remarks + '"  id="Remarks" class="form-control" style="width:70px;font-size:10px;" disabled></td>' +
+                            '<td ><input type="text" name="DriverPat"  value="' + data[i].DriverPat + '"  id="DriverPat" class="form-control" style="width:70px;font-size:10px;" disabled></td>' +
+                            '<td ><input type="text" name="DriverName"  value="' + data[i].DriverName + '"  id="DriverName" class="form-control" style="width:70px;font-size:10px;" disabled></td>' +
+                            '<td ><input type="text" name="DriverMobile"  value="' + data[i].DriverMobile + '"  id="DriverMobile" class="form-control"  style="width:70px;font-size:10px;"disabled></td>' +
+
+                    '</tr>';
+
+
+                    }
+                    trItems += ' </tbody></table>';
+                    $("#tableData").html(trItems);
+                    $("#divMsg").hide();
+                    $("#buttons").show();
+                    $(".col-sm-2").show();
+                    $(".col-sm-3").show();
+                    $(".col-sm-4").show();
+                    $("#MisDataDiv").show();
+                    $("#CheckAll").show();
+                    $("#SelectDelect").show();
+                    $("#btnShowMisData").show();
+                    $("#SaveMisData").css({ "display": "block" });
+                    //$("#SaveMisData").show();
+
+
+                    for (j = 0; j < data.length; j++) {
+                        if (data[j].MISData != "") {
+                            //$("#MIS" + data[j].Recid).val("Off Road");
+                            $("#MIS" + data[j].Recid + " option[value='" + data[j].MISData + "']").prop('selected', true);
+                            //$('#MIS' + data[j].Recid + ' option[value="' + data[j].MISData + '"]').attr('selected', 'selected');
+                        }
+
+                        if (data[j].Reason != "") {
+                            if (data[j].Reason == "DUE TO REPAIR") {
+                                $("#VendorName" + data[j].Recid).attr("disabled", true);
+                            }
+                            if (data[j].Reason == "DUE TO ACCIDENT") {
+                                $("#VendorName" + data[j].Recid).attr("disabled", true);
+                            }
+
+                            $('#Reason' + data[j].Recid + ' option[value="' + data[j].Reason + '"]').attr('selected', 'selected');
+                        }
+
+                        $('#OwnerCompany' + data[j].Recid + ' option[value="' + data[j].Company + '"]').attr('selected', 'selected');
+                        $('#PresentCompany' + data[j].Recid + ' option[value="' + data[j].PresentCompany + '"]').attr('selected', 'selected');
+                        $('#Segment' + data[j].Recid + ' option[value="' + data[j].Segment + '"]').attr('selected', 'selected');
+
+                    }
+                    //alert(Rec_Ids);
+                },
+                error: function () {
+
+                }
+            })
+        })
+    })
+</script>
+
+@*Checkall UnCheckall*@
+<script>
+    var RecIdToStore = [];
+    function CheckAll() {
+        var UserType = '@Session["UserType"]';
+        var checkBox = document.getElementById("CheckAll");
+        if (checkBox.checked == true) {
+            $('.MISDATA').find('input[type="checkbox"]').prop('checked', true);
+            $("#SelectDelect").text("Deselect All");
+            CIds = [];
+            RecIdToStore = Rec_Ids;
+            $(".MISDATA").find("input,select").attr("disabled", false);
+            if (UserType == "User") {
+                $(".AlreadyInserted").find("input,select").attr("disabled", true);
+
+                //new development if if previous data of mis is Scrap then disable all the fields of that tr row
+                for (x = 0; x < RecIdToStore.length; x++) {
+                    var RecIdToStoreSplit = RecIdToStore[x].split("CheckBox");
+                    if ($("#tr" + RecIdToStore[x]).find('td').eq(6).find('option:selected').val() == "Scrap") {
+                        $("#tr" + RecIdToStore[x]).find('select,input').attr("disabled", true);
+                        $("#" + RecIdToStoreSplit[1]).attr("disabled", false);
+
+                    }
+                    //else {
+                    //    $("#tr" + RecIdToStore[x]).find('select,input').attr("disabled", false);
+                    //    $("#" + RecIdToStoreSplit[1]).attr("disabled", false);
+                    //}
+                }
+            }
+            else {
+                $(".AlreadyInserted").find("input,select").attr("disabled", false);
+            }
+
+
+            //here making reason select box and vendor name input box disabled because after selection of off Road mis it will enable
+            $(".Reason").attr("disabled", true);
+            $(".VendorName").attr("disabled", true);
+        }
+        else {
+            //making recid checkbox unchecked, MISData bootstrap table input,select disabled, save button disabled 
+            $('.MISDATA').find('input[type="checkbox"]').prop('checked', false);
+            $("#SelectDelect").text("Select All");
+            RecIdToStore = [];
+            $(".MISDATA").find("input,select").attr("disabled", true);
+            $(".Rec_Id_Checkbox").attr("disabled", false);
+            //$("#SaveMisData").attr("disabled", true);
+        }
+    }
+</script>
+
+@*On Check or Uncheck individually*@
+<script>
+    CIds = [];
+    function OnCheckedUnchecked(CheckboxId) {
+
+
+        //splice/Remove a number will not work, it must be an string
+        //user document.getElementById otherwise it will not give you to validate checked or not property note:hover on variable after putting this
+        var UserType = '@Session["UserType"]';
+        var id = document.getElementById(CheckboxId);
+        var CheckBoxIdString = "CheckBox" + CheckboxId;
+        if (id.checked == true) {
+            CIds.splice(CheckBoxIdString, 1);
+            if (CIds.length == 0) {
+                $('#CheckAll').prop('checked', true);
+                $("#SelectDelect").text("Deselect All");
+                RecIdToStore.push(CheckBoxIdString);
+                $("#trCheckBox" + CheckboxId).find("input,button,textarea,select").attr("disabled", false);
+
+                //here making reason select box and vendor name input box disabled because after selection of off Road mis it will enable
+                $("#Reason" + CheckboxId).attr("disabled", true);
+                $("#VendorName" + CheckboxId).attr("disabled", true);
+
+                if ($("#tr" + CheckBoxIdString).find('td').eq(6).find('option:selected').val() == "Off Road") {
+                    $("#tr" + CheckBoxIdString).find('select').attr("disabled", false);
+                    if ($("#tr" + CheckBoxIdString).find('td').eq(7).find('option:selected').val() == "DUE TO REPAIR") {
+                        $("#VendorName" + CheckboxId).attr("disabled", false);
+                    }
+                    if ($("#tr" + CheckBoxIdString).find('td').eq(7).find('option:selected').val() == "DUE TO ACCIDENT") {
+                        $("#VendorName" + CheckboxId).attr("disabled", false);
+                    }
+                }
+
+                if ($("#tr" + CheckBoxIdString).find('td').eq(6).find('option:selected').val() == "Scrap") {
+                    if (UserType == "Admin") {
+                        $("#tr" + CheckBoxIdString).find('select,input').attr("disabled", false);
+                        $("#" + CheckboxId).attr("disabled", false);
+                    }
+                    else {
+                        $("#tr" + CheckBoxIdString).find('select,input').attr("disabled", true);
+                        $("#" + CheckboxId).attr("disabled", false);
+                    }
+
+                }
+                else {
+                    $("#tr" + CheckBoxIdString).find('select,input').attr("disabled", false);
+                    $("#" + CheckboxId).attr("disabled", false);
+                }
+
+                $("#SaveMisData").attr("disabled", false);
+            }
+            else {
+                $('#CheckAll').prop('checked', false);
+                $("#SelectDelect").text("Select All");
+
+            }
+
+        }
+        else {
+
+
+
+            //getting index value of string id to remove from array
+            var index;
+            for (i = 0; i < RecIdToStore.length; i++) {
+                if (CheckBoxIdString == RecIdToStore[i]) {
+                    index = i;
+                    $('#CheckAll').prop('checked', false);
+                    $("#SelectDelect").text("Select All");
+                    CIds.push(CheckBoxIdString);
+                    RecIdToStore.splice(index, 1);
+                    $("#trCheckBox" + CheckboxId).find("input,button,textarea,select").attr("disabled", "disabled");
+                    $(".Rec_Id_Checkbox").attr("disabled", false);
+
+                    //here making reason select box and vendor name input box disabled because after selection of off Road mis it will enable
+                    //$(".Reason").attr("disabled", true);
+                    //$(".VendorName").attr("disabled", true);
+
+                    //checking RecIdToStore length if it has zero content then save button will be disabled
+                    if (RecIdToStore.length == 0) {
+                        $("#SaveMisData").attr("disabled", true);
+                    }
+                    return;
+                }
+            }
+
+            // alert(CIds);
+        }
+    }
+</script>
+
+@*Onchange MIS Select box*@
+<script>
+    function ChangeOfMIS(trId) {
+        console.log(trId)
+        var MIS = $("#trCheckBox" + trId).find('td').eq(6).find('option:selected').val();
+        if (MIS == "Off Road" || MIS == "UnderFabrication") {
+            $("#Reason" + trId).attr("disabled", false);
+            $("#Reason" + trId).attr("required", true);
+           
+        }
+        else {
+            $("#Reason" + trId).attr("disabled", true);
+            $("#Reason" + trId).val("");
+            $("#VendorName" + trId).val("");
+            
+        }
+        
+        if (MIS != "On Road") {
+
+            $(".RouteID" + trId).val("");
+            $(".RouteID" + trId).attr("disabled", true);
+            
+        } else {
+            $(".RouteID" + trId).attr("disabled", false);
+            
+        }
+
+        if (MIS == "NewVehicleRegistration") {
+            $(".RouteID" + trId).attr("disabled", true);
+            $("#Reason" + trId).attr("disabled", false);
+            $(".RouteID" + trId).attr("disabled", false);
+            $("#VendorName" + trId).attr("disabled", false);
+        }
+
+    }
+</script>
+
+@*Onchange Reason Select box*@
+<script>
+    function ChangeOfReason(trId) {
+        var reason = $("#trCheckBox" + trId).find('td').eq(7).find('option:selected').val();
+        console.log(reason);
+        if (reason == "DUE TO REPAIR") {
+            $("#VendorName" + trId).removeAttr("disabled", false);
+            $("#VendorName" + trId).attr("required", true);
+        }
+        else if (reason == "DUE TO ACCIDENT") {
+            $("#VendorName" + trId).attr("disabled", false);
+            $("#VendorName" + trId).attr("required", true);
+        }
+        else if (reason == "Due to Under Registration") {
+            $("#VendorName" + trId).attr("disabled", false);
+            $("#VendorName" + trId).attr("required", true);
+        }
+        else {
+            $("#VendorName" + trId).attr("disabled", true);
+            $("#VendorName" + trId).val("");
+        }
+        //alert(reason);
+    }
+</script>
+<script>
+    function ChangeOfReasonNew(trId) {
+        var reason = $("#trCheckBox" + trId).find('td').eq(7).find('option:selected').val();
+        $("#VendorName" + trId).removeAttr("disabled");
+        $("#VendorName" + trId).attr("required", true);
+    }
+</script>
+
+@*Click Save button to save mis data*@
+<script>
+    $("#SaveMisData").click(function () {
+        var UserType = '@Session["UserType"]';
+        var ReportingDate = $("#dateOfReporting").val();
+        //alert(ReportingDate);
+        if (ReportingDate == "") {
+            swal("Alert!", "Please select the Reporting Date.", "warning");
+            $("#divMsg").hide();
+            return;
+            //alert("Please select * from reporting date");
+        }
+        if ($(id).find('td').eq(6).find('option:selected').val() == "Off Road") {
+            if ($(id).find('td').eq(7).find('option:selected').val() == "") {
+                $("#divMsg").hide();
+                swal("Alert!", "Please select the Off Road Reason.", "warning");
+                return;
+            }
+        }
+
+        //Admin Selection
+        if (UserType == "Admin") {
+            ReportingDate = $("#dateOfReportingAdmin").val();
+        }
+        var MisData = [];
+
+        for (i = 0; i < RecIdToStore.length; i++) {
+            var id = "#tr" + RecIdToStore[i];
+
+            var Make = $(id).find('td').eq(2).text();
+            var ChassisNumber = $(id).find('td').eq(3).text();
+            var ManufacturingYear = $(id).find('td').eq(4).text();
+            var VehicleNumber = $(id).find('td').eq(5).text();
+            var MIS = $(id).find('td').eq(6).find('option:selected').val();
+            var Reason = $(id).find('td').eq(7).find('option:selected').val();
+            var VendorName = $(id).find('td').eq(8).find('input[type="text"]').val();
+            var Segment = $(id).find('td').eq(9).find('option:selected').val();
+            //var Company = $(id).find('td').eq(10).find('option:selected').val();
+            var PresentCompany = $(id).find('td').eq(10).find('option:selected').val();
+            //var RouteNo = $(id).find('td').eq(12).find('input[type="text"]').val();
+            var RouteId = $(id).find('td').eq(11).find('input[type="text"]').val();
+            var Customer = $(id).find('td').eq(12).find('input[type="text"]').val();
+            var Location = $(id).find('td').eq(13).find('input[type="text"]').val();
+            var Remarks = $(id).find('td').eq(14).find('input[type="text"]').val();
+            var DriverPat = $(id).find('td').eq(15).find('input[type="text"]').val();
+            var DriverName = $(id).find('td').eq(16).find('input[type="text"]').val();
+            var DriverMobile = $(id).find('td').eq(17).find('input[type="text"]').val();
+            console.log(RouteId);
+            var NewRow = {
+                "VehicleNumber": VehicleNumber,
+                "Make": Make,
+                "ChassisNumber": ChassisNumber,
+                "ManufacturingYear": ManufacturingYear,
+                "MIS": MIS,
+                "Reason": Reason,
+                "VendorName": VendorName,
+                "Segment": Segment,
+                
+                "PresentCompany": PresentCompany,
+                
+                "RouteId": RouteId,
+                "Customer": Customer,
+                "Location": Location,
+                "Remarks": Remarks,
+                "DriverPat": DriverPat,
+                "DriverName": DriverName,
+                "DriverMobile": DriverMobile,
+            }
+            if (MIS == "On Road")
+            {
+                if (RouteId == "" || RouteId == 0)
+                {
+                    $("#divMsg").hide();
+                    swal("Alert!", "Please enter Route Id", "warning");
+                    
+                    return false;
+                    break;
+                    
+
+                }
+                if (RouteId.length < 5)
+                {
+                    $("#divMsg").hide();
+                    swal("Alert!", "Please enter Route Id", "warning");
+                    return false;
+                    break;
+                    
+                }
+            }
+            if (MIS == "") {
+                var MIS = id.split("trCheckBox");
+                $("#divMsg").hide();
+                swal("Alert!", "MIS can't be blank for enabled row.", "warning");
+                $("#MIS" + MIS[1]).css({ "background-color": "#f1a09e", "color": "black" });
+                return;
+            }
+            else if (MIS == "Off Road") {
+                if (Reason == "") {
+                    var ReasonId = id.split("trCheckBox");
+                    $("#divMsg").hide();
+                    swal("Alert!", "Reason can't be blank for enabled row.", "warning");
+                    $("#Reason" + ReasonId[1]).css({ "background-color": "#f1a09e", "color": "black" });
+                    return;
+                }
+                else if (Reason == "DUE TO REPAIR") {
+                    if (VendorName == "") {
+                        var VendorNameId = id.split("trCheckBox");
+                        $("#divMsg").hide();
+                        swal("Alert!", "Vendor Name can't be blank for enabled row.", "warning");
+                        $("#VendorName" + VendorNameId[1]).css({ "background-color": "#f1a09e", "color": "black" });
+                        return;
+                    }
+                }
+            }
+            MisData.push(NewRow);
+        }
+        var MisDataToBeSaved = JSON.stringify(MisData);
+        console.log(MisDataToBeSaved);
+        
+        $("#buttons").hide();
+        $(".col-sm-2").hide();
+        $(".col-sm-3").hide();
+        $(".col-sm-4").hide();
+        $("#SelectSegment").hide();
+        $("#SaveMisData").hide();
+        $("#MisDataDiv").hide();
+        $("#divMsg").show();
+
+        $.ajax({
+            type: "post",
+            url: "@Url.Action("SaveMisData","MIS")",
+            data: { MisData: MisDataToBeSaved, ReportingDate: ReportingDate },
+            dataType: "JSON",
+            success: function (data) {
+                if (data == 1) {
+                    $("#buttons").show();
+                    $(".col-sm-2").show();
+                    $(".col-sm-3").show();
+                    $(".col-sm-4").show();
+                    $("#SelectSegment").show();
+                    $("#SaveMisData").show();
+                    $("#MisDataDiv").show();
+                    $("#divMsg").hide();
+                    $("#tableData").html("");
+                    //$("#SaveMisData").attr("disabled", true);
+                    // swal("Success!", "Data saved successfully", "success");
+                    swal({
+                        title: "Success",
+                        text: "Data saved successfully!",
+                        type: "success",
+                        icon: "success",
+                    }).then(function () {
+                        location.reload();
+                    });
+                }
+                else {
+                    $("#buttons").show();
+                    $(".col-sm-2").show();
+                    $(".col-sm-3").show();
+                    $(".col-sm-4").show();
+                    $("#SelectSegment").show();
+                    $("#SaveMisData").show();
+                    $("#MisDataDiv").show();
+                    $("#divMsg").hide();
+                    //$("#SaveMisData").attr("disabled", true);
+                    //swal("Alert!", "Failed to save the data.", "warning");
+                    swal({
+                        title: "Alert!",
+                        text: "Failed to save the data.",
+                        type: "warning",
+                        icon: "warning",
+                    }).then(function () {
+                        location.reload();
+                    });
+                }
+            },
+            error: function () {
+
+            }
+        })
+
+    })
+</script>
+
+@*Populating Region*@
+<script>
+    $(document).ready(function () {
+        $.ajax({
+            url: '@Url.Action("GetAllRegions", "Overview")',
+            type: "post",
+            data: {},
+            dataType: "json",
+            traditional: true,
+            success: function (data) {
+
+                //For Repair & Maintenance
+                var mySelect = $('#cmbRegion');
+
+                mySelect.empty();
+                var selectOption = '<option value="">Select Region</option';
+                //$("#cmbVechile").append(selectOption);
+                $.each(data, function (i) {
+                    var optionhtml = '';
+                    optionhtml = '<option value="' + data[i].Region_id + '">' + data[i].Region_Name + '</option>';
+
+                    $("#cmbRegion").append(optionhtml);
+
+                });
+
+                mySelect.multiselect('rebuild');
+            }
+        })
+    })
+</script>
+
+@*Getting all the branch by Region_id*@
+<script>
+    $(document).ready(function () {
+        $("#cmbRegion").change(function () {
+
+            var Region = $("#hfRegion").val();
+            //alert(Region);
+            $.ajax({
+                url: '@Url.Action("GetBranch", "Overview")',
+                type: "post",
+                data: { RegionId: Region },
+                dataType: "json",
+                traditional: true,
+                success: function (data) {
+                    var mySelect = $('#cmbBranch');
+
+                    mySelect.empty();
+                    var selectOption = '<option value="">Select Branch</option';
+                    //$("#cmbVechile").append(selectOption);
+                    $.each(data, function (i) {
+                        var optionhtml = '';
+                        optionhtml = '<option value="' + data[i].BranchId + '">' + data[i].BranchName + '</option>';
+                        $("#cmbBranch").append(optionhtml);
+                    });
+
+                    mySelect.multiselect('rebuild');
+                    $("#hfBranch").val("");
+                    $("#hfVehicle").val("");
+                },
+                error: function (response) {
+                    alert(response.responseText);
+                },
+                failure: function (response) {
+                    alert(response.responseText);
+                }
+
+
+            })
+        })
+    })
+</script>
+
+@*On Branch Change*@
+<script>
+    $(document).ready(function () {
+        $("#cmbBranch").change(function () {
+            var UserType = '@Session["UserType"]';
+
+            var Region = $("#hfRegion").val();
+            var Branch = $("#hfBranch").val();
+
+            var Date = "";
+
+            if (UserType == "Admin") {
+                Date = $("#dateOfReportingAdmin").val();
+            }
+            if (UserType == "User") {
+                Date = $("#dateOfReporting").val();
+            }
+            //alert(Region);
+            $.ajax({
+                url: '@Url.Action("PendingInformation")',
+                type: "post",
+                data: { RegionId: Region, BranchId: Branch, ReportingDate: Date },
+                dataType: "json",
+                traditional: true,
+                success: function (data) {
+                    $("#ShowMisData").text("");
+                    $("#ShowMisData").text("Total No. Pending:- " + data[0].Total + " / " + data[0].Pending);
+                },
+                error: function (response) {
+                    alert(response.responseText);
+                },
+                failure: function (response) {
+                    alert(response.responseText);
+                }
+
+
+            })
+        })
+    })
+</script>
+@* Route NO Validation *@
+<script>
+    $('body').on('blur', '.RouteIDList', function () {
+        var RecId = $('this').data("id");
+        var RouteId = $(this).val();
+        if (RouteId.length < 5)
+        {
+            $("#divMsg").hide();
+            swal("Alert!", "Please enter Route Id", "warning");
+        }
+            
+    });
+</script>

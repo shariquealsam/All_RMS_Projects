@@ -1,0 +1,415 @@
+﻿@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/Master.cshtml";
+}
+
+@*<h2>vechile Index Page</h2>*@
+<!-- Latest compiled and minified CSS -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+
+<!-- jQuery library -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
+<!-- Latest compiled JavaScript -->
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.css">
+
+<script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.js"></script>
+
+<link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" />
+
+
+<script src="~/Angular/Angular.js"></script>
+<script src="~/Angular/VechileController.js"></script>
+<script src="~/Js/table2excel.js"></script>
+<!DOCTYPE html>
+
+<html>
+
+<head>
+    <title>Vechile Creation Page</title>
+</head>
+
+<body ng-app="myApp" ng-controller="myController">
+    <div class="container">
+        <button class="btn btn-primary btn-xs add-user">
+            <i class="fa fa-car" style="font-size: 30px" id="AddSingleVehicle"><span class="form-control">ADD SINGLE VEHICLE</span></i>
+        </button>
+
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+
+        <button class="btn btn-primary btn-xs add-user">
+            <i class="fa fa-car" style="font-size: 30px" id="AddMultipleVehicle"><span class="form-control">ADD MULTIPLE VEHICLE</span></i>
+        </button>
+
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+           <button class="btn btn-primary btn-xs add-user" onclick="location.href='@Url.Action("Download", "Vechile")'">
+               <i class="fa fa-search" style="font-size: 30px" id="ExportExcelTemplate"><span class="form-control">Excel Template</span></i>
+           </button>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        &nbsp;&nbsp;
+
+        <button class="btn btn-primary float-right btn-xs" id="AddMultipleVehicleSave">
+            <i class="fa fa-save" style="font-size: 30px" ng-click="SaveVehicleMaster()"><span class="form-control">Submit</span></i>
+        </button>
+        <button class="btn btn-primary float-right btn-xs" style="display: none;" id="AddSingleVehicleSave">
+            <i class="fa fa-save" style="font-size: 30px" id="SaveVehicle"><span class="form-control">Submit</span></i>
+        </button>
+
+        <br />
+        <br />
+        <img src="~/Image/PleaseWait.gif" style="top: 200px; position: absolute; left: 550px" ng-show="loadingSpinner" />
+        <pre style="position: absolute; top: 0px; left: 0; width: 100%; height: 98%; z-index: 10; background-color: rgba(0, 0, 0, 0.14); text-align: center" ng-show="loadingSpinner">
+            
+
+        </pre>
+        <div style="display: none; padding: 9.5px; margin: 0 0 10px; line-height: 1.42857143; color: #333; border: 1px solid #ccc; border-radius: 4px;" id="Single">
+            <div class="row">
+                <div class="col-sm-3">
+                    <label for="VechileName" class="control-label">Vehicle Number</label>
+                    <input type="text" class="form-control" placeholder="Enter Vehicle Number" id="txtVehicleNo" name="txtVehicleNo" required="required"  />
+                </div>
+                <div class="col-sm-3">
+                    <label for="Make" class="control-label">Make</label>
+                    <input type="text" class="form-control" placeholder="Enter Make Details" id="txtMake" name="txtMake" required="required"/>
+                </div>
+                <div class="col-sm-3">
+                    <label for="ChassisNo" class="control-label">Chassis Number</label>
+                    <input type="text" class="form-control" placeholder="Enter Chassis NUmber" id="txtChassisNo" name="txtChassisNo" required="required"  />
+                </div>
+                <div class="col-sm-3">
+                    <label for="ManufacturingYear" class="control-label">Manufacturing Year</label>
+                    <input type="text" class="form-control" placeholder="Enter Manufacturing Year" id="txtManufacturingYear" name="txtManufacturingYear" required="required" maxlength="4" />
+                </div>
+            </div>
+            <p></p>
+            <div class="row">
+                <div class="col-sm-3">
+                    <label for="Password" class="control-label">Password</label>
+                    <input type="text" class="form-control" placeholder="Enter Password" id="txtPassword" name="txtPassword" required="required"  />
+                </div>
+                <div class="col-sm-3">
+                    <label for="ConfirmPassword" class="control-label">Confirm Password</label>
+                    <input type="text" class="form-control" placeholder="Enter Confirm Password" id="txtConfirmPassword" name="txtConfirmPassword" required="required" />
+                </div>
+                <div class="col-sm-3">
+                    <label for="Region" class="control-label">Region</label>
+                    <select class="form-control" id="cmbRegion" name="cmbRegion">
+                        @if(ViewBag.RegionDetails == null)
+                        {
+                        <option value="">--Select Region--</option>
+                        }
+                        else
+                        {
+                            foreach (var item1 in ViewBag.RegionDetails)
+                            {
+                               <option value="@item1.RegionId">@item1.RegionName</option>
+                            }
+                        }
+                    </select>
+                </div>
+                <div class="col-sm-3">
+                    <label for="Branch" class="control-label">Branch</label>
+                     <select class="form-control" id="cmbBranch" name="cmbBranch">   
+                          <option value="">--Select Branch--</option>                                 
+                     </select>
+                </div>
+            </div>
+            <p></p>
+        </div>
+
+        @using (Html.BeginForm("Multiple", "Vechile", FormMethod.Post, new { enctype = "multipart/form-data" }))
+        {
+            @Html.AntiForgeryToken();
+            @Html.ValidationSummary();
+            <div style="display: none; padding: 9.5px; margin: 0 0 10px; line-height: 1.42857143; color: #333; border: 1px solid #ccc; border-radius: 4px;" id="Multiple">
+                <div class="row">
+                    <div class="col-sm-10">
+                        <label class="text-info">Upload Excel File</label>
+                        <input type="file" class="form-control" name="postedFile" id="postedFile" />
+                    </div>
+                    <div class="col-sm-2">
+                        <label class="text-info">&nbsp;<span style="visibility: hidden">Upload Excel File</span></label>
+                        <button class="btn btn-primary float-right btn-block" id="ExcelSubmit">Upload</button>
+                    </div>
+                </div>
+            </div>
+        }
+
+        <div class="row" id="TableGridView" ng-hide="IsVisible">
+            <div class="col-sm-12">
+                @if (Model != null)
+                {
+                    if ((Model).Count != 0)
+                    {
+                    <table class="table table-responsive table-bordered table-hover table-striped" style="font-size: 13px;">
+                        <thead class="bg-primary">
+                            <tr>
+                                <th>Vehicle Number</th>
+                                <th>Make</th>
+                                <th>Chassis Number</th>
+                                <th>Manufacturing Year</th>
+                                <th>Password</th>
+                                @*<th>Confirm Password</th>*@
+                                <th>Region</th>
+                                <th>Branch</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                            @foreach (var item1 in Model)
+                            {                     
+                                <tr>
+                                    <td>@item1.VehicleNumber</td>
+                                    <td>@item1.Make</td>
+                                    <td>@item1.ChassisNumber</td>
+                                    <td>@item1.ManufacturingYear</td>
+                                    <td>@item1.Password</td>
+                                    @*<td>@item1.ConfirmPassword</td>*@
+                                    <td>@item1.Region</td>
+                                    <td>@item1.Branch</td>
+                                    @if (@item1.Status == "Region And Branch Matching")
+                                    {
+                                        <td style="color:green;font-weight:bold">@item1.Status</td>
+                                    }
+                                    else
+                                    {
+                                        <td style="color:red;font-weight:bold">@item1.Status</td>
+                                    }
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                    }
+                }
+            </div>
+        </div>
+
+        <div style="padding: 9.5px; margin: 0 0 10px; line-height: 1.42857143; color: #333; border: 1px solid #ccc; border-radius: 4px;">
+
+            <button class="btn btn-info btn-xs" style="float: right" id="HideShow" ng-click="VehicleMaster()"><i class="fa fa-folder-open-o" style="font-size: 25px">View Master</i></button>
+            <button class="btn btn-warning btn-xs" style="float: left" ng-click="Export()"><i class="fa fa-file-excel-o" style="font-size: 25px">Export To Excel</i></button>
+            <br />
+
+            <div class="row">
+                <div class="col-sm-12">
+                    <p></p>
+                    <div class="input-group">
+                        <span class="input-group-addon"><i class="fa fa-search"></i></span>
+                        <input type="text" ng-model="SearchKeyword" class="form-control" placeholder="Please Enter The Keyword You Want To Search" />
+                    </div>
+                    @*<input type="text" ng-model="SearchKeyword" class="form-control" placeholder="Please Enter The Keyword You Want To Search" />*@
+                    <p></p>
+                    <table class="table table-responsive table-bordered table-hover table-striped" style="font-size: 13px; display: none;" id="Hide" ng-model="username">
+                        <thead class="bg-primary">
+                            <tr>
+                                <th style="display: none">Recid</th>
+                                <th>Vehicle Number</th>
+                                <th>Make</th>
+                                <th>Chassis Number</th>
+                                <th>Manufacturing Year</th>
+                                <th>Password</th>
+                                <th>Region</th>
+                                <th>Branch</th>
+                                <th>Edit</th>
+                                <th>Delete</th>
+                               @* <th>Status</th>*@
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr ng-repeat="Vechile in VehicleMasterData | filter : SearchKeyword">
+                                <td style="display: none">{{Vechile.Recid}}</td>
+                                <td>{{Vechile.VehicleNumber}}</td>
+                                <td>{{Vechile.Make}}</td>
+                                <td>{{Vechile.ChassisNumber}}</td>
+                                <td>{{Vechile.ManufacturingYear}}</td>
+                                <td>{{Vechile.Password}}</td>
+                                <td>{{Vechile.Region}}</td>
+                                <td>{{Vechile.BranchName}}</td>
+                                <td>
+                                    @*<button class="btn btn-warning btn-xs" style="float: right"><i class="fa fa-edit" style="font-size: 20px" data-toggle="modal" data-target="#myModal" ng-click="GetEditDetails(Vechile)"></i></button>*@
+                                    <button class="btn btn-warning btn-xs" style="float: right"><i class="fa fa-edit" style="font-size: 20px" ng-click="GetEditDetails(Vechile)"></i></button>
+                                </td>
+                                <td>
+                                    <button class="btn btn-danger btn-xs" style="float: right" value="Get Details" ng-click="GetDetails(Vechile)"><i class="fa fa-trash" style="font-size: 20px"></i></button>
+                                </td>
+                              @*  <td>{{Vechile.Status}}</td>*@
+                            </tr>
+                        </tbody>
+                    </table>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>
+
+<script>
+    $('#ExcelSubmit').bind('click', function (e) {
+        if ($('#postedFile').val() != "") {
+        }
+        else {
+            alert("No file has been selected");
+            return;
+        }
+    });
+</script>
+
+<script>
+    $(document).ready(function () {
+        $("#AddSingleVehicle").click(function () {
+            $("#Multiple").hide();
+            $("#Single").toggle();
+            $("#AddMultipleVehicleSave").hide();
+            $("#AddSingleVehicleSave").show();
+            $("#TableGridView").hide();
+        })
+        $("#AddMultipleVehicle").click(function () {
+            $("#Single").hide();
+            $("#Multiple").toggle();
+            $("#AddMultipleVehicleSave").show();
+            $("#AddSingleVehicleSave").hide();
+            $("#TableGridView").hide();
+        })
+        $("#HideShow").click(function () {
+            $("#Hide").toggle();
+        })
+
+    })
+</script>
+
+<script>
+    $(document).ready(function () {
+        $("#Update").click(function () {
+            alert($("#txtEditVehicleNo").val());
+        })
+    })
+</script>
+
+  <script>
+      $(document).ready(function () {
+          $('#cmbRegion').change(function () {
+              $.ajax({
+                  url: '@Url.Action("GetBranchdetails")',
+                    data: {
+                        RegionId: $('#cmbRegion').val(),
+                    },
+                    dataType: "json",
+                    type: "POST",
+                    traditional: true,
+                    success: function (data) {
+                        var mySelect = $('#cmbBranch');
+                        mySelect.empty();
+                        $.each(data, function (i) {
+                            var optionhtml = '';
+                            optionhtml = '<option value="' + data[i].BranchId + '">' + data[i].BranchName + '</option>';
+                            $('#cmbBranch').append(optionhtml);
+                        });
+                    },
+                    error: function (response) {
+                        alert(response.responseText);
+                    },
+                    failure: function (response) {
+                        alert(response.responseText);
+                    }
+                });
+            });
+
+        });
+    </script>
+
+    <script>
+        $(document).ready(function () {
+            $('#SaveVehicle').click(function () {
+                if ($('#txtVehicleNo').val() == "" || $('#txtVehicleNo').val() == null) {
+                    alert("Please Enter Vechile Number");
+                    return;
+                }
+                else if ($('#txtMake').val() == "" || $('#txtMake').val() == null) {
+                    alert("Please Enter Make Details");
+                    return;
+                }
+                else if ($('#txtChassisNo').val() == "" || $('#txtChassisNo').val() == null) {
+                    alert("Please Enter ChassisNumber Details");
+                    return;
+                }
+                else if ($('#txtManufacturingYear').val() == "" || $('#txtManufacturingYear').val() == null) {
+                    alert("Please Enter Manufacturing Year");
+                    return;
+                }
+
+                else if ($('#txtPassword').val() == "" || $('#txtPassword').val() == null) {
+                    alert("Please Enter Password");
+                    return;
+                }
+
+                else if ($('#txtConfirmPassword').val() == "" || $('#txtConfirmPassword').val() == null) {
+                    alert("Please Enter ConfirmPassword Details");
+                    return;
+                }
+
+                else if ($('#txtPassword').val() != $('#txtConfirmPassword').val()) {
+                    alert("Please Enter Password and ConfirmPassword as same");
+                    return;
+                }
+
+                else if ($('#cmbRegion').val() == "" || $('#cmbRegion').val() == null) {
+                    alert("Please Enter ConfirmPassword Details");
+                    return;
+                }
+
+                else if ($('#cmbBranch').val() == "" || $('#cmbBranch').val() == null) {
+                    alert("Please Enter Branch Details");
+                    return;
+                }
+
+                $.ajax({
+                    url: '@Url.Action("SaveVehicle")',
+                    data: {
+                        VechileNumber: $('#txtVehicleNo').val(),
+                        Make: $('#txtMake').val(),
+                        ChassisNo: $('#txtChassisNo').val(),
+                        ManufacturingYear: $('#txtManufacturingYear').val(),
+                        Password: $('#txtPassword').val(),
+                        Region: $('#cmbRegion').val(),
+                        Branch: $('#cmbBranch').val(),
+                    },
+                    dataType: "json",
+                    type: "POST",
+                    traditional: true,
+                    success: function (data) {
+                        alert(data);
+                        $('#txtVehicleNo').val("");
+                        $('#txtMake').val("");
+                        $('#txtChassisNo').val("");
+                        $('#txtManufacturingYear').val("");
+                        $('#txtPassword').val("");
+                        $('#cmbRegion').val("");
+                        $('#cmbBranch').val("");
+                        $('#txtConfirmPassword').val("")
+                        var mySelect = $('#cmbBranch');
+                        mySelect.empty();
+                    },
+                    error: function (response) {
+                        alert(response.responseText);
+                    },
+                    failure: function (response) {
+                        alert(response.responseText);
+                    }
+                });
+            })
+        });
+    </script>

@@ -1,0 +1,123 @@
+﻿@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/Master.cshtml";
+}
+
+@*<h2>Index</h2>*@
+
+<!-- Latest compiled and minified CSS -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+
+<!-- jQuery library -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
+<!-- Latest compiled JavaScript -->
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.css">
+<script src="~/Js/jquery.dataTables.js"></script>
+
+
+<script src="~/Angular/Angular.js"></script>
+<script src="~/Angular/DashboardController.js"></script>
+
+<style type="text/css">
+	/*  Define the background color for all the ODD background rows  */
+	.TFtable tr:nth-child(odd){ 
+		/*background: #b8d1f3;*/
+        background: #FFCC00C7;
+	}
+	/*  Define the background color for all the EVEN background rows  */
+	.TFtable tr:nth-child(even){
+		background: #dae5f4;
+	}
+</style>
+
+
+<!DOCTYPE html>
+<html>
+<head>
+
+    <title>Dashboard</title>
+      <meta http-equiv="refresh" content="90">
+</head>
+<body ng-app="myApp" ng-controller="myController">
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-12">
+             <table class="table table-responsive table-bordered " style="font-size: 13px;" id="myDataTable" >
+                <thead class="bg-primary">
+                    <tr>
+                        <th style="display:none" class="bg-primary">RegionID</th>
+                        <th>Region</th>
+                        <th>No. Of Vehicles</th>
+                        <th>No. Of Openings</th>
+                        <th>No. Of Closings</th>
+                        <th>No. Reporting Today</th>
+                        <th>No. Reporting Till Date</th>
+                    </tr>
+                </thead>
+                <tbody class="TFtable">
+                    @foreach (var item1 in ViewBag.Dashbard)
+                    {  
+                        <tr>
+                            <td style="display:none">@item1.RegionID</td>
+                            <td class="bg-primary" style="font-size:16px">@item1.Region</td>
+                            <td style="text-align:center;">
+                                @if (item1.Region == "TOTAL")
+                                {
+                                    <a href="@Url.Action("TotalVehicleOpeningClosing", "Dashboard", new { RegionId = @item1.RegionID })" target="_blank" style="color:black;font-weight:bold;font-size:14px;">@item1.NoOfVehicles</a>
+                                }
+                                else
+                                {
+                                    <a href="@Url.Action("RegionWiseMasterVehicle", "Dashboard", new { RegionId = @item1.RegionID })" target="_blank" style="color:black;font-weight:bold;font-size:14px;">@item1.NoOfVehicles</a>
+                                }
+
+                            </td>
+                            <td style="text-align:center;">
+                                <a href="@Url.Action("Index", "Report", new { RegionId = @item1.RegionID })" target="_blank" style="color:green;font-weight:bold;font-size:14px">@item1.NoOfOpenings</a>
+                            </td>
+                            <td style="text-align:center;">
+                                 <a href="@Url.Action("Index", "Report", new { RegionId = @item1.RegionID })" target="_blank" style="color:green;font-weight:bold;font-size:14px">@item1.NoOfClosings</a>
+                            </td>
+                            <td  style="text-align:center;">
+                                @if (item1.Region == "TOTAL")
+                                {
+                                    <a href="@Url.Action("NoActivityVehicles", "Report", new { RegionId=@item1.RegionID,  Type="Fleet_NoReportingVehiclesRegionWiseT"})" style="text-align:center; color:red; font-weight:bold;font-size:14px;" target="_blank" > @item1.NoReportingToday</a>
+                                }
+                                else
+                                { 
+                                    <a href="@Url.Action("NoActivityVehicles", "Report", new { RegionId=@item1.RegionID,  Type="Fleet_NoReportingVehiclesRegionWise"})" style="text-align:center; color:red; font-weight:bold;font-size:14px;" target="_blank" > @item1.NoReportingToday</a>
+                                }
+                             </td>
+                            <td  style="text-align:center;">
+                                @if(item1.Region=="TOTAL")
+                                {
+                                <a href="@Url.Action("NoActivityVehicles", "Report", new { RegionId=@item1.RegionID, Type="Fleet_NoReportingVehiclesRegionWiseTillDateT"})" style="text-align:center; color:red; font-weight:bold;font-size:14px;" target="_blank" > @item1.NoReportingTillDate </a>
+                                }
+                                else
+                                {
+                                <a href="@Url.Action("NoActivityVehicles", "Report", new { RegionId=@item1.RegionID, Type="Fleet_NoReportingVehiclesRegionWiseTillDate"})" style="text-align:center; color:red; font-weight:bold;font-size:14px;" target="_blank" > @item1.NoReportingTillDate </a>
+                                }
+                                </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
+<script>
+    $(document).ready( function () {
+        $('#myDataTable').DataTable(
+            {
+                "pageLength": 25,
+                paging: false,
+                searching: false,
+                select: true,
+                "bInfo": false
+            });
+    });
+</script>

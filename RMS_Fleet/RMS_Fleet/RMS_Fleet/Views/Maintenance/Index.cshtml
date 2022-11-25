@@ -1,0 +1,525 @@
+﻿@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/Master.cshtml";
+}
+
+
+<!-- Latest compiled and minified CSS -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+
+<!-- jQuery library -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
+<!-- Latest compiled JavaScript -->
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.css">
+
+<script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.js"></script>
+
+<link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" />
+
+<link href="~/Css/bootstrap-multiselect.css" rel="stylesheet" />
+
+<script src="~/Js/bootstrap-multiselect.js"></script>
+
+@*style for loader*@
+<link href="~/Css/Ribbon.css" rel="stylesheet" />
+<link href="~/Css/style.css" rel="stylesheet" />
+<style>
+    #divMsg {
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        position: fixed;
+        background: #f5f5f5ed;
+        z-index: 1;
+    }
+</style>
+@*OnLoad loader*@
+<script>
+    $(document).ready(function () {
+        $("#divMsg").show();
+        setTimeout(function () { $("#divMsg").hide(); }, 1000);
+    })
+</script>
+
+<style>
+    div#buttonsforSaveReset {
+        margin-top: 43px;
+    }
+
+    .col-sm-4 {
+        width: 25.333333%;
+    }
+</style>
+
+
+
+
+<div class="container">
+    <div id="divMsg" style="display: none;">
+        @*<img src="~/Image/loader.gif" alt="Please wait.." />*@
+        <div class="loader">Loading</div>
+    </div>
+    <div class="row" style="border: 1px solid #d4d4d4; padding-top: 15px; padding-bottom: 28px">
+        <h4 style="border-bottom: 1px solid #cecece; padding-bottom: 10px; padding-left: 16px;">Maintenance for Taxes</h4>
+        <div class="col-sm-2">
+            <label for="RegionKPL" class="control-label">Region</label>
+            <select class="form-control" name="ddlRegionTAX" id="ddlRegionTAX">
+                <option value="0">-- Select Region --</option>
+                @foreach (var item1 in ViewBag.RegionDetails)
+                {
+                    <option value="@item1.RegionId">@item1.RegionName</option>
+                }
+            </select>
+        </div>
+        <div class="col-sm-2">
+            <label for="BranchKPL" class="control-label">Branch</label>
+            <select class="form-control" name="ddlBranchTAX" id="ddlBranchTAX">
+                <option value="0">-- Select Branch --</option>
+            </select>
+        </div>
+        <div class="col-sm-2">
+            <label for="uVechile">Vechile Number</label>
+            <select class="form-control" id="cmbVechileTAX" name="cmbVechileTAX" required>
+            </select>
+            <script>
+                $(document).ready(function () {
+                    //Bank Dropdown Selectedchange event    
+                    $('[id=cmbVechileTAX]').multiselect({
+                        enableFiltering: true,
+                        enableCaseInsensitiveFiltering: true,
+                        includeSelectAllOption: false,
+                        includeSelectAllDivider: false,
+                        maxHeight: 260,
+                        buttonWidth: '164px',
+                    });
+                })
+            </script>
+        </div>
+        <div class="col-sm-2">
+            <label for="uVechile">Make</label>
+            <input type="text" class="form-control" id="txtMakeTAX" />
+        </div>
+        <div class="col-sm-2">
+            <label for="txtModelTAX">Model</label>
+            <input type="text" class="form-control" id="txtModelTAX" name="txtModelTAX" required />
+
+        </div>
+        <div class="col-sm-2">
+            <label for="txtChessisNumberTAX">Chessis Number</label>
+            <input type="text" class="form-control" id="txtChessisNumberTAX" name="txtChessisNumberTAX" required />
+        </div>
+        <div class="col-sm-2">
+            <br />
+            <label for="selectDocumentTAX">Document</label>
+            <select class="form-control" name="selectDocumentTAX" id="selectDocumentTAX">
+                <option value="0">-- Select Document --</option>
+                <option value="RoadTax">RoadTax</option>
+                <option value="Fitness">Fitness</option>
+                <option value="Permit">Permit</option>
+                <option value="Insurance">Insurance</option>
+                <option value="PUC">PUC(Pollution)</option>
+            </select>
+        </div>
+        <div class="col-sm-2">
+            <br />
+            <label for="txtExpiryDateTAX">Expiry Date</label>
+            <input type="date" class="form-control" id="txtExpiryDateTAX" name="txtExpiryDateTAX" required />
+        </div>
+
+        <div class="col-sm-4" id="buttonsforSaveReset">
+            <center>
+            <button type="button" class="btn btn-success" style="width:130px" id="btnSaveMaintenance">Save</button>
+            <button type="reset" class="btn btn-danger" style="width:130px" id="btnReset">Reset</button>
+        </center>
+        </div>
+
+    </div>
+    <br />
+</div>
+
+
+
+
+@*OnLoad disable make, model, chessis number as there is no use of it*@
+<script>
+    $(document).ready(function () {
+        DisabledMakeModelChessisNo();
+    })
+</script>
+
+
+@*function disable make, model, chessis number as there is no use of it*@
+<script>
+    function DisabledMakeModelChessisNo() {
+        $("#txtMakeTAX").attr("disabled", true);
+        $("#txtModelTAX").attr("disabled", true);
+        $("#txtChessisNumberTAX").attr("disabled", true);
+    }
+</script>
+
+
+
+@*OnChange Region On Select Region fill Branch on TAX div *@
+<script>
+    $(document).ready(function () {
+        $("#ddlRegionTAX").change(function () {
+            $("#divMsg").show();
+            $.ajax({
+                url: 'SalesReport/GetBranch',
+                data: {
+                    RegionId: $("#ddlRegionTAX").val(),
+                },
+                dataType: "json",
+                type: "POST",
+                traditional: true,
+                success: function (data) {
+                    $("#ddlBranchTAX").html("");
+                    $("#ddlBranchTAX").append($('<option></option>').val("0").html("-- Select Branch --"));
+                    $.each(data, function (i, item) {
+                        $("#ddlBranchTAX").append($('<option></option>').val(item.BranchId).html(item.BranchName))
+                    });
+
+                    $("#cmbVechileTAX").html("");
+                    $("#cmbVechileTAX").append($('<option></option>').val("").html("-- Select Vehicle --"));
+
+
+
+                    $("#txtMakeTAX").val("");
+                    $("#txtModelTAX").val("");
+                    $("#txtChessisNumberTAX").val("");
+                    $("#txtExpiryDateTAX").val("");
+                    $("#selectDocumentTAX").prop("selectedIndex", 0);
+
+                    $("#divMsg").hide();
+                },
+                error: function (response) {
+                    alert(response.responseText);
+                },
+                failure: function (response) {
+                    alert(response.responseText);
+                }
+            });
+        });
+    });
+</script>
+
+
+@*OnChange Branch On Select Branch fill Vechile Number on TAX Div *@
+<script>
+    $(document).ready(function () {
+        $("#ddlBranchTAX").change(function () {
+            $("#divMsg").show();
+            $.ajax({
+                url: 'SalesReport/GetVehicle',
+                data: {
+                    RegionId: $("#ddlRegionTAX").val(),
+                    BranchId: $("#ddlBranchTAX").val(),
+                },
+                dataType: "json",
+                type: "POST",
+                traditional: true,
+                success: function (data) {
+                    //$("#cmbVechileTAX").html("");
+                    //$("#cmbVechileTAX").append($('<option></option>').val("").html("-- Select Vehicle --"));
+                    //$.each(data, function (i, item) {
+                    //    $("#cmbVechileTAX").append($('<option></option>').val(item.VehicleNo).html(item.VehicleNo))
+                    //});
+                    //$("#cmdVechileTAX").multiselect('rebuild');
+                    //$("#divMsg").hide();
+
+                    var mySelect = $('#cmbVechileTAX');
+
+                    mySelect.empty();
+                    var selectOption = '<option value="">Select Vechile</option';
+                    $("#cmbVechileTAX").append(selectOption);
+                    $.each(data, function (i, item) {
+                        var optionhtml = '';
+
+                        optionhtml = '<option id="option" value="' + item.VehicleNo + '">' + item.VehicleNo + '</option>';
+
+                        $("#cmbVechileTAX").append(optionhtml);
+                    });
+
+                    mySelect.multiselect('rebuild');
+                    $("#txtMakeTAX").val("");
+                    $("#txtModelTAX").val("");
+                    $("#txtChessisNumberTAX").val("");
+                    $("#txtExpiryDateTAX").val("");
+                    $("#selectDocumentTAX").prop("selectedIndex", 0);
+                    $("#divMsg").hide();
+                },
+                error: function (response) {
+                    alert(response.responseText);
+                },
+                failure: function (response) {
+                    alert(response.responseText);
+                }
+            });
+        });
+    });
+</script>
+
+
+@*OnChange Vechile Get Make,Model and Chessis Number on Vehcile Change and document and its expiry date if it exists*@
+<script>
+    var existingExpiryDate;
+    var UserType = '@Session["UserType"]';
+    $(document).ready(function () {
+        $("#cmbVechileTAX").change(function () {
+            $("#divMsg").show();
+            var RegionId = $("#ddlRegionTAX").val();
+            var BranchId = $("#ddlBranchTAX").val();
+            var Vechile = $("#cmbVechileTAX").val();
+            //alert(RegionId + " " + BranchId + " " + Vechile + " ");
+            //alert("Vechile Change");
+            $("#txtExpiryDateTAX").attr('disabled', false);
+            $("#btnSaveMaintenance").attr('disabled', false);
+            $.ajax({
+                url: '@Url.Action("GetMakeModelChessisNumber")',
+                type: 'post',
+                data: { RegionId: RegionId, BranchId: BranchId, VechileNumber: Vechile },
+                dataType: 'json',
+                success: function (data) {
+                    $("#txtMakeTAX").val(data.lstMakeModelChessisNo[0].Make);
+                    $("#txtModelTAX").val(data.lstMakeModelChessisNo[0].Model);
+                    $("#txtChessisNumberTAX").val(data.lstMakeModelChessisNo[0].ChessisNumber);
+
+
+                    $("#selectDocumentTAX").prop("selectedIndex", 0);
+                    $("#txtExpiryDateTAX").val("");
+                    //$("#txtExpiryDateTAX").val(data.lstExpiryDateDocument[0].ExpiryDate);
+                    //if (data.lstExpiryDateDocument[0].Document == "") {
+                    //    $("#selectDocumentTAX").prop("selectedIndex", 0);
+                    //}
+                    //else {
+                    //    $("#selectDocumentTAX").val(data.lstExpiryDateDocument[0].Document);
+                    //}
+
+
+                    //Restrict user to update document if there was some existing data
+                    //existingExpiryDate = $("#txtExpiryDateTAX").val();
+                    //if (UserType == "Admin") {
+
+                    //}
+                    //else {
+                    //    //disable to update document of vechile by user 
+                    //    if (existingExpiryDate != "") {
+                    //        $("#btnSaveMaintenance").attr('disabled', 'disabled');
+                    //        $("#txtExpiryDateTAX").attr('disabled', true);
+                    //        if ($("#selectDocumentTAX").val() == "Insurance") {
+                    //            $("#btnSaveMaintenance").attr('disabled', 'disabled');
+                    //            // $("#selectDocumentTAX").attr('disabled', 'disabled');
+                    //        }
+                    //    }
+                    //    else {
+                    //        $("#btnSaveMaintenance").attr('disabled', false);
+                    //        // $("#selectDocumentTAX").attr('disabled', false);
+                    //    }
+                    //}
+
+                    $("#divMsg").hide();
+                },
+                error: function () {
+                    alert("Error");
+                },
+                failure: function () {
+                    alert("Failure");
+                }
+            })
+        })
+    })
+</script>
+
+
+@*reset button action*@
+<script>
+    $(document).ready(function () {
+        $("#btnReset").click(function () {
+            $("#ddlRegionTAX").prop("selectedIndex", 0);
+
+            $("#ddlBranchTAX").html("");
+            $("#ddlBranchTAX").append($('<option></option>').val("0").html("-- Select Branch --"));
+
+
+            //$("#cmbVechileTAX").html("");
+            //$("#cmbVechileTAX").append($('<option></option>').val("0").html("-- Select Vehicle --"));
+            var myselect = $("#cmbVechileTAX");
+            myselect.empty();
+            var selectOption = '<option value="">Select Vechile</option';
+            $("#cmbVechileTAX").append(selectOption);
+            myselect.multiselect('rebuild');
+
+            $("#txtMakeTAX").val("");
+            $("#txtModelTAX").val("");
+            $("#txtChessisNumberTAX").val("");
+            $("#txtExpiryDateTAX").val("");
+            $("#selectDocumentTAX").prop("selectedIndex", 0);
+
+
+            $("#txtExpiryDateTAX").attr('disabled', false);
+            $("#btnSaveMaintenance").attr('disabled', false);
+        })
+    })
+</script>
+
+
+@*function of making all inputs blank*@
+<script>
+    function BlankAllTextBox() {
+        //$("#ddlRegionTAX").prop("selectedIndex", 0);
+
+        //$("#ddlBranchTAX").html("");
+        //$("#ddlBranchTAX").append($('<option></option>').val("0").html("-- Select Branch --"));
+
+
+        //$("#cmbVechileTAX").html("");
+        //$("#cmbVechileTAX").append($('<option></option>').val("0").html("-- Select Vehicle --"));
+
+        //$("#txtMakeTAX").val("");
+        //$("#txtModelTAX").val("");
+        //$("#txtChessisNumberTAX").val("");
+        $("#txtExpiryDateTAX").val("");
+        $("#selectDocumentTAX").prop("selectedIndex", 0);
+    }
+</script>
+
+
+@*Save Maintenance data*@
+<script>
+    $(document).ready(function () {
+        $("#btnSaveMaintenance").click(function () {
+            var RegionId = $("#ddlRegionTAX").val();
+            var RegionName = $("#ddlRegionTAX option:selected").html();
+            var RName = RegionName.replace("&amp;", "&");;
+            var BranchId = $("#ddlBranchTAX").val();
+            var BranchName = $("#ddlBranchTAX option:selected").html();
+            var VechileNo = $("#cmbVechileTAX").val();
+            var Make = $("#txtMakeTAX").val();
+            var Model = $("#txtModelTAX").val();
+            var ChessisNumber = $("#txtChessisNumberTAX").val();
+            var ExpiryDate = $("#txtExpiryDateTAX").val();
+            var selectDocument = $("#selectDocumentTAX").val();
+
+            //alert(RegionId + " " + RegionName + " " + BranchId + " " + BranchName + " " + VechileNo + " " + Make + " " + Model + " " + ChessisNumber + " " + ExpiryDate + " " + selectDocument);
+            //alert(RegionId+" "+BranchId+" "+VechileNo+" "+ExpiryDate+" "+selectDocument);
+            if (RegionId == "0" || BranchId == "0" || VechileNo == "null" || ExpiryDate == "" || selectDocument == "0") {
+                alert("Fill all the details");
+            }
+            else {
+                $.ajax({
+                    url: '@Url.Action("SaveMaintenanceDetails")',
+                    type: 'post',
+                    data: {
+                        RegionId: RegionId, RegionName: RName, BranchId: BranchId, BranchName: BranchName,
+                        VechileNo: VechileNo, Make: Make, Model: Model, ChessisNumber: ChessisNumber, ExpiryDate: ExpiryDate
+                        , selectDocument: selectDocument
+                    },
+                    dataType: 'json',
+                    success: function () {
+                        if (existingExpiryDate == "") {
+                            alert("Data has been saved successfully");
+                        }
+                        else {
+                            alert("Data has been updated successfully");
+                        }
+                        BlankAllTextBox();
+                    },
+                    error: function () {
+                        alert("Error");
+                    },
+                    failure: function () {
+                        alert("Failure");
+                    }
+                })
+
+            }
+        })
+    })
+</script>
+
+
+@*OnChange Document getting expiryDate of Vechile on Document Change*@
+<script>
+    $(document).ready(function () {
+        $("#selectDocumentTAX").change(function () {
+            var RegionId = $("#ddlRegionTAX").val();
+            var BranchId = $("#ddlBranchTAX").val();
+            var VechileNo = $("#cmbVechileTAX").val();
+            var document = $("#selectDocumentTAX").val();
+            $.ajax({
+                url: '@Url.Action("GetMaintenanceDocumentDate")',
+                type: 'post',
+                data: {
+                    RegionId: RegionId, BranchId: BranchId, VechileNo: VechileNo,
+                    document: document
+                },
+                dataType: 'json',
+                success: function (data) {
+                    //alert("success");
+                    //alert(data[0].ExpiryDate);
+                    $("#txtExpiryDateTAX").val(data[0].ExpiryDate);
+                    //alert(data[0].CurrentDate);
+
+                    //alert(data[0].OneYearCompleteOfDocument)
+                    //alert(UserType);
+                    if (UserType == "User")
+                    {
+                        //restrict user to update document for 1 year  and enable 4 before completion of 1 year
+                        if (data[0].ExpiryDate != "" && data[0].CurrentDate < data[0].OneYearCompleteOfDocument) {
+                            $("#btnSaveMaintenance").attr('disabled', 'disabled');
+                            $("#txtExpiryDateTAX").attr('disabled', true);
+                        }
+                        else
+                        {
+                            $("#btnSaveMaintenance").attr('disabled', false);
+                            $("#txtExpiryDateTAX").attr('disabled', false);
+                        }
+
+                        if (document == 'PUC')
+                        {
+                            $("#btnSaveMaintenance").attr('disabled', false);
+                            $("#txtExpiryDateTAX").attr('disabled', false);
+                        }
+                    }
+                    //if (document == "Insurance") {
+                    //    if (UserType == "Admin") {
+                    //        $("#btnSaveMaintenance").attr('disabled', false);
+                    //    }
+                    //    else {
+                    //        $("#btnSaveMaintenance").attr('disabled', 'disabled');
+                    //        $("#txtExpiryDateTAX").attr('disabled', true);
+                    //    }
+
+                    //}
+                    //else {
+                    //    $("#btnSaveMaintenance").attr('disabled', false);
+                    //    $("#txtExpiryDateTAX").attr('disabled', false);
+                    //}
+                },
+                error: function () {
+                    alert("error");
+                },
+                failure: function () {
+                    alert("failure");
+                }
+            })
+        })
+    })
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+

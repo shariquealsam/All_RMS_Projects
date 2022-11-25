@@ -1,0 +1,473 @@
+﻿@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/Master.cshtml";
+}
+
+@*<h2>Index</h2>*@
+
+<!-- Latest compiled and minified CSS -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+<!-- jQuery library -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<!-- Latest compiled JavaScript -->
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.css">
+
+<script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.js"></script>
+
+<link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" />
+
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Hired Taxi </title>
+</head>
+
+<body>
+    <div class="container">
+        <div class="row">
+             <div class="col-sm-2">
+                <label for="uDate" class="control-label">Date</label>
+                <input type="text" class="form-control" id="txtDate" name="txtDate" required="required"  readonly="true" value="@ViewBag.Date"/>
+            </div>
+             <div class="col-sm-2">
+                 <label for="Region" class="control-label">Region</label>
+                    <select class="form-control" id="cmbRegion" name="cmbRegion">
+                        @if(ViewBag.RegionDetails == null)
+                        {
+                        <option value="">--Select Region--</option>
+                        }
+                        else
+                        {
+                            foreach (var item1 in ViewBag.RegionDetails)
+                            {
+                               <option value="@item1.RegionId">@item1.RegionName</option>
+                            }
+                        }
+                    </select>
+            </div>
+             <div class="col-sm-2">
+                 <label for="Branch" class="control-label">Branch</label>
+                     <select class="form-control" id="cmbBranch" name="cmbBranch">   
+                           @if (ViewBag.BranchDetails == null)
+                        {
+                        <option value="">--Select Branch--</option>
+                        }
+                        else
+                        {
+                            foreach (var item1 in ViewBag.BranchDetails)
+                            {
+                               <option value="@item1.BranchId">@item1.BranchName</option>
+                            }
+                        }                                
+                     </select>
+            </div>
+             <div class="col-sm-2">
+                 <label for="uLocation" class="control-label">Location</label>
+                 <input type="text" class="form-control" placeholder="Enter Location" id="txtLocation" name="txtLocation" />
+            </div>
+             <div class="col-sm-2">
+                 <label for="uCustomer" class="control-label">Customer</label>
+                 <input type="text" class="form-control" placeholder="Enter Customer" id="txtCustomer" name="txtCustomer" />
+            </div>
+             <div class="col-sm-2">
+                 <label for="ucmbTypeOfService" class="control-label">Type Of Service</label>
+                 <select class="form-control" id="cmbTypeOfService" name="cmbTypeOfService">   
+                    <option value="">--Select Type Of Service</option>
+                    <option value="CIT">CIT</option>
+                    <option value="DSB">DSB</option> 
+                    <option value="ATM">ATM</option> 
+                    <option value="BULLION">BULLION</option> 
+                    <option value="SURPLUS">SURPLUS</option> 
+                    <option value="SIS India(Billing)">SIS INDIA(BILLING)</option> 
+                    <option value="SIS India(Non-Billing)">SIS INDIA(NON-BILLING)</option> 
+                    <option value="Merge(CIT-DSB)">MERGE(CIT-DSB)</option> 
+                    <option value="Merge(DSB-ATM)">MERGE(DSB-ATM)</option> 
+                    <option value="SCRAP">SCRAP</option>
+                 </select>
+            </div>
+        </div>
+        <br />
+        <div class="row">
+             <div class="col-sm-2">
+                 <label for="txtRouteId" class="control-label">Route Id.</label>
+                 <input type="text" class="form-control" placeholder="Enter Route Id" id="txtRouteId" name="txtRouteId" />
+            </div>
+             <div class="col-sm-2">
+                <label for="uRouteNo" class="control-label">Route No.</label>
+                <input type="text" class="form-control" placeholder="Enter Route No" id="txtRouteNo" name="txtRouteNo" />
+            </div>
+             <div class="col-sm-2">
+                <label for="uVehicleNo" class="control-label">Vehicle No.</label>
+                <input type="text" class="form-control" placeholder="Enter Vehicle No" id="txtVehicleNo" name="txtVehicleNo" />
+            </div>
+             <div class="col-sm-2">
+                 <label for="uFrequency" class="control-label">Frequency</label>
+                <select class="form-control" id="cmbFrequency" name="cmbFrequency">   
+                          <option value="">--Select Frequency--</option>                                 
+                          <option value="Oncall">Oncall</option>                                 
+                          <option value="Monthly">Monthly</option>                                 
+                     </select>
+            </div>
+             <div class="col-sm-2">
+                <label for="uFrequency" class="control-label" style="visibility:hidden">Save Details</label>
+                <button type="button" class="btn btn-success btn-block" id="btnSaveHiredDetails" disabled >Save</button>
+            </div>
+             <div class="col-sm-2">
+                <label for="uFrequency" class="control-label" style="visibility:hidden">Frequency</label>
+                <button type="button" class="btn btn-danger btn-block" id="btnResetHiredDetails">Reset</button>
+            </div>
+        </div>
+
+        <br />
+        @if(Session["UserType"].ToString() == "Admin")
+        {
+        <div class="row" style="border: 1px solid #d4d4d4; padding-top: 15px; padding-bottom: 28px">
+            <legend>&nbsp;&nbsp;&nbsp;Delete Requested Entry </legend>
+            <div class="col-sm-2"></div>
+            <div class="col-sm-2">
+                <label for="uDate" class="control-label">Date</label>
+                <input type="date" class="form-control" id="txtSearchDate" name="txtSearchDate" required="required" />
+            </div>
+            <div class="col-sm-2">
+                <label for="Region" class="control-label">Region</label>
+                <select class="form-control" id="cmbRegionSearch" name="cmbRegionSearch">
+                    @if (ViewBag.RegionDetails == null)
+                    {
+                        <option value="">--Select Region--</option>
+                        }
+                    else
+                    {
+                        foreach (var item1 in ViewBag.RegionDetails)
+                        {
+                        <option value="@item1.RegionId">@item1.RegionName</option>
+                            }
+                        }
+                </select>
+            </div>
+            <div class="col-sm-2">
+                 <label for="Branch" class="control-label">Branch</label>
+                     <select class="form-control" id="cmbBranchSearch" name="cmbBranchSearch">   
+                           @if (ViewBag.BranchDetails == null)
+                        {
+                        <option value="">--Select Branch--</option>
+                        }
+                        else
+                        {
+                            foreach (var item1 in ViewBag.BranchDetails)
+                            {
+                               <option value="@item1.BranchId">@item1.BranchName</option>
+                            }
+                        }                                
+                     </select>
+            </div>
+            <div class="col-sm-2">
+                <label for="uFrequency" class="control-label" style="visibility:hidden">Save Details</label>
+                <button type="button" class="btn btn-success btn-block" id="btnSearchHiredDetails">Search Details</button>
+            </div>
+            <div class="col-sm-2"></div>
+        </div>
+        <br />
+        
+            <div class="row" id="HiredVehicleMaster" style="display:none;">
+                <div class="col-sm-12">
+                     <table id="myDatatable" class="table table-striped table-bordered" style="font-family: Calibri; font-size: 14px;">
+                <thead>
+                    <tr class="bg bg-primary">
+                        <th>Sl No.</th>
+                        <th>Date</th>
+                        <th>Vehicle No.</th>
+                        <th>Region</th>
+                        <th>Branch</th>
+                        <th>Location</th>
+                        <th>Customer</th>
+                        <th>Route No.</th>
+                        <th>Frequency</th>
+                        <th style="display:none;">RecId</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+
+                </tbody>
+            </table>
+                </div>
+            </div>
+        }
+    </div>
+</body>
+
+</html>
+
+@* On Save Button Click *@
+<script>
+    $('#btnSaveHiredDetails').click(function () {
+        var UserID = '@Session["EmailId"]';
+
+        if ($("#cmbRegion").val() == "") {
+            alert("Please Select Region");
+            $("#cmbRegion").focus();
+            return;
+        }
+        else if ($("#cmbBranch").val() == "") {
+            alert("Please Select Branch");
+            $("#cmbBranch").focus();
+            return;
+        }
+        else if ($("#txtLocation").val() == "") {
+            alert("Please Enter Location");
+            $("#txtLocation").focus();
+            return;
+        }
+        else if ($("#txtCustomer").val() == "") {
+            alert("Please Enter Customer");
+            $("#txtCustomer").focus();
+            return;
+        }
+        else if ($("#cmbTypeOfService").val() == "") {
+            alert("Please Select Type Of Service");
+            $("#cmbTypeOfService").focus();
+            return;
+        }
+        else if ($("#txtRouteId").val() == "") {
+            alert("Please Enter RouteId");
+            $("#txtRouteId").focus();
+            return;
+        }
+        else if ($("#txtRouteNo").val() == "") {
+            alert("Please Enter RouteNo");
+            $("#txtRouteNo").focus();
+            return;
+        }
+        else if ($("#txtVehicleNo").val() == "") {
+            alert("Please Enter Vehicle No");
+            $("#txtVehicleNo").focus();
+            return;
+        }
+        else if ($("#cmbFrequency").val() == "") {
+            alert("Please Select Frequency");
+            $("#cmbFrequency").focus();
+            return;
+        }
+        $.ajax({
+            url: '@Url.Action("SaveHiredTaxiDetails")',
+            data: {
+
+                HiredDate: $("#txtDate").val(),
+                Region: $("#cmbRegion").val(),
+                Branch: $("#cmbBranch").val(),
+                Location: $("#txtLocation").val(),
+                Customer: $("#txtCustomer").val(),
+                TypeOfServices: $("#cmbTypeOfService").val(),
+                RouteNo: $("#txtRouteNo").val(),
+                RouteId: $("#txtRouteId").val(),
+                VehicleNo: $("#txtVehicleNo").val(),
+                Frequency: $("#cmbFrequency").val(),
+                CreatedBy: UserID,
+            },
+            dataType: "json",
+            type: "Post",
+            traditional: true,
+            success: function (data) {
+                alert(data);
+                $("#btnResetHiredDetails").click();
+            },
+            error: function (response) {
+                alert(response.responseText);
+            },
+            failure: function (response) {
+                alert(response.responseText);
+            }
+
+        });
+    });
+</script>
+
+@* On Reset Click *@
+<script>
+    $('#btnResetHiredDetails').click(function () {
+        $("#txtLocation").val("");
+        $("#txtCustomer").val("");
+        $("#cmbTypeOfService").val("");
+        $("#txtRouteNo").val("");
+        $("#txtRouteId").val("");
+        $("#txtVehicleNo").val("");
+        $("#cmbFrequency").val("");
+    });
+</script>
+
+@* On select Region *@
+<script>
+    $('#cmbRegion').change(function () {
+        $.ajax({
+            url: '@Url.Action("GetBranch")',
+            data: {
+                RegionId: $("#cmbRegion").val(),
+            },
+            dataType: "json",
+            type: "Post",
+            traditional: true,
+            success: function (data) {
+                $("#cmbBranch").html("");
+                $("#cmbBranch").append($('<option></option>').val("0").html("-- Select Branch --"));
+                $.each(data, function (i, item) {  
+                    $("#cmbBranch").append($('<option></option>').val(item.BranchId).html(item.BranchName))
+                });
+            },
+            error: function (response) {
+                alert(response.responseText);
+            },
+            failure: function (response) {
+                alert(response.responseText);
+            }
+
+        });
+    });
+</script>
+
+@* Check User Is Admin Or User  on change function*@
+<script>
+    $(document).ready(function () {
+        var UserID = '@Session["EmailId"]';
+        var UserType = '@Session["UserType"]';
+
+        $('#txtVehicleNo').change(function () {
+
+            $.ajax({
+                url: '@Url.Action("GetValidation")',
+                 data: {
+                     Date: $('#txtDate').val(),
+                     VehicleNo: $('#txtVehicleNo').val(),
+                 },
+                 dataType: "json",
+                 type: "Post",
+                 traditional: true,
+                 success: function (data) {
+                     console.log(data);
+                     if (UserType == "Admin") {
+                         $("#btnSaveHiredDetails").prop('disabled', false);
+                     }
+                     else if (data[0].Validation == "1") {
+                         $("#btnSaveHiredDetails").prop('disabled', true);
+                     }
+                     else if (data[0].Validation == "0") {
+                         $("#btnSaveHiredDetails").prop('disabled', false);
+                     }
+                 },
+                 error: function (response) {
+                     alert(response.responseText);
+                 },
+                 failure: function (response) {
+                     alert(response.responseText);
+                 }
+
+             });
+        });
+       
+    });
+</script>
+
+@* On Serch region select  *@
+<script>
+    $('#cmbRegionSearch').change(function () {
+        $.ajax({
+            url: '@Url.Action("GetBranch")',
+            data: {
+                RegionId: $("#cmbRegionSearch").val(),
+            },
+            dataType: "json",
+            type: "Post",
+            traditional: true,
+            success: function (data) {
+                $("#cmbBranchSearch").html("");
+                $("#cmbBranchSearch").append($('<option></option>').val("0").html("-- Select Branch --"));
+                $.each(data, function (i, item) {
+                    $("#cmbBranchSearch").append($('<option></option>').val(item.BranchId).html(item.BranchName))
+                });
+            },
+            error: function (response) {
+                alert(response.responseText);
+            },
+            failure: function (response) {
+                alert(response.responseText);
+            }
+
+        });
+    });
+</script>
+
+@* On Search Master Click *@
+<script type="text/javascript">
+    $(document).ready(function () {
+        $("#btnSearchHiredDetails").click(function () {
+            $("#HiredVehicleMaster").show();
+            $.ajax({
+                url: '@Url.Action("GetHiredDetails")',
+                        data: {
+                            Date: $("#txtSearchDate").val(),
+                            RegionId: $("#cmbRegionSearch").val(),
+                            BranchId: $("#cmbBranchSearch").val()
+                        },
+                        dataType: "json",
+                        type: "POST",
+                        traditional: true,
+                        success: function (data) {
+                            $("#myDatatable").find("tr:not(:first)").remove();
+                            var trHTML = '';
+                            $.each(data, function (i, item) {
+                                trHTML += '<tr><td>' + data[i].Slno + '</td>' +
+                                                    '<td>' + data[i].HiredDate + '</td>' +
+                                                    '<td>' + data[i].VehicleNo + '</td>' +
+                                                    '<td>' + data[i].Region + '</td>' +
+                                                    '<td>' + data[i].BranchName + '</td>' +
+                                                    '<td>' + data[i].Location + '</td>' +
+                                                    '<td>' + data[i].Customer + '</td>' +
+                                                    '<td>' + data[i].RouteNo + '</td>' +
+                                                    '<td>' + data[i].Frequency + '</td>' +
+                                                    '<td style="display:none;" >' + data[i].Rec_id + '</td>' +
+                                                    '<td style="text-align:center" > <button class="fa fa-trash" style="background-color: red;border: none;color: white;padding: 10px 10px;cursor: pointer;"></button> </td>' +
+
+                                              '</tr>';
+                            });
+                            $('#myDatatable').append(trHTML);//To add the table row to table                   
+                        },
+                        error: function (response) {
+                            alert(response.responseText);
+                        },
+                        failure: function (response) {
+                            alert(response.responseText);
+                        }
+                    });
+                });
+            });
+        </script>
+
+@* On Click Tr Button Get record id Value  *@
+<script type="text/javascript">
+    $("#myDatatable").on("click", "td:nth-child(11)", function () {
+        var RecId = ($(this).closest('tr').find('td').eq(9).text());
+
+        var x = confirm("Are you sure you want to delete?");
+        if (x == true) {
+            $.ajax({
+                url: '@Url.Action("DeleteRecord")',
+                 data: {
+                     RecId: RecId,
+                 },
+                 dataType: "json",
+                 type: "POST",
+                 traditional: true,
+                 success: function (data) {
+                     alert(data);
+                     $("#btnSearchHiredDetails").click();
+                 }
+             });
+        }
+        else {
+            return false;
+        }
+
+    });
+</script>

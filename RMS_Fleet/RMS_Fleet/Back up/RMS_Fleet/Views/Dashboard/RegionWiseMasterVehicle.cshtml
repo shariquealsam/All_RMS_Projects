@@ -1,0 +1,83 @@
+﻿@{
+    ViewBag.Title = "RegionWiseMasterVehicle";
+    Layout = "~/Views/Shared/Master.cshtml";
+}
+
+
+@*<h2>RegionWiseMasterVehicle</h2>*@
+<!-- Latest compiled and minified CSS -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+
+<!-- jQuery library -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
+<!-- Latest compiled JavaScript -->
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.css">
+<script src="~/Js/jquery.dataTables.js"></script>
+
+<link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" />
+
+<script src="~/Angular/Angular.js"></script>
+
+<style type="text/css">
+	/*  Define the background color for all the ODD background rows  */
+	.TFtable tr:nth-child(odd){ 
+		/*background: #b8d1f3;*/
+        background: #FFCC00C7;
+	}
+	/*  Define the background color for all the EVEN background rows  */
+	.TFtable tr:nth-child(even){
+		background: #dae5f4;
+	}
+</style>
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Page Title</title>
+</head>
+<body>
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-12">
+                <table class="table table-responsive table-bordered " style="font-size: 13px;" id="myDataTable">
+                    <thead class="bg-primary">
+                        <tr>
+                            <th style="display: none" class="bg-primary">RegionId</th>
+                            <th style="display: none" class="bg-primary">BranchId</th>
+                            <th class="bg-primary" >Branch</th>
+                            <th>No. Of Vehicles</th>
+                            <th>No. Of Openings</th>
+                            <th>No. Of Closings</th>
+                            <th>No. Reporting Today</th>
+                            <th>No. Reporting Till Date</th>
+                        </tr>
+                    </thead>
+
+                    <tbody class="TFtable">
+                        @foreach (var item1 in ViewBag.DashbardRegion)
+                        {
+                            <tr>
+                                <td style="display: none; color:black; font-weight:bold">@item1.RegionID</td>
+                                <td style="display: none">@item1.BranchID</td>
+                                <td class="bg-primary" style="font-size:16px">@item1.Branch</td>
+                                <td style="color:black; font-weight:bold; text-align:center;font-size:14px">@item1.NoOfVehicles</td>
+                                <td style="text-align:center;">
+                                    <a href="@Url.Action("Index", "Report", new { RegionId = @item1.RegionID, BranchId = @item1.BranchID})" target="_blank" style="color:green;font-weight:bold; text-align:center;font-size:14px">@item1.NoOfOpenings</a>
+                                </td>
+                                <td style="text-align:center;">
+                                    <a href="@Url.Action("Index", "Report", new { RegionId = @item1.RegionID })" target="_blank" style="color:green;font-weight:bold; text-align:center;font-size:14px">@item1.NoOfClosings</a>
+                                </td>
+                                <td style="color:red; font-weight:bold; text-align:center;font-size:14px">@item1.NoReportingToday</td>
+                                <td style="color:red; font-weight:bold; text-align:center;font-size:14px">@item1.NoReportingTillDate</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

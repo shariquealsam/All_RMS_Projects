@@ -1,0 +1,254 @@
+﻿using RMS_Fleet.Models;
+using System;
+using System.Collections.Generic;
+using System.Data;
+using System.Data.SqlClient;
+using System.Linq;
+using System.Web;
+using System.Web.Mvc;
+using System.Xml;
+
+namespace RMS_Fleet.Controllers
+{
+    public class LoginController : Controller
+    {
+        LoginDetails logdal = new LoginDetails();
+        clsImportant ci = new clsImportant();
+
+        public ActionResult Index()
+        {
+            try
+            {
+                if (Session["UserName"] != null)
+                {
+                    return RedirectToAction("Index", "Dashboard");
+                }
+            }
+            catch
+            {
+            }
+            return View();
+        }
+
+
+        [HttpPost]
+        public JsonResult UserLogin(Login l)
+        {
+            string Message = "";
+
+            DataSet ds = new DataSet();
+
+            ds = logdal.GetUserNameDetails(l.UserID, l.Password);
+
+            // Important Segment after Mac address
+            //if (l.UserID == "sharique.aslam@sisprosegur.com" || l.UserID == "sharique.aslam@sisprosegur.com")
+            //{
+            //    ds = logdal.GetUserNameDetails(l.UserID, l.Password,"Admin");
+            //}
+            //else
+            //{
+            //    ds = logdal.GetUserNameDetails(l.UserID, l.Password);
+            //}
+
+            if (ds.Tables.Count > 0)
+            {
+                if (ds.Tables[0].Rows.Count > 0)
+                {
+                    if (ds.Tables[0].Rows[0]["Active"].ToString() == "0")
+                    {
+                        Message = "User is InActive";
+                    }
+
+                    else
+                    {
+                        int ireturn =  0;
+                        try
+                        {
+                            ireturn = UpdateIsAllowedToLogin(l.UserID);
+                        }
+                        catch
+                        {
+                            ireturn = 0;
+                        }
+                        if (ireturn > 0)
+                        {
+                            Session["UserName"] = ds.Tables[0].Rows[0]["UserName"].ToString();
+                            if (Session["UserName"].ToString() == "Sanjay Pandey")
+                            {
+                                Session["UserTypeApr"] = "SuperAdmin";
+                            }
+                            else
+                                Session["UserTypeApr"] = ds.Tables[0].Rows[0]["UserType"].ToString();
+
+                            Session["EmailId"] = ds.Tables[0].Rows[0]["EmailID"].ToString();
+                            Session["UserType"] = ds.Tables[0].Rows[0]["UserType"].ToString();
+                            Session["RegionIds"] = ds.Tables[0].Rows[0]["RegionId"].ToString();
+
+                            Message = ds.Tables[0].Rows[0]["UserType"].ToString() + "_" + ds.Tables[0].Rows[0]["RegionId"].ToString() + "_" + "Active";
+                        }
+                        else
+                        {
+                            Message = "Invalid Credential";
+                        }
+                    }
+                }
+                else
+                {
+                    Message = "Invalid Credential";
+                }
+            }
+            else
+            {
+                Message = "Invalid Credential";
+            }
+
+            return Json(Message, JsonRequestBehavior.AllowGet);
+        }
+
+
+        [HttpPost]
+        public JsonResult SendPassword(string EmailId)
+        {
+            string Message = "";
+
+            DataSet ds = logdal.GetUserDetails(EmailId);
+
+            if (ds.Tables.Count > 0)
+            {
+                if (ds.Tables[0].Rows.Count > 0)
+                {
+                    if (ds.Tables[0].Rows[0]["Active"].ToString() == "0")
+                    {
+                        Message = "User is InActive";
+                    }
+                    else
+                    {
+                        string msgbody = "<html>" +
+                                        "<head> " +
+                                        "<style> " +
+                                        "table { " +
+                                        "  font-family: arial, sans-serif; " +
+                                        "  border-collapse: collapse; " +
+                                        "  width: 100%; " +
+                                        "} " +
+                                        " " +
+                                        "td, th { " +
+                                        "  border: 1px solid black; " +
+                                        "  text-align: left; " +
+                                        "  padding: 8px; " +
+                                        "} " +
+                                        " " +
+                                        "</style> " +
+                                        "</head> " +
+                                        "<body> " +
+                                        " " +
+                                        "<h2 style='text-align:center'>Fleet User Credential</h2> " +
+                                        " " +
+                                        "<table> " +
+                                        "  <tr style='background-color:#ffcc00'> " +
+                                        "    <th>Name</th> " +
+                                        "    <th>Email Id</th> " +
+                                        "    <th>Password</th> " +
+                                        "  </tr> " +
+                                        "  <tr> " +
+                                        "    <td>" + ds.Tables[0].Rows[0]["UserName"].ToString() + "</td> " +
+                                        "    <td>" + ds.Tables[0].Rows[0]["EmailID"].ToString() + "</td> " +
+                                        "    <td>" + ci.Decrypt(ds.Tables[0].Rows[0]["Password"].ToString()) + "</td> " +
+                                        "  </tr> " +
+                                        "   " +
+                                        "</table> " +
+                                        " " +
+                                        "</body> " +
+                                        "</html> " ;
+
+                        ci.SendMailMessagenoreply("fleetbills@sisprosegur.com", ds.Tables[0].Rows[0]["EmailID"].ToString(), "","", "Fleet User Credential", msgbody);
+                        Message = "Password sent to your registered email id !! Please check your mail";
+                    }
+                }
+                else
+                {
+                    Message = "Email Id not regeister with us";
+                }
+            }
+            else
+            {
+                Message = "Email Id not regeister with us";
+            }
+
+            return Json(Message, JsonRequestBehavior.AllowGet);
+        }
+
+        protected override JsonResult Json(object data, string contentType, System.Text.Encoding contentEncoding, JsonRequestBehavior behavior)
+        {
+            return new JsonResult()
+            {
+                Data = data,
+                ContentType = contentType,
+                ContentEncoding = contentEncoding,
+                JsonRequestBehavior = behavior,
+                MaxJsonLength = Int32.MaxValue
+            };
+        }
+
+        string strMySqlConnectionString = "";
+        string strMySqlConnectionStringBulk = "";
+        string strSqlConnectionString = "";
+        string strSCOConnectionString = "";
+
+        public void Get_from_config()
+        {
+            try
+            {
+                XmlDocument xmlDoc = new XmlDocument();
+                xmlDoc.Load(@"C:\Rms_Bulk_Upload_Template\Cyclo_Connection_Details.xml");
+
+                XmlNodeList nodeList = xmlDoc.DocumentElement.SelectNodes("/Configuration");
+
+                foreach (XmlNode node in nodeList)
+                {
+                    strMySqlConnectionString = node.SelectSingleNode("MySqlConnectionString").InnerText;
+                    strMySqlConnectionStringBulk = node.SelectSingleNode("MySqlConnectionStringBulk").InnerText;
+                    strSqlConnectionString = node.SelectSingleNode("RMS_Connection_String").InnerText;
+                    strSCOConnectionString = node.SelectSingleNode("SCO_Connection_String").InnerText;
+                }
+
+            }
+            catch (Exception ex)
+            {
+
+            }
+        }
+
+        public int UpdateIsAllowedToLogin(string UserEmail)
+        {
+            Get_from_config();
+
+            int iReturn = 0;
+
+            try
+            {
+                //Sql Connection
+                SqlConnection con = new SqlConnection(strSqlConnectionString);
+
+                //SQL Statement 
+                string sSql = " UPDATE [dbo].[Fleet_User_Details] SET IsAllowedToLogin = 0 WHERE EmailId = '" + UserEmail + "' ";
+
+                //Open Database Connection
+                con.Open();
+                //Insert User Details
+                SqlCommand cmd = new SqlCommand(sSql, con);
+                cmd.CommandType = CommandType.Text;
+
+                iReturn = cmd.ExecuteNonQuery();
+
+                con.Close();
+            }
+            catch (Exception ex)
+            {
+                iReturn = 0;
+            }
+
+            return iReturn;
+        }
+    }
+}

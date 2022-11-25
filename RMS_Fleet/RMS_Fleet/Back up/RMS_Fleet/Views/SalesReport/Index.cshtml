@@ -1,0 +1,306 @@
+﻿@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/Master.cshtml";
+}
+
+@*<h2>Sales Reoprt Index</h2>*@
+
+<!-- Latest compiled and minified CSS -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+
+<!-- jQuery library -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
+<!-- Latest compiled JavaScript -->
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.css">
+
+<script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.js"></script>
+
+<link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" />
+
+<link href="~/Css/Ribbon.css" rel="stylesheet" />
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Sales Report Page</title>
+</head>
+<body>
+    <div class="container" style="margin: 0; background-color: transparent; text-align: center;">
+        <div class="row" style="margin: 0; background-color: transparent; text-align: center;">
+            <div class="ui-group-buttons">
+                <button type="button" class="btn btn-info btn-lg" id="SalesReport">R & M Report</button>
+                <div class="or or-lg"></div>
+                <button type="button" class="button btn btn-success btn-lg" id="KPLReport" disabled>KPL Report</button>
+                <div class="or or-lg"></div>
+                <button type="button" class="button btn btn-warning btn-lg" id="VehicleHistory" disabled>Vehicle History Details</button>
+            </div>
+        </div>
+    </div>
+    <pre style="visibility: hidden"></pre>
+    @using (Html.BeginForm("Download", "SalesReport", FormMethod.Post))
+    {
+        <div class="container-fluid" id="RMDetails" style="display: none;">
+            <div style="padding: 9.5px; margin: 0 0 10px; line-height: 1.42857143; color: #333; border: 1px solid #ccc; border-radius: 4px;">
+                <div class="row">
+                    <div class="col-sm-2">
+                        <label for="FromDate" class="control-label">From Date</label>
+                        <input type="date" id="txtFromDate" name="txtFromDate" class="form-control" required/>
+                    </div>
+                    <div class="col-sm-2">
+                        <label for="ToDate" class="control-label">To Date</label>
+                        <input type="date" class="form-control" id="txtToDate" name="txtToDate" required/>
+                    </div>
+                    <div class="col-sm-2">
+                        <label for="Region" class="control-label">Region</label>
+                        <select class="form-control" name="ddlRegion" id="ddlRegion">
+                            <option value="">-- Select Region --</option>
+                            @foreach (var item1 in ViewBag.RegionDetails)
+                            {
+                                <option value="@item1.RegionId">@item1.RegionName</option>
+                            }
+                        </select>
+                    </div>
+                    <div class="col-sm-2">
+                        <label for="Branch" class="control-label">Branch</label>
+                        <select class="form-control" name="ddlBranch" id="ddlBranch">
+                            <option value="">-- Select Branch --</option>
+                        </select>
+                    </div>
+                    <div class="col-sm-2">
+                        <label for="VehicleNumber" class="control-label">Vehicle Number <a title="Change Textbox To Dropdown or Viceversa"><span class="glyphicon glyphicon-exclamation-sign" id="change"></span></a></label>
+                        <select class="form-control" id="ddlVehicleNumber" name="ddlVehicleNumber" style="display:none;">
+                            <option>-- Select Vehicle --</option>
+                        </select>
+                        <input type="text" id="txtVehicleNumber" name="txtVehicleNumber" class="form-control" />
+                    </div>
+                    <div class="col-sm-2">
+                        <label for="VehicleNumber" class="control-label" style="visibility: hidden">Vehicle Number</label>
+                        <div class="ui-group-buttons">
+                            <button type="button" class="btn btn-success glyphicon glyphicon-search" id="View">Show</button>
+                            <div class="or"></div>
+                            <button type="submit" class="btn btn-default glyphicon glyphicon-export" id="ExportExcel">Export</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+    <div class="container">
+        <div style="display: none; padding: 9.5px; margin: 0 0 10px; line-height: 1.42857143; color: #333; border: 1px solid #ccc; border-radius: 4px; height: 200px; overflow-x: auto;" id="SalesGridShow">
+            <div class="row">
+                <div class="col-sm-12">
+                    <table id="myDatatable" class="table table-striped table-bordered" style="font-family: Calibri; font-size: 12px;">
+                        <thead>
+                            <tr class="bg bg-primary">
+                                <th>Region</th>
+                                <th>Branch</th>
+                                <th>Vechile No</th>
+                                <th>Make</th>
+                                <th>Year</th>
+                                <th>No.Of Tyre</th>
+                                <th>Tyre Amount</th>
+                                <th>Battery Amount</th>
+                                <th>Routine Amount</th>
+                                <th>Denting Amount</th>
+                                <th>Minor Amount</th>
+                                <th>Seat Amount</th>
+                                <th>Self Amount</th>
+                                <th>Electrical Amount</th>
+                                <th>Clutch Amount</th>
+                                <th>Alternator Amount</th>
+                                <th>Leaf Amount</th>
+                                <th>Suspension Amount</th>
+                                <th>GearBox Amount</th>
+                                <th>BreakWork Amount</th>
+                                <th>EngineWork Amount</th>
+                                <th>Fuel Amount</th>
+                                <th>Puncher Amount</th>
+                                <th>Oil Amount</th>
+                                <th>Radiator Amount</th>
+                                <th>Axle Amount</th>
+                                <th>Differential Amount</th>
+                                <th>Turbo Amount</th>
+                                <th>Ecm Amount</th>
+                                <th>Accidental Total Amount</th>
+                                <th>Total Value</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
+@* On Button Click Hide Show *@
+<script>
+    $(document).ready(function () {
+        $("#SalesReport").click(function () {
+            $("#RMDetails").toggle();
+        });
+        $("#View").click(function () {
+            $("#SalesGridShow").toggle();
+        });
+        $("#change").click(function () {
+            $("#txtVehicleNumber").toggle();
+            $("#ddlVehicleNumber").toggle();
+        });
+    });
+</script>
+
+@* On Select Region fill Branch  *@
+<script>
+    $(document).ready(function () {
+        $("#ddlRegion").change(function () {
+            $.ajax({
+                url: '@Url.Action("GetBranch")',
+                data: {
+                    RegionId: $("#ddlRegion").val(),
+                },
+                dataType: "json",
+                type: "POST",
+                traditional: true,
+                success: function (data) {
+                    $("#ddlBranch").html("");
+                    $("#ddlBranch").append($('<option></option>').val("").html("-- Select Branch --"));
+                    $.each(data, function (i, item) {
+                        $("#ddlBranch").append($('<option></option>').val(item.BranchId).html(item.BranchName))
+                    });
+                },
+                error: function (response) {
+                    alert(response.responseText);
+                },
+                failure: function (response) {
+                    alert(response.responseText);
+                }
+            });
+        });
+    });
+</script>
+
+@* On Select Branch fill Vechile Number *@
+<script>
+    $(document).ready(function () {
+        $("#ddlBranch").change(function () {
+            $.ajax({
+                url: '@Url.Action("GetVehicle")',
+                data: {
+                    RegionId: $("#ddlRegion").val(),
+                    BranchId: $("#ddlBranch").val(),
+                },
+                dataType: "json",
+                type: "POST",
+                traditional: true,
+                success: function (data) {
+                    $("#ddlVehicleNumber").html("");
+                    $("#ddlVehicleNumber").append($('<option></option>').val("").html("-- Select Vehicle --"));
+                    $.each(data, function (i, item) {
+                        $("#ddlVehicleNumber").append($('<option></option>').val(item.VehicleNo).html(item.VehicleNo))
+                    });
+                },
+                error: function (response) {
+                    alert(response.responseText);
+                },
+                failure: function (response) {
+                    alert(response.responseText);
+                }
+            });
+        });
+     });
+</script>
+
+@* On Show Click Details *@
+<script>
+    $(document).ready(function () {
+        $("#View").click(function () {
+            if ($("#txtFromDate").val() == "") {
+                alert("Please Select From Date");
+                $("#txtFromDate").focus();
+                return;
+            }
+            if ($("#txtToDate").val() == "") {
+                alert("Please Select To Date");
+                $("#txtToDate").focus();
+                return;
+            }
+            if ($("#ddlRegion").val() = "" || $("#ddlRegion").val() == "-- Select Region --") {
+                alert("Please Region Details From Dropdown");
+                $("#ddlRegion").focus();
+                return;
+            }
+            if ($("#ddlBranch").val() = "" || $("#ddlBranch").val() == "-- Select Branch --") {
+                alert("Please Branch Details From Dropdown");
+                $("#ddlBranch").focus();
+                return;
+            }
+            if ($("#ddlVehicleNumber").val() = "" || $("#ddlVehicleNumber").val() == "-- Select Vehicle --") {
+                alert("Please Vechile Details From Dropdown");
+                $("#ddlVehicleNumber").focus();
+                return;
+            }
+            $.ajax({
+                url: '@Url.Action("GetMaintainanceReport")',
+                 data: {
+                     FromDate: $("#txtFromDate").val(),
+                     ToDate: $("#txtToDate").val(),
+                     RegionId: $("#ddlRegion").val(),
+                     BranchId: $("#ddlBranch").val(),
+                     VechileNumber: $("#ddlVehicleNumber").val(),
+                 },
+                 dataType: "json",
+                 type: "POST",
+                 traditional: true,
+                 success: function (data) {
+                     $("#myDatatable").find("tr:not(:first)").remove();
+                     var trHTML = '';
+                     $.each(data, function (i, item) {
+                         trHTML += '<tr><td>' + data[i].RegionName + '</td>' +
+                                             '<td>' + data[i].BranchName + '</td>' +
+                                             '<td>' + data[i].VechileNumber + '</td>' +
+                                             '<td>' + data[i].Make + '</td>' +
+                                             '<td>' + data[i].ManufacturingYear + '</td>' +
+                                             '<td>' + data[i].NoOfTyres + '</td>' +
+                                             '<td>' + data[i].TyreAmount + '</td>' +
+                                             '<td>' + data[i].Battery + '</td>' +
+                                             '<td>' + data[i].Routine + '</td>' +
+                                             '<td>' + data[i].DentingPainting + '</td>' +
+                                             '<td>' + data[i].MinorRepairing + '</td>' +
+                                             '<td>' + data[i].SeatRepair + '</td>' +
+                                             '<td>' + data[i].SelfWork + '</td>' +
+                                             '<td>' + data[i].ElectricalWork + '</td>' +
+                                             '<td>' + data[i].ClutchRepairing + '</td>' +
+                                             '<td>' + data[i].Alternator + '</td>' +
+                                             '<td>' + data[i].LeafPattiSpring + '</td>' +
+                                             '<td>' + data[i].Suspension + '</td>' +
+                                             '<td>' + data[i].GearBox + '</td>' +
+                                             '<td>' + data[i].BreakWork + '</td>' +
+                                             '<td>' + data[i].EngineWork + '</td>' +
+                                             '<td>' + data[i].FuelPump + '</td>' +
+                                             '<td>' + data[i].Puncher + '</td>' +
+                                             '<td>' + data[i].OilTopUp + '</td>' +
+                                             '<td>' + data[i].RadiatorandWaterBody + '</td>' +
+                                             '<td>' + data[i].AxleWork + '</td>' +
+                                             '<td>' + data[i].DifferentialWork + '</td>' +
+                                             '<td>' + data[i].Turbo + '</td>' +
+                                             '<td>' + data[i].EcmSencer + '</td>' +
+                                             '<td>' + data[i].Accidental + '</td>' +
+                                             '<td>' + data[i].TotalValue + '</td>' +
+                                       '</tr>';
+                     });
+                     $('#myDatatable').append(trHTML);//To add the table row to table    
+                 },
+                 error: function (response) {
+                     alert(response.responseText);
+                 },
+                 failure: function (response) {
+                     alert(response.responseText);
+                 }
+             });
+        });
+    });
+</script>
+

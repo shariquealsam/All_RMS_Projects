@@ -1,0 +1,1019 @@
+﻿@{
+    ViewBag.Title = "GetVechileMasterValue";
+    Layout = "~/Views/Shared/Master.cshtml";
+}
+
+@*<h2>GetVechileMasterValue</h2>*@
+<!-- Latest compiled and minified CSS -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+
+<!-- jQuery library -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
+<!-- Latest compiled JavaScript -->
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.css">
+
+<script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.js"></script>
+
+<link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" />
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Page Title</title>
+</head>
+   <body>
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-12">
+
+                @foreach (var item in Model)
+                {
+                    <div style="padding: 9.5px; margin: 0 0 10px; line-height: 1.42857143; color: #333; border: 1px solid #ccc; border-radius: 4px;">
+
+                    <div class="row">
+                        <div class="col-sm-3">
+                            <label for="VechileName" class="control-label">Vehicle Number</label>
+                            <input type="text" class="form-control" placeholder="Enter Vehicle Number" id="txtEditVehicleNo" name="txtEditVehicleNo" value="@item.VehicleNumber" />
+                        </div>
+                        <div class="col-sm-3">
+                            <label for="Make" class="control-label">Make</label>
+                            <input type="text" class="form-control" placeholder="Enter Make Details" id="txtEditMake" name="txtEditMake" value="@item.Make" />
+                        </div>
+                        <div class="col-sm-3">
+                            <label for="ChassisNo" class="control-label">Chassis Number</label>
+                            <input type="text" class="form-control" placeholder="Enter Chassis NUmber" id="txtEditChassisNo" name="txtEditChassisNo" value="@item.ChassisNumber" />
+                        </div>
+                        <div class="col-sm-3">
+                            <label for="ManufacturingYear" class="control-label">Manufacturing Year</label>
+                            <input type="text" class="form-control" placeholder="Enter Manufacturing Year" id="txtEditManufacturingYear" name="txtEditManufacturingYear" maxlength="4" value="@item.ManufacturingYear" />
+                        </div>
+                    </div>
+                    <p></p> 
+                    <div class="row">
+                        <div class="col-sm-3">
+                            <label for="Password" class="control-label">Password</label>
+                            <input type="text" class="form-control" placeholder="Enter Password" id="txtEditPassword" name="txtEditPassword"  value="@item.Password"/>
+                        </div>
+                        <div class="col-sm-3">
+                            <label for="Region" class="control-label">Region</label>
+                            <select class="form-control" id="cmbRegion" name="cmbRegion">
+                                @foreach (var item1 in ViewBag.Region)
+                                {
+
+                                    if (@item.Region == @item1.RegionName)
+                                    {                                       
+                                        <option value="@item1.RegionId" selected>@item1.RegionName</option>
+                                    }
+                                    else
+                                    {
+                                        <option value="@item1.RegionId">@item1.RegionName</option>
+                                    }
+                                }
+                            </select>
+                        </div>
+                        <div class="col-sm-3">
+                            <label for="Branch" class="control-label">Branch</label>
+                            <select class="form-control" id="cmbBranch" name="cmbBranch">                                    
+                                 <option value="@item.BranchId" selected>@item.BranchName</option>
+                            </select>
+                            <input type="hidden" value="@item.Recid" id="Recidvalue" class="form-control"/>
+                        </div>
+                        <div class="col-sm-3">
+                            <label for="PetroCardNumber" class="control-label">Petro Card Number</label>
+                            <input type="text" class="form-control" placeholder="Enter Chassis NUmber" id="txtPetroCardNumber" name="txtPetroCardNumber" value="@item.PetroCardNumber" />
+                        </div>
+                    </div>
+                    <p></p>
+                    <div class="row">
+                        <div class="col-sm-3">
+                             <label for="STDKMPL" class="control-label">STD KMPL</label>
+                             <input type="text" class="form-control" placeholder="Enter Manufacturing Year" id="txtSTDKMPL" name="txtSTDKMPL"  value="@item.STDKMPL" />
+                        </div>
+                        <div class="col-sm-3">
+                             <label for="BPNONBP" class="control-label">BP/NON BP</label>
+                             <select class="form-control" id="cmbBPNONBP" name="cmbBPNONBP">
+                                 @if (item.BPNONBP != "")
+                                 {
+
+                                     if (item.BPNONBP == "BP")
+                                     {                              
+                                     <option value="BP" selected>BP</option>
+                                     <option value="NON BP">NON BP</option>
+                                     <option value="BP AC">BP AC</option>
+                                     <option value="NON BP AC">NON BP AC</option>
+                                     }
+
+                                     else if (item.BPNONBP == "NON BP")
+                                     {
+                                     <option value="NON BP" selected>NON BP</option>
+                                     <option value="BP">BP</option>
+                                     <option value="BP AC">BP AC</option>
+                                     <option value="NON BP AC">NON BP AC</option>
+                                     }
+
+                                     else if (item.BPNONBP == "BP AC")
+                                     {
+                                     <option value="BP AC" selected>BP AC</option>
+                                     <option value="BP">BP</option>
+                                     <option value="NON BP">NON BP</option>
+                                     <option value="NON BP AC">NON BP AC</option>
+                                     }
+
+                                     else if (item.BPNONBP == "NON BP AC")
+                                     {
+                                     <option value="NON BP AC" selected>NON BP AC</option>
+                                     <option value="BP">BP</option>
+                                     <option value="NON BP">NON BP</option>
+                                     <option value="BP AC">BP AC</option>
+                                     }
+
+                                     else
+                                     {
+                                     <option value="BP">BP</option>
+                                     <option value="NON BP">NON BP</option>
+                                     <option value="BP AC">BP AC</option>
+                                     <option value="NON BP AC">NON BP AC</option>
+                                     }
+
+                                 }
+                                 else
+                                 {
+                                     <option value="">-- Select --</option>
+                                     <option value="BP">BP</option>
+                                     <option value="NON BP">NON BP</option>
+                                     <option value="BP AC">BP AC</option>
+                                     <option value="NON BP AC">NON BP AC</option>
+                                 }
+                             </select>
+                        </div>
+                        <div class="col-sm-3">
+                            <label for="FuelType" class="control-label">Fuel Type</label>
+                             <select class="form-control" id="cmbFuelType" name="cmbFuelType"> 
+                                 @if (item.FuelType == "Petrol")
+                                 {                                   
+                                     <option value="Petrol" selected>Petrol</option>
+                                     <option value="Diesel">Diesel</option>
+                                     <option value="Cng">CNG</option>
+                                 }
+                                 @if (item.FuelType == "Diesel")
+                                 {
+                                     <option value="Diesel" selected>Diesel</option>
+                                     <option value="Petrol">Petrol</option>
+                                     <option value="Cng">CNG</option>
+                                 }
+                                 @if (item.FuelType == "Cng")
+                                 {
+                                     <option value="Cng" selected>CNG</option>
+                                     <option value="Petrol">Petrol</option>
+                                     <option value="Diesel">Diesel</option>
+                                 }
+                                 @if (item.FuelType == "")
+                                 {
+                                     <option value="">-- Select --</option>
+                                     <option value="Cng">CNG</option>
+                                     <option value="Petrol">Petrol</option>
+                                     <option value="Diesel">Diesel</option>
+                                 }
+                             </select>
+                        </div>
+                          <div class="col-sm-3">
+                            <label for="DateOfInvoice" class="control-label">Date Of Invoice</label>
+                            <input type="date" class="form-control" id="txtDateOfInvoice" name="txtDateOfInvoice"  value="@item.DateOfInvoice"/>
+                        </div>
+                    </div>
+                    <p></p>
+                    <div class="row">
+                 <div class="col-sm-3">
+                            <label for="InvoiceNumber" class="control-label">Invoice Number</label>
+                            <input type="text" class="form-control" placeholder="Enter Invoice Number" id="txtInvoiceNumber" name="txtInvoiceNumber"  value="@item.InvoiceNumber"/>
+                        </div>
+                 <div class="col-sm-3">
+                            <label for="FileNumber" class="control-label">File Number</label>
+                            <input type="text" class="form-control" placeholder="Enter File Number" id="txtFileNumber" name="txtFileNumber"  value="@item.FileNumber"/>
+                        </div>
+                 <div class="col-sm-3">
+                            <label for="FinancierName" class="control-label">Financer Name</label>
+                            <input type="text" class="form-control" placeholder="Enter Financier Name" id="txtFinancierName" name="txtFinancierName"  value="@item.FinancierName"/>
+                        </div>
+                 <div class="col-sm-3">
+                            <label for="ROI" class="control-label">Rate Of Interest</label>
+                            <input type="text" class="form-control" placeholder="Enter Rate Of Interest" id="txtROI" name="txtROI"  value="@item.ROI"/>
+                        </div>
+            </div>
+                    <p></p>
+                    <div class="row">
+                 
+                 <div class="col-sm-3">
+                            <label for="EMIStartDate" class="control-label">EMI Start Date</label>
+                            <input type="date" class="form-control" id="txtEMIStartDate" name="txtEMIStartDate"  value="@item.EMIStartDate"/>
+                        </div>
+                 <div class="col-sm-3">
+                            <label for="EMIEndDate" class="control-label">EMI End Date</label>
+                            <input type="date" class="form-control" id="txtEMIEndDate" name="txtEMIEndDate"  value="@item.EMIEndDate"/>
+                        </div>
+                 <div class="col-sm-3">
+                            <label for="EMIAmount" class="control-label">Invoice Amount</label>
+                            <input type="text" class="form-control" placeholder="Enter Invoice Amount" id="txtEMIAmount" name="txtEMIAmount"  value="@item.EMIAmount"/>
+                        </div>
+                        <div class="col-sm-3">
+                            <label for="EngineNumber" class="control-label">Engine Number</label>
+                            <input type="text" class="form-control" placeholder="Enter Engine Number" id="txtEngineNumber" name="txtEngineNumber" value="@item.EngineNumber" />
+                        </div>
+            </div>
+                    <p></p>
+                    <div class="row">
+                        
+                        <div class="col-sm-3">
+                            <label for="Location" class="control-label">Location</label>
+                            <input type="text" class="form-control" id="txtLocation" name="txtLocation" placeholder="Enter Location Details" value="@item.Location" />
+                        </div>
+                        <div class="col-sm-3">
+                            <label for="Customer" class="control-label">Customer</label>
+                            <input type="text" class="form-control" id="txtCustomer" name="txtCustomer" placeholder="Enter Customer Details" value="@item.Customer" />
+                        </div>
+                        <div class="col-sm-3">
+                            <label for="FabricationName" class="control-label">Fabrication Name</label>
+                            <input type="text" class="form-control" placeholder="Enter Fabrication Name" id="txtFabricationName" name="txtFabricationName" value="@item.FabricationName"/>
+                        </div>
+                        <div class="col-sm-3">
+                            <label for="FabricationAmount" class="control-label">Fabrication Amount</label>
+                            <input type="text" class="form-control" placeholder="Enter Fabrication Amount" id="txtFabricationAmount" name="txtFabricationAmount" value="@item.FabricationAmount" />
+                        </div>
+                    </div>
+                    <p></p>
+                    <div class="row">
+                        
+                        <div class="col-sm-3">
+                            <label for="ChassisAmount" class="control-label">Chassis Loan Amount</label>
+                            <input type="text" class="form-control" id="txtChassisAmount" placeholder="Enter ChassisAmount" name="txtChassisAmount" value="@item.ChassisAmount" />
+                        </div>
+                        <div class="col-sm-3">
+                            <label for="BodyAmount" class="control-label">Body Loan Amount</label>
+                            <input type="text" class="form-control" id="txtBodyAmount" placeholder="Enter Body Amount" name="txtBodyAmount" value="@item.BodyAmount" />
+                        </div>
+                        <div class="col-sm-3">
+                            <label for="ChassisEMI" class="control-label">Chassis EMI Amount</label>
+                            <input type="text" class="form-control" placeholder="Enter Chassis EMI Amount" id="txtChassisEMI" name="txtChassisEMI" value="@item.ChassisEMI"  />
+                        </div>
+                        <div class="col-sm-3">
+                            <label for="BodyEMI" class="control-label">Body EMI Amount</label>
+                            <input type="text" class="form-control" placeholder="Enter Body EMI Amount" id="txtBodyEMI" name="txtBodyEMI" value="@item.BodyEMI"  />
+                        </div>
+                    </div>
+                    <p></p>
+                    <div class="row">
+                        
+                        <div class="col-sm-3">
+                            <label for="TotalEMI" class="control-label">Total EMI Amount</label>
+                            <input type="text" class="form-control" placeholder="Enter Body EMI Amount" id="txtTotalEMI" name="txtTotalEMI" value="@item.TotalEMI" />
+                        </div>
+                        <div class="col-sm-3">
+                            <label for="ChassisLAN" class="control-label">Chassis LAN</label>
+                            <input type="text" class="form-control" id="txtChassisLAN" placeholder="Enter Chassis LAN" name="txtChassisLAN" value="@item.ChassisLAN"  />
+                        </div>
+                        <div class="col-sm-3">
+                            <label for="BodyLAN" class="control-label">Body LAN</label>
+                            <input type="text" class="form-control" id="txtBodyLAN" placeholder="Enter Body LAN" name="txtBodyLAN" value="@item.BodyLAN"  />
+                        </div>
+                        <div class="col-sm-3">
+                            <label for="Tenure" class="control-label">Tenure</label>
+                            <input type="text" class="form-control" placeholder="Enter Tenure" id="txtTenure" name="txtTenure" value="@item.Tenure" />
+                        </div>
+                         
+                    </div>
+                    <p></p>
+                    <div class="row">
+                         
+                        <div class="col-sm-3">
+                            <label for="Other" class="control-label">Other</label>
+                            <input type="text" class="form-control" placeholder="Enter Other Details" id="txtOther" name="txtOther" value="@item.Other" />
+                        </div>
+                        <div class="col-sm-3">
+                            <label for="DepreciationValue" class="control-label">Depreciation Value</label>
+                            <input type="text" class="form-control" id="txtDepreciationValue" placeholder="Enter Depreciation Value" name="txtDepreciationValue" value="@item.DepreciationValue" />
+                        </div>
+                        <div class="col-sm-3">
+                            <label for="TypeofBody" class="control-label">Type Of Body</label>
+                            <select class="form-control" id="ddlTypeOfBody" name="ddlTypeOfBody">
+                                 @if (item.TypeOfBody == "FrontSeat")
+                                 {
+                                      <option value="">-- Select --</option>
+                                      <option value="FrontSeat" selected>Front Seat</option>
+                                      <option value="RearSeat">Rear Seat</option>
+                                 }
+                                 @if (item.TypeOfBody == "RearSeat")
+                                 {
+                                      <option value="">-- Select --</option>
+                                      <option value="FrontSeat">Front Seat</option>
+                                      <option value="RearSeat" selected>Rear Seat</option>
+                                 }
+                                 @if (item.TypeOfBody == "")
+                                 {
+                                      <option value="" selected>-- Select --</option>
+                                      <option value="FrontSeat">Front Seat</option>
+                                      <option value="RearSeat">Rear Seat</option>
+                                 }
+                            </select>
+                        </div>
+                        <div class="col-sm-3">
+                            <label for="VehicleAge" class="control-label">Vehicle Age</label>
+                            <input type="text" class="form-control" placeholder="Enter Vehicle Age" id="txtVehicleAge" name="txtVehicleAge" readonly="true" value="@item.VehicleAge" />
+                        </div>
+                         <div class="col-sm-3">
+                    <label for="ddlOwnerName" class="control-label">Owner Name</label>
+                      <select class="form-control" id="ddlOwnerName" name="ddlOwnerName">
+                       @if (item.OwnerName == "")
+                       {
+                            <option value="" selected>-- Select --</option>
+                            <option value="SIS(I)LTD">SIS (I) LTD</option>
+                            <option value="SISCASH">SIS CASH</option>
+                            <option value="SISCO">SISCO</option>
+                            <option value="SISCOLP">SISCO/LP</option>
+                            <option value="SMC">SMC</option>
+                            <option value="SLV">SLV</option>
+                            <option value="IPS">I.P.S</option>
+                            <option value="RITURAJSINHA">RITURAJ SINHA</option>
+                            <option value="RKSINHA">R K SINHA</option>
+                            <option value="RITASINHA">RITA SINHA</option>
+                            <option value="VPROTECT">V.PROTECT</option>
+                            <option value="ALBTROSS">ALBTROSS</option>
+                       }
+                        
+                           @if (item.OwnerName == "SIS(I)LTD")
+                       {
+                            <option value="">-- Select --</option>
+                            <option value="SIS(I)LTD" selected>SIS (I) LTD</option>
+                            <option value="SISCASH">SIS CASH</option>
+                            <option value="SISCO">SISCO</option>
+                            <option value="SISCOLP">SISCO/LP</option>
+                            <option value="SMC">SMC</option>
+                            <option value="SLV">SLV</option>
+                            <option value="IPS">I.P.S</option>
+                            <option value="RITURAJSINHA">RITURAJ SINHA</option>
+                            <option value="RKSINHA">R K SINHA</option>
+                            <option value="RITASINHA">RITA SINHA</option>
+                            <option value="VPROTECT">V.PROTECT</option>
+                            <option value="ALBTROSS">ALBTROSS</option>
+                       }
+                           @if (item.OwnerName == "SISCASH")
+                       {
+                            <option value="">-- Select --</option>
+                            <option value="SIS(I)LTD">SIS (I) LTD</option>
+                            <option value="SISCASH" selected>SIS CASH</option>
+                            <option value="SISCO">SISCO</option>
+                            <option value="SISCOLP">SISCO/LP</option>
+                            <option value="SMC">SMC</option>
+                            <option value="SLV">SLV</option>
+                            <option value="IPS">I.P.S</option>
+                            <option value="RITURAJSINHA">RITURAJ SINHA</option>
+                            <option value="RKSINHA">R K SINHA</option>
+                            <option value="RITASINHA">RITA SINHA</option>
+                            <option value="VPROTECT">V.PROTECT</option>
+                            <option value="ALBTROSS">ALBTROSS</option>
+                       }
+                           @if (item.OwnerName == "SISCO")
+                       {
+                            <option value="">-- Select --</option>
+                            <option value="SIS(I)LTD">SIS (I) LTD</option>
+                            <option value="SISCASH">SIS CASH</option>
+                            <option value="SISCO" selected>SISCO</option>
+                            <option value="SISCOLP">SISCO/LP</option>
+                            <option value="SMC">SMC</option>
+                            <option value="SLV">SLV</option>
+                            <option value="IPS">I.P.S</option>
+                            <option value="RITURAJSINHA">RITURAJ SINHA</option>
+                            <option value="RKSINHA">R K SINHA</option>
+                            <option value="RITASINHA">RITA SINHA</option>
+                            <option value="VPROTECT">V.PROTECT</option>
+                            <option value="ALBTROSS">ALBTROSS</option>
+                       }
+                           @if (item.OwnerName == "SISCOLP")
+                       {
+                            <option value="">-- Select --</option>
+                            <option value="SIS(I)LTD">SIS (I) LTD</option>
+                            <option value="SISCASH">SIS CASH</option>
+                            <option value="SISCO">SISCO</option>
+                            <option value="SISCOLP" selected>SISCO/LP</option>
+                            <option value="SMC">SMC</option>
+                            <option value="SLV">SLV</option>
+                            <option value="IPS">I.P.S</option>
+                            <option value="RITURAJSINHA">RITURAJ SINHA</option>
+                            <option value="RKSINHA">R K SINHA</option>
+                            <option value="RITASINHA">RITA SINHA</option>
+                            <option value="VPROTECT">V.PROTECT</option>
+                            <option value="ALBTROSS">ALBTROSS</option>
+                       }
+                           @if (item.OwnerName == "SMC")
+                       {
+                            <option value="">-- Select --</option>
+                            <option value="SIS(I)LTD">SIS (I) LTD</option>
+                            <option value="SISCASH">SIS CASH</option>
+                            <option value="SISCO">SISCO</option>
+                            <option value="SISCOLP">SISCO/LP</option>
+                            <option value="SMC" selected>SMC</option>
+                            <option value="SLV">SLV</option>
+                            <option value="IPS">I.P.S</option>
+                            <option value="RITURAJSINHA">RITURAJ SINHA</option>
+                            <option value="RKSINHA">R K SINHA</option>
+                            <option value="RITASINHA">RITA SINHA</option>
+                            <option value="VPROTECT">V.PROTECT</option>
+                            <option value="ALBTROSS">ALBTROSS</option>
+                       }
+                           @if (item.OwnerName == "SLV")
+                       {
+                            <option value="">-- Select --</option>
+                            <option value="SIS(I)LTD">SIS (I) LTD</option>
+                            <option value="SISCASH">SIS CASH</option>
+                            <option value="SISCO">SISCO</option>
+                            <option value="SISCOLP">SISCO/LP</option>
+                            <option value="SMC">SMC</option>
+                            <option value="SLV" selected>SLV</option>
+                            <option value="IPS">I.P.S</option>
+                            <option value="RITURAJSINHA">RITURAJ SINHA</option>
+                            <option value="RKSINHA">R K SINHA</option>
+                            <option value="RITASINHA">RITA SINHA</option>
+                            <option value="VPROTECT">V.PROTECT</option>
+                            <option value="ALBTROSS">ALBTROSS</option>
+                       }
+                           @if (item.OwnerName == "IPS")
+                       {
+                            <option value="">-- Select --</option>
+                            <option value="SIS(I)LTD">SIS (I) LTD</option>
+                            <option value="SISCASH">SIS CASH</option>
+                            <option value="SISCO">SISCO</option>
+                            <option value="SISCOLP">SISCO/LP</option>
+                            <option value="SMC">SMC</option>
+                            <option value="SLV">SLV</option>
+                            <option value="IPS" selected>I.P.S</option>
+                            <option value="RITURAJSINHA">RITURAJ SINHA</option>
+                            <option value="RKSINHA">R K SINHA</option>
+                            <option value="RITASINHA">RITA SINHA</option>
+                            <option value="VPROTECT">V.PROTECT</option>
+                            <option value="ALBTROSS">ALBTROSS</option>
+                       }
+                           @if (item.OwnerName == "RITURAJSINHA")
+                       {
+                            <option value="">-- Select --</option>
+                            <option value="SIS(I)LTD">SIS (I) LTD</option>
+                            <option value="SISCASH">SIS CASH</option>
+                            <option value="SISCO">SISCO</option>
+                            <option value="SISCOLP">SISCO/LP</option>
+                            <option value="SMC">SMC</option>
+                            <option value="SLV">SLV</option>
+                            <option value="IPS">I.P.S</option>
+                            <option value="RITURAJSINHA" selected>RITURAJ SINHA</option>
+                            <option value="RKSINHA">R K SINHA</option>
+                            <option value="RITASINHA">RITA SINHA</option>
+                            <option value="VPROTECT">V.PROTECT</option>
+                            <option value="ALBTROSS">ALBTROSS</option>
+                       }
+                           @if (item.OwnerName == "RKSINHA")
+                       {
+                            <option value="">-- Select --</option>
+                            <option value="SIS(I)LTD">SIS (I) LTD</option>
+                            <option value="SISCASH">SIS CASH</option>
+                            <option value="SISCO">SISCO</option>
+                            <option value="SISCOLP">SISCO/LP</option>
+                            <option value="SMC">SMC</option>
+                            <option value="SLV">SLV</option>
+                            <option value="IPS">I.P.S</option>
+                            <option value="RITURAJSINHA">RITURAJ SINHA</option>
+                            <option value="RKSINHA" selected>R K SINHA</option>
+                            <option value="RITASINHA">RITA SINHA</option>
+                            <option value="VPROTECT">V.PROTECT</option>
+                            <option value="ALBTROSS">ALBTROSS</option>
+                       }
+                           @if (item.OwnerName == "RITASINHA")
+                       {
+                            <option value="">-- Select --</option>
+                            <option value="SIS(I)LTD">SIS (I) LTD</option>
+                            <option value="SISCASH">SIS CASH</option>
+                            <option value="SISCO">SISCO</option>
+                            <option value="SISCOLP">SISCO/LP</option>
+                            <option value="SMC">SMC</option>
+                            <option value="SLV">SLV</option>
+                            <option value="IPS">I.P.S</option>
+                            <option value="RITURAJSINHA">RITURAJ SINHA</option>
+                            <option value="RKSINHA">R K SINHA</option>
+                            <option value="RITASINHA" selected>RITA SINHA</option>
+                            <option value="VPROTECT">V.PROTECT</option>
+                            <option value="ALBTROSS">ALBTROSS</option>
+                       }
+                           @if (item.OwnerName == "VPROTECT")
+                       {
+                            <option value="">-- Select --</option>
+                            <option value="SIS(I)LTD">SIS (I) LTD</option>
+                            <option value="SISCASH">SIS CASH</option>
+                            <option value="SISCO">SISCO</option>
+                            <option value="SISCOLP">SISCO/LP</option>
+                            <option value="SMC">SMC</option>
+                            <option value="SLV">SLV</option>
+                            <option value="IPS">I.P.S</option>
+                            <option value="RITURAJSINHA">RITURAJ SINHA</option>
+                            <option value="RKSINHA">R K SINHA</option>
+                            <option value="RITASINHA">RITA SINHA</option>
+                            <option value="VPROTECT" selected>V.PROTECT</option>
+                            <option value="ALBTROSS">ALBTROSS</option>
+                       }
+                           @if (item.OwnerName == "ALBTROSS")
+                       {
+                            <option value=">-- Select --</option>
+                            <option value="SIS(I)LTD">SIS (I) LTD</option>
+                            <option value="SISCASH">SIS CASH</option>
+                            <option value="SISCO">SISCO</option>
+                            <option value="SISCOLP">SISCO/LP</option>
+                            <option value="SMC">SMC</option>
+                            <option value="SLV">SLV</option>
+                            <option value="IPS">I.P.S</option>
+                            <option value="RITURAJSINHA">RITURAJ SINHA</option>
+                            <option value="RKSINHA">R K SINHA</option>
+                            <option value="RITASINHA">RITA SINHA</option>
+                            <option value="VPROTECT">V.PROTECT</option>
+                            <option value="ALBTROSS" selected>ALBTROSS</option>
+                       }
+                    </select>
+                </div>
+                        <script>
+                            $(document).ready(function () {
+                                $("#ddlOwnerName option[value=@item.OwnerName]").attr("selected", "selected");
+                                $("#ddlNOCStatus option[value=@item.NOCStatus]").attr("selected", "selected");
+                                $("#ddlVehicleSoldStatus option[value=@item.VehicleSoldStatus]").attr("selected", "selected");
+
+                                if ("@item.NOCStatus" == "Yes") {
+                                    $("#divDateOfNOC").css({ "display": "block" });
+                                }
+                                else {
+                                    $("#divDateOfNOC").css({ "display": "none" });
+                                }
+
+                                if ("@item.VehicleSoldStatus" == "Yes") {
+                                    $("#divVendarName").css({ "display": "block", "margin-top": "15px!important; " });
+                                    $("#divVehicleSoldDate").css({ "display": "block", "margin-top": "15px!important; " });
+                                    $("#divVehicleSoldAmount").css({ "display": "block", "margin-top": "15px!important; " });
+                                }
+                                else {
+                                    $("#divVendarName").css({ "display": "none" });
+                                    $("#divVehicleSoldDate").css({ "display": "none" });
+                                    $("#divVehicleSoldAmount").css({ "display": "none" });
+                                }
+                            })
+                        </script>
+                         <div class="col-sm-3">
+                    <label for="ddlNOCStatus" class="control-label">NOC Status</label>
+                    <select class="form-control" id="ddlNOCStatus" name="ddlNOCStatus">
+                         @if (item.NOCStatus == "")
+                         {
+                            <option value="" selected>-- Select --</option>
+                            <option value="Yes">Yes</option>
+                            <option value="No">No</option>
+                         }
+                         @if (item.NOCStatus == "Yes")
+                         {
+                            <option value="">-- Select --</option>
+                            <option value="Yes" selected>Yes</option>
+                            <option value="No">No</option>
+                         }
+                         @if (item.NOCStatus == "No")
+                         {
+                            <option value="">-- Select --</option>
+                            <option value="Yes">Yes</option>
+                            <option value="No" selected>No</option>
+                         }
+                    </select>
+                </div>
+                 <div class="col-sm-3" id="divDateOfNOC" style="display:none">
+                    <label for="txtDateOfNOC" class="control-label">Date Of NOC</label>
+                    <input type="date" class="form-control" id="txtDateOfNOC"  placeholder="Enter Date Of NOC" value="@item.DateOfNOC"   name="txtDateOfNOC"  />
+                </div>
+                 <div class="col-sm-3">
+                    <label for="ddlVehicleSoldStatus" class="control-label">Vehicle Sold Status</label>
+                    <select class="form-control" id="ddlVehicleSoldStatus" name="ddlVehicleSoldStatus">
+                        @if (item.VehicleSoldStatus == "")
+                        {
+                            <option value="" selected>-- Select --</option>
+                            <option value="Yes">Yes</option>
+                            <option value="No">No</option>
+                        }
+                         @if (item.VehicleSoldStatus == "Yes")
+                         {
+                            <option value="">-- Select --</option>
+                            <option value="Yes" selected>Yes</option>
+                            <option value="No">No</option>
+                         }
+                         @if (item.VehicleSoldStatus == "No")
+                         {
+                            <option value="">-- Select --</option>
+                            <option value="Yes">Yes</option>
+                            <option value="No" selected>No</option>
+                         }
+                    </select>
+                </div>
+
+                <p></p>
+                 <div class="col-sm-3" id="divVendarName" style="display:none">
+                    <label for="txtVendarName" class="control-label">Vendor Name</label>
+                    <input type="text" class="form-control" id="txtVendarName"  value="@item.VendarName"  placeholder="Enter Vendor Name"  name="txtVendarName" />
+                </div>
+                 <div class="col-sm-3" id="divVehicleSoldDate" style="display:none">
+                    <label for="txtVehicleSoldDate" class="control-label">Vehicle Sold Date</label>
+                    <input type="date" class="form-control" id="txtVehicleSoldDate"  value="@item.VehicleSoldDate"  name="txtVehicleSoldDate" />
+                </div>
+                 <div class="col-sm-3" id="divVehicleSoldAmount" style="display:none">
+                    <label for="txtVehicleSoldAmount" class="control-label">Vechicle Sold Amount</label>
+                    <input type="text" class="form-control" id="txtVehicleSoldAmount"  value="@item.VehicleSoldAmount"  placeholder="Enter Depreciation Value"  name="txtVehicleSoldAmount" />
+                </div>
+                    </div>
+                    <p></p>
+
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-success" id="Update">Update</button>
+                        <button type="button" class="btn btn-warning" data-dismiss="modal" id="btnClose" onclick="javascript:window.open('','_self').close();">Close</button>
+                    </div>
+
+                    </div>
+                }
+
+            </div>
+        </div>
+    </div>
+</body>
+   <script>
+        $(document).ready(function () {
+            $('#cmbRegion').change(function () {
+                $.ajax({
+                    url: '@Url.Action("GetBranchdetails")',
+                     data: {
+                         RegionId: $('#cmbRegion').val(),
+                     },
+                     dataType: "json",
+                     type: "POST",
+                     traditional: true,
+                     success: function (data) {
+                         var mySelect = $('#cmbBranch');
+                         mySelect.empty();
+                         $.each(data, function (i) {
+                             var optionhtml = '';
+                             optionhtml = '<option value="' + data[i].BranchId + '">' + data[i].BranchName + '</option>';
+                                 $('#cmbBranch').append(optionhtml);
+                         });
+                },
+                     error: function (response) {
+                         alert(response.responseText);
+                     },
+                     failure: function (response) {
+                         alert(response.responseText);
+                     }
+                 });
+            });
+
+        });
+    </script>
+
+    <script>
+        $(document).ready(function () {
+            $('#Update').click(function () {
+
+                if ($('#txtPetroCardNumber').val() == "" || $('#txtPetroCardNumber').val() == null)
+                {
+                    alert("Please Enter Petro Card Number Details!!");
+                    $('#txtPetroCardNumber').focus();
+                    return;
+                }
+                if ($('#txtSTDKMPL').val() == "" || $('#txtSTDKMPL').val() == null) {
+                    alert("Please Enter STDKMPL Details !!");
+                    $('#txtSTDKMPL').focus();
+                    return;
+                }
+                if ($('#cmbBPNONBP').val() == "" || $('#cmbBPNONBP').val() == "-- Select --") {
+                    alert("Please Enter BP/NONBP Details !!");
+                    $('#cmbBPNONBP').focus();
+                    return;
+                }
+                if ($('#cmbFuelType').val() == "" || $('#cmbFuelType').val() == "-- Select --") {
+                    alert("Please Enter Fuel Type Details !!");
+                    $('#cmbFuelType').focus();
+                    return;
+                }
+                else if ($('#txtDateOfInvoice').val() == "" || $('#txtDateOfInvoice').val() == null) {
+                    alert("Please Enter Date Of Invoice");
+                    return;
+                }
+                else if ($('#txtInvoiceNumber').val() == "" || $('#txtInvoiceNumber').val() == null) {
+                    alert("Please Enter Invoice Number");
+                    return;
+                }
+                else if ($('#txtFileNumber').val() == "" || $('#txtFileNumber').val() == null) {
+                    alert("Please Enter File Number");
+                    return;
+                }
+                else if ($('#txtFinancierName').val() == "" || $('#txtFinancierName').val() == null) {
+                    alert("Please Enter Financier Name");
+                    return;
+                }
+                else if ($('#txtROI').val() == "" || $('#txtROI').val() == null) {
+                    alert("Please Enter Rate Of Interest");
+                    return;
+                }
+                else if ($('#txtEMIStartDate').val() == "" || $('#txtEMIStartDate').val() == null) {
+                    alert("Please Enter EMI Start Date");
+                    return;
+                }
+                else if ($('#txtEMIEndDate').val() == "" || $('#txtEMIEndDate').val() == null) {
+                    alert("Please Enter EMI End Date");
+                    return;
+                }
+                else if ($('#txtEMIAmount').val() == "" || $('#txtEMIAmount').val() == null) {
+                    alert("Please Enter EMI Amount");
+                    return;
+                }
+                else if ($('#txtEngineNumber').val() == "" || $('#txtEngineNumber').val() == null) {
+                    alert("Please Enter Engine Number");
+                    return;
+                }
+                else if ($('#txtLocation').val() == "" || $('#txtLocation').val() == null) {
+                    alert("Please Enter Location Details");
+                    return;
+                }
+                else if ($('#txtCustomer').val() == "" || $('#txtCustomer').val() == null) {
+                    alert("Please Enter Customer Details");
+                    return;
+                }
+                else if ($('#txtFabricationName').val() == "" || $('#txtFabricationName').val() == null) {
+                    alert("Please Enter Fabrication Name");
+                    return;
+                }
+                else if ($('#txtFabricationAmount').val() == "" || $('#txtFabricationAmount').val() == null) {
+                    alert("Please Enter Fabrication Amount");
+                    return;
+                }
+                else if ($('#txtChassisAmount').val() == "" || $('#txtChassisAmount').val() == null) {
+                    alert("Please Enter Chassis Amount");
+                    return;
+                }
+                else if ($('#txtBodyAmount').val() == "" || $('#txtBodyAmount').val() == null) {
+                    alert("Please Enter Body Amount");
+                    return;
+                }
+                else if ($('#txtChassisEMI').val() == "" || $('#txtChassisEMI').val() == null) {
+                    alert("Please Enter Chassis EMI Amount");
+                    return;
+                }
+                else if ($('#txtBodyEMI').val() == "" || $('#txtBodyEMI').val() == null) {
+                    alert("Please Enter Body EMI Amount");
+                    return;
+                }
+                else if ($('#txtTotalEMI').val() == "" || $('#txtTotalEMI').val() == null) {
+                    alert("Please Enter Total EMI Amount");
+                    return;
+                }
+                else if ($('#txtChassisLAN').val() == "" || $('#txtChassisLAN').val() == null) {
+                    alert("Please Enter Chassis LAN");
+                    return;
+                }
+                else if ($('#txtBodyLAN').val() == "" || $('#txtBodyLAN').val() == null) {
+                    alert("Please Enter Body LAN");
+                    return;
+                }
+                else if ($('#txtTenure').val() == "" || $('#txtTenure').val() == null) {
+                    alert("Please Enter Tenure");
+                    return;
+                }
+                else if ($('#txtOther').val() == "" || $('#txtOther').val() == null) {
+                    alert("Please Enter Other Details");
+                    return;
+                }
+                else if ($('#txtDepreciationValue').val() == "" || $('#txtDepreciationValue').val() == null) {
+                    alert("Please Enter Depreciation Value");
+                    return;
+                }
+                else if ($('#ddlTypeOfBody').val() == "" || $('#ddlTypeOfBody').val() == null) {
+                    alert("Please Select Type Of Body");
+                    return;
+                }
+                else if ($('#txtVehicleAge').val() == "" || $('#txtVehicleAge').val() == null) {
+                    alert("Please Enter Vehicle Age");
+                    return;
+                }
+                else if ($('#ddlOwnerName').val() == "" || $('#ddlOwnerName').val() == null) {
+                    alert("Please Enter Owner Name");
+                    return;
+                }
+                else if ($('#ddlNOCStatus').val() == "" || $('#ddlNOCStatus').val() == null) {
+                    alert("Please Select NOC Status");
+                    return;
+                }
+
+                else if ($("#ddlNOCStatus").val() == "Yes") {
+                    if ($("#txtDateOfNOC").val() == "" || $("#txtDateOfNOC").val() == null) {
+                        alert("Please Enter Date Of NOC");
+                        return;
+                    }
+                }
+                else if ($('#ddlVehicleSoldStatus').val() == "" || $('#ddlVehicleSoldStatus').val() == null) {
+                    alert("Please Select Vehicle Sold Status");
+                    return;
+                }
+                else if ($("#ddlVehicleSoldStatus").val() == "Yes") {
+                    if ($("#txtVendarName").val() == "" || $("#txtVendarName").val() == null) {
+                        alert("Please Enter Vendor Name");
+                        return;
+                    }
+                    else if ($("#ddlVehicleSoldStatus").val() == "" || $("#ddlVehicleSoldStatus").val() == null) {
+                        alert("Please Enter Vehicle Sold Date");
+                        return;
+                    }
+                    else if ($("#txtVehicleSoldAmount").val() == "" || $("#txtVehicleSoldAmount").val() == null) {
+                        alert("Please Enter Vehicle Sold Amount");
+                        return;
+                    }
+                }
+
+                $.ajax({
+                    url: '@Url.Action("GetVechileDataUpdate")',
+                    data: {
+                        RecId: $('#Recidvalue').val(),
+                        VechileNumber: $('#txtEditVehicleNo').val(),
+                        Make: $('#txtEditMake').val(),
+                        ChassisNo: $('#txtEditChassisNo').val(),
+                        ManufacturingYear: $('#txtEditManufacturingYear').val(),
+                        Password: $('#txtEditPassword').val(),
+                        Region: $('#cmbRegion').val(),
+                        Branch: $('#cmbBranch').val(),
+                        PetroCardNumber: $('#txtPetroCardNumber').val(),
+                        STDKMPL: $('#txtSTDKMPL').val(),
+                        BPNONBP: $('#cmbBPNONBP').val(),
+                        FuelType: $('#cmbFuelType').val(),
+                        DateOfInvoice: $('#txtDateOfInvoice').val(),
+                        InvoiceNumber: $('#txtInvoiceNumber').val(),
+                        FileNumber: $('#txtFileNumber').val(),
+                        FinancierName: $('#txtFinancierName').val(),
+                        ROI: $('#txtROI').val(),
+                        EMIStartDate: $('#txtEMIStartDate').val(),
+                        EMIEndDate: $('#txtEMIEndDate').val(),
+                        EMIAmount: $('#txtEMIAmount').val(),
+                        EngineNumber: $('#txtEngineNumber').val(),
+                        Location: $('#txtLocation').val(),
+                        Customer: $('#txtCustomer').val(),
+                        FabricationName: $('#txtFabricationName').val(),
+                        FabricationAmount: $('#txtFabricationAmount').val(),
+                        ChassisAmount: $('#txtChassisAmount').val(),
+                        BodyAmount: $('#txtBodyAmount').val(),
+                        ChassisEMI: $('#txtChassisEMI').val(),
+                        BodyEMI: $('#txtBodyEMI').val(),
+                        TotalEMI: $('#txtTotalEMI').val(),
+                        ChassisLAN: $('#txtChassisLAN').val(),
+                        BodyLAN: $('#txtBodyLAN').val(),
+                        Tenure: $('#txtTenure').val(),
+                        Other: $('#txtOther').val(),
+                        DepreciationValue: $('#txtDepreciationValue').val(),
+                        TypeOfBody: $('#ddlTypeOfBody').val(),
+                        VehicleAge: $('#txtVehicleAge').val(),
+                        OwnerName: $('#ddlOwnerName').val(),
+                        NOCStatus: $('#ddlNOCStatus').val(),
+                        DateOfNOC: $('#txtDateOfNOC').val(),
+                        VehicleSoldStatus: $('#ddlVehicleSoldStatus').val(),
+                        VendarName: $('#txtVendarName').val(),
+                        VehicleSoldDate: $('#txtVehicleSoldDate').val(),
+                        VehicleSoldAmount: $('#txtVehicleSoldAmount').val()
+                    },
+                    dataType: "json",
+                    type: "POST",
+                    traditional: true,
+                    success: function (data) {
+                        alert(data);
+                    },
+                    error: function (response) {
+                        alert(response.responseText);
+                    },
+                    failure: function (response) {
+                        alert(response.responseText);
+                    }
+                });
+            })
+        });
+    </script>
+
+    <script>
+        $(document).ready(function () {
+            $('#txtDateOfInvoice').change(function () {
+                var DateOfInvoice = $('#txtDateOfInvoice').val();
+                var res = DateOfInvoice.split("-");
+                var Year = res[0];
+                var Month = res[1];
+                var Date = res[2];
+                showAge(Year, Month, Date);
+            })
+        });
+
+        function showAge(dobYear, dobMonth, dobDay) {
+            var bthDate, curDate, days;
+            var ageYears, ageMonths, ageDays;
+            bthDate = new Date(dobYear, dobMonth - 1, dobDay);
+            curDate = new Date();
+            if (bthDate > curDate) return;
+            days = Math.floor((curDate - bthDate) / (1000 * 60 * 60 * 24));
+            ageYears = Math.floor(days / 365);
+            ageMonths = Math.floor((days % 365) / 31);
+            ageDays = days - (ageYears * 365) - (ageMonths * 31);
+            //if (ageYears > 0) {
+            //    //document.write(ageYears + " year");
+            //    if (ageYears > 1) document.write("s");
+            //   // if ((ageMonths > 0) || (ageDays > 0)) document.write(", ");
+            //}
+            //if (ageMonths > 0) {
+            //    //document.write(ageMonths + " month");
+            //    if (ageMonths > 1) document.write("s");
+            //    if (ageDays > 0) document.write(", ");
+            //}
+            //if (ageDays > 0) {
+            //    //document.write(ageDays + " day");
+            //    if (ageDays > 1) document.write("s");
+            //}
+            $('#txtVehicleAge').val((ageYears + " Years " + ageMonths + " Months " + ageDays + " Days "));
+        }
+
+</script>
+
+    
+ @*On change of ddlNOCStatus selectBox and ddlVehicleSoldStatus*@
+    <script>
+        $(document).ready(function () {
+            $("#ddlNOCStatus").change(function () {
+                var NOCStatus = $("#ddlNOCStatus").val();
+                if (NOCStatus == "Yes") {
+                    $("#divDateOfNOC").css({ "display": "block" });
+                }
+                else {
+                    $("#divDateOfNOC").css({ "display": "none" });
+                }
+            })
+
+            $("#ddlVehicleSoldStatus").change(function () {
+                var VehicleSoldStatus = $("#ddlVehicleSoldStatus").val();
+                if (VehicleSoldStatus == "Yes") {
+                    $("#divVendarName").css({ "display": "block", "margin-top": "15px!important; " });
+                    $("#divVehicleSoldDate").css({ "display": "block", "margin-top": "15px!important; " });
+                    $("#divVehicleSoldAmount").css({ "display": "block", "margin-top": "15px!important; " });
+                }
+                else {
+                    $("#divVendarName").css({ "display": "none" });
+                    $("#divVehicleSoldDate").css({ "display": "none" });
+                    $("#divVehicleSoldAmount").css({ "display": "none" });
+                }
+            })
+        })
+</script>
+<script>
+    $(document).ready(function () {
+        var regin = $("#cmbRegion").val();
+        var brnch = $("#cmbBranch").val();
+        
+       
+        $.ajax({
+            url: '@Url.Action("GetBranchdetails")',
+            data: {
+                RegionId: $("#cmbRegion").val(),
+            },
+            dataType: "json",
+            type: "POST",
+            traditional: true,
+            success: function (data) {
+                console.log(data);
+                var mySelect = $('#cmbBranch');
+                mySelect.empty();
+                $.each(data, function (i) {
+
+                    var optionhtml = '';
+                    if (data[i].BranchId == brnch) {
+                        optionhtml = '<option value="' + data[i].BranchId + '" selected>' + data[i].BranchName + '</option>';
+                        //alert("hh");
+                    } else {
+                        optionhtml = '<option value="' + data[i].BranchId + '">' + data[i].BranchName + '</option>';
+                        //alert("uui");
+                    }
+                    $('#cmbBranch').append(optionhtml);
+                });
+            },
+            error: function (response) {
+                alert(response.responseText);
+            },
+            failure: function (response) {
+                alert(response.responseText);
+            }
+        });
+    });
+</script>
+ <script>
+     $(document).ready(function () {
+         var DateOfInvoice = $('#txtDateOfInvoice').val();
+         var res = DateOfInvoice.split("-");
+         var Year = res[0];
+         var Month = res[1];
+         var Date = res[2];
+         showAge(Year, Month, Date);
+     })
+ </script>
+</html>

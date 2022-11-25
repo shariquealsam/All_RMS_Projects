@@ -1,0 +1,1206 @@
+﻿@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/Master.cshtml";
+}
+
+@*<h2>Sales Reoprt Index</h2>*@
+
+<!-- Latest compiled and minified CSS -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+
+<!-- jQuery library -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
+<!-- Latest compiled JavaScript -->
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.css">
+
+<script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.js"></script>
+
+<link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" />
+
+<link href="~/Css/bootstrap-multiselect.css" rel="stylesheet" />
+
+<script src="~/Js/bootstrap-multiselect.js"></script>
+
+@*style for loader*@
+<link href="~/Css/Ribbon.css" rel="stylesheet" />
+<link href="~/Css/style.css" rel="stylesheet" />
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Sales Report Page</title>
+    </head>
+
+     <body>
+         <style>
+                   #divMsg {
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        position: fixed;
+        background: #f5f5f5ab;
+            z-index: 1;
+    }
+         </style>
+        <div class="container" style="margin: 0; background-color: transparent; text-align: center;">
+            <div id="divMsg" style="display:none;">
+                @*<img src="~/Image/loader.gif" alt="Please wait.." />*@
+                <div class="loader">Loading</div>
+            </div>
+            <div class="row" style="margin: 0; background-color: transparent; text-align: center;">
+                <div class="ui-group-buttons">
+                    <button type="button" class="btn btn-info btn-lg" id="SalesReport">R & M Report</button>
+                    <div class="or or-lg"></div>
+                    <button type="button" class="button btn btn-success btn-lg" id="KPLReport" >KPL Report</button>
+                    <div class="or or-lg"></div>
+                    <button type="button" class="button btn btn-warning btn-lg" id="DailyMIS">Daily MIS Report</button>
+                    <div class="or or-lg"></div>
+                    <button type="button" class="button btn btn-danger btn-lg" id="SalesReportDate">R & M DateWise Report</button>
+                </div>
+            </div>
+        </div>
+        <pre style="visibility: hidden"></pre>
+         <div class="container" style="margin: 0; background-color: transparent; text-align: center;">
+            <div id="divMsg1" style="display:none;">
+                @*<img src="~/Image/loader.gif" alt="Please wait.." />*@
+                <div class="loader">Loading</div>
+            </div>
+            <div class="row" style="margin: 0; background-color: transparent; text-align: center;">
+                <div class="ui-group-buttons">
+                    <button type="button" class="btn btn-info btn-lg" id="MainReport">Maintainance Tax's Report</button>
+                    <div class="or or-lg"></div>
+                    <button type="button" class="button btn btn-success btn-lg" id="MonthlyDaily" >Date Range Daily Mis Report</button>
+                    @*<div class="or or-lg"></div>
+                    <button type="button" class="button btn btn-warning btn-lg" id="TrackerDownload">Routine Tracker</button>
+                    <div class="or or-lg"></div>
+                    <button type="button" class="button btn btn-danger btn-lg" id="SalesReportDate">R & M DateWise Report</button>*@
+                </div>
+            </div>
+        </div>
+          <pre style="visibility: hidden"></pre>
+         <div class="container" style="margin: 0; background-color: transparent; text-align: center;">
+            <div id="divMsg2" style="display:none;">
+                @*<img src="~/Image/loader.gif" alt="Please wait.." />*@
+                <div class="loader">Loading</div>
+            </div>
+            <div class="row" style="margin: 0; background-color: transparent; text-align: center;">
+                <div class="ui-group-buttons">
+                     @using (Html.BeginForm("RoutineTrackerDownload", "SalesReport", FormMethod.Post))
+         {
+                    <button type="submit"  class="button btn btn-warning btn-lg" id="TrackerDownload">Routine Tracker</button>
+                     }
+
+                </div>
+            </div>
+        </div>
+         <pre style="visibility: hidden"></pre>
+         <div class="container" style="margin: 0; background-color: transparent; text-align: center;">
+            <div id="divMonthly" style="display:none;">
+                @*<img src="~/Image/loader.gif" alt="Please wait.." />*@
+            </div>
+            <div class="row" style="margin: 0; background-color: transparent; text-align: center;">
+                <div class="ui-group-buttons">
+                    <button type="button" class="btn btn-info btn-lg" id="DMis">Monthly Daily MIS Report</button>
+                    <div class="or or-lg"></div>
+                    <button type="button" class="button btn btn-success btn-lg" id="btnHiredVehicle">Hired Vehicle</button>
+                    <div class="or or-lg"></div>
+                    <button type="button" class="button btn btn-warning btn-lg" id="2" disabled >Coming Soon</button>
+                    <div class="or or-lg"></div>
+                    <button type="button" class="button btn btn-danger btn-lg" id="3" disabled >Coming Soon</button>
+                </div>
+            </div>
+        </div>
+         <pre style="visibility: hidden"></pre>
+         @using (Html.BeginForm("Download", "SalesReport", FormMethod.Post))
+         {
+            <div class="container-fluid" id="RMDetails" style="display: none;">
+                    <div style="padding: 9.5px; margin: 0 0 10px; line-height: 1.42857143; color: #333; border: 1px solid #ccc; border-radius: 4px;">
+                        <div class="row">
+                            <div class="col-sm-2">
+                                <label for="FromDate" class="control-label">From Date</label>
+                                <input type="date" id="txtFromDate" name="txtFromDate" class="form-control" required/>
+                            </div>
+                            <div class="col-sm-2">
+                                <label for="ToDate" class="control-label">To Date</label>
+                                <input type="date" class="form-control" id="txtToDate" name="txtToDate" required/>
+                            </div>
+                            <div class="col-sm-2">
+                                <label for="Region" class="control-label">Region</label>
+                                <select class="form-control" name="ddlRegion" id="ddlRegion">
+                                    <option value="">-- Select Region --</option>
+                                    @foreach (var item1 in ViewBag.RegionDetails)
+                                    {
+                                        <option value="@item1.RegionId">@item1.RegionName</option>
+                                    }
+                                </select>
+                            </div>
+                            <div class="col-sm-2">
+                                <label for="Branch" class="control-label">Branch</label>
+
+                                <select class="form-control" name="ddlBranch" id="ddlBranch">
+                                    <option value="">-- Select Branch --</option>
+                                </select>
+                            </div>
+                            <div class="col-sm-2">
+                                <label for="VehicleNumber" class="control-label">Vehicle Number <a title="Change Textbox To Dropdown or Viceversa"><span class="glyphicon glyphicon-exclamation-sign" id="change"></span></a></label>
+                                <select class="form-control" id="ddlVehicleNumber" name="ddlVehicleNumber" style="display:none;">
+                                    <option>-- Select Vehicle --</option>
+                                </select>
+                                <input type="text" id="txtVehicleNumber" name="txtVehicleNumber" class="form-control" />
+                            </div>
+                            <div class="col-sm-2">
+                                <label for="VehicleNumber" class="control-label" style="visibility: hidden">Vehicle Number</label>
+                                <div class="ui-group-buttons">
+                                    <button type="button" class="btn btn-success glyphicon glyphicon-search" id="View">Show</button>
+                                    <div class="or"></div>
+                                    <button type="submit" class="btn btn-default glyphicon glyphicon-export" id="ExportExcel">Export</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+         }
+         @using (Html.BeginForm("DownloadKPLReport", "SalesReport", FormMethod.Post, new { id="DownloadKPLReportForm"}))
+         {
+            <div class="container-fluid" id="KPLDetails" style="display: none;">
+                <div style="padding: 9.5px; margin: 0 0 10px; line-height: 1.42857143; color: #333; border: 1px solid #ccc; border-radius: 4px;">
+                    <div class="row">
+                         <div class="col-sm-2">
+                            <label for="FromDate" class="control-label">Year</label>
+                            @*<input type="date" id="txtFromDate" name="txtFromDate" class="form-control" required/>*@
+                         <select class="form-control" id="cmbYear" name="cmbYear">
+                             <option value="">--Select Year--</option>
+                             <option value="2019">2019</option>
+                             <option value="2020">2020</option>
+                             <option value="2021">2021</option>
+                             <option value="2022">2022</option>
+                         </select>
+                        </div>
+                        <div class="col-sm-2">
+                            <label for="ToDate" class="control-label">Month</label>
+                            @*<input type="date" class="form-control" id="txtToDate" name="txtToDate" required/>*@
+                            <select class="form-control" id="cmbMonth" name="cmbMonth">
+                                <option value="1">January</option>
+                                <option value="2">February</option>
+                                <option value="3">March</option>
+                                <option value="4">April</option>
+                                <option value="5">May</option>
+                                <option value="6">June</option>
+                                <option value="7">July</option>
+                                <option value="8">August</option>
+                                <option value="9">September</option>
+                                <option value="10">October</option>
+                                <option value="11">November</option>
+                                <option value="12">December</option>
+                            </select>
+                        </div>
+                        <div class="col-sm-2">
+                            <label for="RegionKPL" class="control-label">Region</label>
+                            <select class="form-control" name="ddlRegionKPL" id="ddlRegionKPL">
+                                @if(Session["UserType"].ToString()=="Admin")
+                                {
+                                <option value="0">-- Select Region --</option>
+                                }
+                                    @foreach (var item1 in ViewBag.RegionDetails)
+                                {
+                                    <option value="@item1.RegionId">@item1.RegionName</option>
+                                }
+                            </select>
+                        </div>
+                        <div class="col-sm-2">
+                           <label for="BranchKPL" class="control-label">Branch</label>
+                            <select class="form-control" name="ddlBranchKPL" id="ddlBranchKPL">
+                                <option value="0">-- Select Branch --</option>
+                            </select>
+                        </div>
+                        <div class="col-sm-2">
+                            <label for="VehicleNumberKPL" class="control-label">Vehicle Number <a title="Change Textbox To Dropdown or Viceversa"><span class="glyphicon glyphicon-exclamation-sign" id="changeKPL"></span></a></label>
+                            <select class="form-control" id="ddlVehicleNumberKPL" name="ddlVehicleNumberKPL" style="display:none;">
+                                <option value="">-- Select Vehicle --</option>
+                            </select>
+                            <input type="text" id="txtVehicleNumberKPL" name="txtVehicleNumberKPL" class="form-control" />
+                        </div>
+                        <div class="col-sm-2">
+                            <label for="VehicleNumberKPL" class="control-label" style="visibility: hidden">Vehicle Number</label>
+                            <div class="ui-group-buttons">
+                                <button type="button" class="btn btn-success glyphicon glyphicon-search" id="showKPLData">Show</button>
+                                <div class="or"></div>
+                                <button type="button" class="btn btn-default glyphicon glyphicon-export" id="ExportExcelKPL">Export</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+         }
+        @using (Html.BeginForm("DailyMisDownload", "SalesReport", FormMethod.Post))
+        {
+            <div class="container-fluid" id="DaliyMisDetails"  style="display: none;">
+                <div style="padding: 9.5px; margin: 0 0 10px; line-height: 1.42857143; color: #333; border: 1px solid #ccc; border-radius: 4px;">
+                    <div class="row">
+                        <div class="col-sm-2">
+                            <label for="FromDate" class="control-label">Date</label>
+                            <input type="date" id="txtDailyFromDate" name="txtDailyFromDate" class="form-control" required/>
+                        </div>
+                        <div class="col-sm-3">
+                            <label for="Region" class="control-label">Region</label>
+                            <select class="form-control" name="ddlDailyRegion" id="ddlDailyRegion">
+                                <option value="">-- Select Region --</option>
+                                @foreach (var item1 in ViewBag.RegionDetails)
+                                {
+                                    <option value="@item1.RegionId">@item1.RegionName</option>
+                                }
+                            </select>
+                        </div>
+                        <div class="col-sm-3">
+                            <label for="Branch" class="control-label">Branch</label>
+                            <input type="hidden" id="hfBranch" />
+                            <select name="ddlDailyBranch" id="ddlDailyBranch" class="form-control" multiple>
+                            <script type="text/javascript">
+                                $(document).ready(function () {
+                                    //Bank Dropdown Selectedchange event    
+                                    $('[id=ddlDailyBranch]').multiselect({
+                                        enableFiltering: true,
+                                        enableCaseInsensitiveFiltering: true,
+                                        includeSelectAllOption: true,
+                                        includeSelectAllDivider: false,
+                                        maxHeight: 260,
+                                        buttonWidth: '100%',
+                                        onChange: function () {
+                                            Branch = $("#ddlDailyBranch option:selected").map(function () { return this.value }).get().join(', ');
+                                            $("#hfBranch").val(Branch);
+                                            //alert(Branch);
+                                        },
+                                        onSelectAll: function () {
+                                            Branch = $("#ddlDailyBranch option:selected").map(function () { return this.value }).get().join(', ');
+                                            $("#hfBranch").val(Branch);
+                                            //alert(Branch);
+                                        },
+                                        onDeselectAll: function () {
+                                            Branch = $("#ddlDailyBranch option:selected").map(function () { return this.value }).get().join(', ');
+                                            $("#hfBranch").val(Branch);
+                                            //alert(Branch);
+                                        },
+
+                                    });
+                                });
+                            </script>
+                        </select>
+                        </div>
+                        <div class="col-sm-3">
+                            <label for="VehicleNumber" class="control-label" style="visibility: hidden">Vehicle Number VehicleVehicleVehicle</label>
+                            <div class="ui-group-buttons">
+                                <button type="button" class="btn btn-success glyphicon glyphicon-search btn-md" id="ViewDaily">ShowDetails</button>
+                                <div class="or"></div>
+                                <button type="submit" class="btn btn-default glyphicon glyphicon-export btn-md" id="ExportExcelDaily">ExportReport</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    
+        @using (Html.BeginForm("RepairMaintainanceDownload", "SalesReport", FormMethod.Post))
+        {
+           <div class="container-fluid" id="RepairDetails"  style="display: none;">
+                <div style="padding: 9.5px; margin: 0 0 10px; line-height: 1.42857143; color: #333; border: 1px solid #ccc; border-radius: 4px;">
+                    <div class="row">
+                        <div class="col-sm-3">
+                            <label for="FromDate" class="control-label"> From Date</label>
+                            <input type="date" id="txtRepairFromDate" name="txtRepairFromDate" class="form-control" required/>
+                        </div>
+                       <div class="col-sm-3">
+                            <label for="ToDate" class="control-label"> To Date</label>
+                            <input type="date" id="txtRepairToDate" name="txtRepairToDate" class="form-control" required/>
+                        </div>
+                        <div class="col-sm-3">
+                            <label for="VehicleNumber" class="control-label" style="visibility: hidden">Vehicle Number VehicleVehicleVehicle</label>
+                            <div class="ui-group-buttons">
+                                <button type="button" class="btn btn-success glyphicon glyphicon-search btn-md" id="RepairDaily">ShowDetails</button>
+                                <div class="or"></div>
+                                <button type="submit" class="btn btn-default glyphicon glyphicon-export btn-md" id="ExportRepairDaily">ExportReport</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+        
+           @using (Html.BeginForm("MaintainanceTaxsDownload", "SalesReport", FormMethod.Post))
+        {
+           <div class="col-sm-3">
+                   <label for="VehicleNumber" class="control-label" style="visibility: hidden" >Vehicle Number VehicleVehicleVehicle</label>
+                           <button type="button" class="btn btn-success glyphicon glyphicon-download btn-md" style="visibility: hidden" > Download </button>
+               </div>
+           <div class="container-fluid" id="MaintainanceTaxDetails"  style="display: none;">
+                <div style="padding: 9.5px; margin: 0 0 10px; line-height: 1.42857143; color: #333; border: 1px solid #ccc; border-radius: 4px;">
+                    <div class="row">
+                        <div class="col-sm-3">
+                            <label for="Document" class="control-label">Document Type </label>
+                            <input type="hidden" id="hfDocumentType" name="hfDocumentType" />
+                            <select name="cmbRegion1" id="cmbDocumentType" class="form-control" multiple>
+                                <option value="RoadTax">RoadTax</option>
+                                <option value="Fitness">Fitness</option>
+                                <option value="StatePermit">State Permit</option>
+                                <option value="NationalPermit">National Permit</option>
+                                <option value="Insurance">Insurance</option>
+                                <option value="PUC">PUC(Pollution)</option>
+                                <option value="RC">RC</option>
+                                <option value="NOC">NOC</option>
+
+                                <script type="text/javascript">
+                                    $(document).ready(function () {
+                                        //Bank Dropdown Selectedchange event    
+                                        $('[id=cmbDocumentType]').multiselect({
+                                            enableFiltering: true,
+                                            enableCaseInsensitiveFiltering: true,
+                                            includeSelectAllOption: true,
+                                            includeSelectAllDivider: false,
+                                            maxHeight: 260,
+                                            buttonWidth: '100%',
+                                            onChange: function () {
+                                                var DocumentType = $("#cmbDocumentType option:selected").map(function () { return this.value }).get().join(', ');
+                                                $("#hfDocumentType").val(DocumentType);
+
+                                                //alert(Region);
+
+                                            },
+                                            onSelectAll: function () {
+                                                var DocumentType = $("#cmbDocumentType option:selected").map(function () { return this.value }).get().join(', ');
+                                                $("#hfDocumentType").val(DocumentType);
+                                                //alert(Region);
+
+                                            },
+                                            onDeselectAll: function () {
+                                                var DocumentType = $("#cmbDocumentType option:selected").map(function () { return this.value }).get().join(', ');
+                                                $("#hfDocumentType").val(DocumentType);
+                                                //alert(Region);
+
+                                            },
+                                        });
+                                    });
+                                </script>
+
+                            </select>
+                        </div>
+                       <div class="col-sm-3">
+                            <label for="VehicleNumber" class="control-label" style="visibility: hidden">Vehicle Number VehicleVehicleVehicle</label>
+                           <button type="submit" class="btn btn-success glyphicon glyphicon-download btn-md" id="DownloadReport"> Download </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+
+        @using (Html.BeginForm("DailyMisMonthlyDownload", "SalesReport", FormMethod.Post))
+        {
+           <div class="container-fluid" id="DailyMisDetails" style="display: none;">
+                <div style="padding: 9.5px; margin: 0 0 10px; line-height: 1.42857143; color: #333; border: 1px solid #ccc; border-radius: 4px;">
+                    <div class="row">
+                        <div class="col-sm-3">
+                            <label for="FromDate" class="control-label">From Date</label>
+                            <input type="date" name="txtFromDailyMisDate" id="txtFromDailyMisDate" class="form-control" />
+                        </div>
+                        <div class="col-sm-3">
+                            <label for="ToDate" class="control-label">To Date</label>
+                            <input type="date" name="txtToDailyMisDate" id="txtToDailyMisDate" class="form-control" />
+
+                        </div>
+
+                        <div class="col-sm-3">
+                            <label for="VehicleNumber" class="control-label" style="visibility: hidden">Vehicle Number VehicleVehicleVehicle</label>
+                            <button type="submit" class="btn btn-success glyphicon glyphicon-download btn-md" id="DownloadDailyMisReport">Download </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+
+           @using (Html.BeginForm("MonthlyMisReport", "SalesReport", FormMethod.Post))
+        {
+           <div class="container-fluid" id="MonthlyReport" style="display: none;">
+                <div style="padding: 9.5px; margin: 0 0 10px; line-height: 1.42857143; color: #333; border: 1px solid #ccc; border-radius: 4px;">
+                    <div class="row">
+                        <div class="col-sm-3">
+                            <label for="FromDate" class="control-label">From Date</label>
+                            <input type="date" name="txtFromMonthlyReportMisDate" id="txtFromMonthlyReportMisDate" class="form-control" />
+                        </div>
+                        <div class="col-sm-3">
+                            <label for="ToDate" class="control-label">To Date</label>
+                            <input type="date" name="txtToMonthlyReportMisDate" id="txtToMonthlyReportMisDate" class="form-control" />
+
+                        </div>
+
+                        <div class="col-sm-3">
+                            <label for="VehicleNumber" class="control-label" style="visibility: hidden">Vehicle Number VehicleVehicleVehicle</label>
+                            <button type="submit" class="btn btn-success glyphicon glyphicon-download btn-md" id="DownloadMonthlyMisReport">Download </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+
+         @using (Html.BeginForm("HiredVehicleReport", "SalesReport", FormMethod.Post))
+        {
+           <div class="container-fluid" id="HiredReport" style="display: none;">
+                <div style="padding: 9.5px; margin: 0 0 10px; line-height: 1.42857143; color: #333; border: 1px solid #ccc; border-radius: 4px;">
+                    <div class="row">
+                        <div class="col-sm-3">
+                            <label for="FromDate" class="control-label">From Date</label>
+                            <input type="date" name="txtFromHiredDate" id="txtFromHiredDate" class="form-control" />
+                        </div>
+                        <div class="col-sm-3">
+                            <label for="ToDate" class="control-label">To Date</label>
+                            <input type="date" name="txtToHiredMisDate" id="txtToHiredMisDate" class="form-control" />
+
+                        </div>
+
+                        <div class="col-sm-3">
+                            <label for="VehicleNumber" class="control-label" style="visibility: hidden">Vehicle Number VehicleVehicleVehicle</label>
+                            <button type="submit" class="btn btn-success glyphicon glyphicon-download btn-md" id="DwnlHiredReport">Download </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+        <div class="container">
+            <div style="display: none; padding: 9.5px; margin: 0 0 10px; line-height: 1.42857143; color: #333; border: 1px solid #ccc; border-radius: 4px; height: 200px; overflow-x: auto;" id="SalesGridShow">
+                <div class="row">
+                    <div class="col-sm-12">
+                        <table id="myDatatable" class="table table-striped table-bordered" style="font-family: Calibri; font-size: 12px;">
+                            <thead>
+                                <tr class="bg bg-primary">
+                                    <th>Region</th>
+                                    <th>Branch</th>
+                                    <th>Vechile No</th>
+                                    <th>Make</th>
+                                    <th>Year</th>
+                                    <th>No.Of Tyre</th>
+                                    <th>Tyre Amount</th>
+                                    <th>Battery Amount</th>
+                                    <th>Routine Amount</th>
+                                    <th>Denting Amount</th>
+                                    <th>Minor Amount</th>
+                                    <th>Seat Amount</th>
+                                    <th>Self Amount</th>
+                                    <th>Electrical Amount</th>
+                                    <th>Clutch Amount</th>
+                                    <th>Alternator Amount</th>
+                                    <th>Leaf Amount</th>
+                                    <th>Suspension Amount</th>
+                                    <th>GearBox Amount</th>
+                                    <th>BreakWork Amount</th>
+                                    <th>EngineWork Amount</th>
+                                    <th>Fuel Amount</th>
+                                    <th>Puncher Amount</th>
+                                    <th>Oil Amount</th>
+                                    <th>Radiator Amount</th>
+                                    <th>Axle Amount</th>
+                                    <th>Differential Amount</th>
+                                    <th>Turbo Amount</th>
+                                    <th>Ecm Amount</th>
+                                    <th>Accidental Total Amount</th>
+                                    <th>Total Value</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="container-fluid">
+            <div style="display: none; padding: 9.5px; margin: 0 0 10px; line-height: 1.42857143; color: #333; border: 1px solid #ccc; border-radius: 4px; height: 366px; overflow-x: auto;" id="KPLGridShow">
+                <div class="row">
+                    <div class="col-sm-12">
+                        <table id="KPLDatatable" class="table table-striped table-bordered" style="font-family: Calibri; font-size: 12px;">
+                            <thead>
+                                <tr class="bg bg-primary">
+                                    <th>Month</th>
+                                    <th>RegionName</th>
+                                    <th>BranchName</th>
+                                    <th>VechileNumber</th>
+                                    <th>OpeningKM</th>
+                                    <th>ClosingKM</th>
+                                    <th>Make</th>
+                                    <th>Manufacturing_Year</th>
+                                    <th>FuelType</th>
+                                    <th>PetroCardNumber</th>
+                                    <th>OpeningFuel</th>
+                                    <th>FuelPuchasedInLtr</th>
+                                    <th>ClosingFuelLtr</th>
+                                    <th>FuelCombustion</th>
+                                    <th>BillingKM</th>
+                                    <th>NonBillingKM</th>
+                                    <th>TOTALKM</th>
+                                    <th>KMPL</th>
+                                    <th>BpNonBp</th>
+                                    <th>StdKmpl</th>
+                                    <th>TypeOfServices</th>
+                                    <th>RouteNumber</th>
+                                    <th>UnitName</th>
+                                    <th>FuelCostPerKM</th>
+                                    <th>FuelRateInRsPerLtr</th>
+                                    <th>FuelPurchasedInCash</th>
+                                    <th>FuelPuchasedThroughPetroCard</th>
+                                    <th>Remarks</th>
+                                    <th>ExtraFuelTakenByCard</th>
+                                    <th>ExtraAmountSwipedByCard</th>
+                                    <th>VendorName</th>
+                                    <th>DriverName</th>
+                                    <th>DriverPatId</th>
+                                    <th>ActualFuelTakenAsPerSTD_KPL</th>
+
+                                </tr>
+                            </thead>
+                            <tbody>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </body>
+</html>
+@* On Button Click Hide Show *@
+<script>
+    $(document).ready(function () {
+        $("#SalesReport").click(function () {
+            $("#RMDetails").toggle();
+            $("#KPLDetails").hide();
+            $("#DaliyMisDetails").hide();
+            $("#RepairDetails").hide();
+            
+        });
+        $("#View").click(function () {
+            $("#SalesGridShow").toggle();
+        });
+        $("#change").click(function () {
+            $("#txtVehicleNumber").toggle();
+            $("#ddlVehicleNumber").toggle();
+        });
+    });
+</script>
+
+@* On Select Region fill Branch  *@
+<script>
+    $(document).ready(function () {
+        
+        $("#ddlRegion").change(function () {
+            $.ajax({
+                url: '@Url.Action("GetBranch")',
+                data: {
+                    RegionId: $("#ddlRegion").val(),
+                },
+                dataType: "json",
+                type: "POST",
+                traditional: true,
+                success: function (data) {
+                    $("#ddlBranch").html("");
+                    $("#ddlBranch").append($('<option></option>').val("").html("-- Select Branch --"));
+                    $.each(data, function (i, item) {
+                        $("#ddlBranch").append($('<option></option>').val(item.BranchId).html(item.BranchName))
+                    });
+                },
+                error: function (response) {
+                    alert(response.responseText);
+                },
+                failure: function (response) {
+                    alert(response.responseText);
+                }
+            });
+        });
+    });
+</script>
+
+@* On Select Branch fill Vechile Number *@
+<script>
+    $(document).ready(function () {
+        $("#ddlBranch").change(function () {
+            $.ajax({
+                url: '@Url.Action("GetVehicle")',
+                data: {
+                    RegionId: $("#ddlRegion").val(),
+                    BranchId: $("#ddlBranch").val(),
+                },
+                dataType: "json",
+                type: "POST",
+                traditional: true,
+                success: function (data) {
+                    $("#ddlVehicleNumber").html("");
+                    $("#ddlVehicleNumber").append($('<option></option>').val("").html("-- Select Vehicle --"));
+                    $.each(data, function (i, item) {
+                        $("#ddlVehicleNumber").append($('<option></option>').val(item.VehicleNo).html(item.VehicleNo))
+                    });
+                },
+                error: function (response) {
+                    alert(response.responseText);
+                },
+                failure: function (response) {
+                    alert(response.responseText);
+                }
+            });
+        });
+    });
+</script>
+
+@* On Show Click Details *@
+<script>
+    $(document).ready(function () {
+        $("#View").click(function () {
+           
+            if ($("#txtFromDate").val() == "") {
+                alert("Please Select From Date");
+                $("#txtFromDate").focus();
+                return;
+            }
+            if ($("#txtToDate").val() == "") {
+                alert("Please Select To Date");
+                $("#txtToDate").focus();
+                return;
+            }
+            if ($("#ddlRegion").val() = "" || $("#ddlRegion").val() == "-- Select Region --") {
+                alert("Please Region Details From Dropdown");
+                $("#ddlRegion").focus();
+                return;
+            }
+            if ($("#ddlBranch").val() = "" || $("#ddlBranch").val() == "-- Select Branch --") {
+                alert("Please Branch Details From Dropdown");
+                $("#ddlBranch").focus();
+                return;
+            }
+            if ($("#ddlVehicleNumber").val() = "" || $("#ddlVehicleNumber").val() == "-- Select Vehicle --") {
+                alert("Please Vechile Details From Dropdown");
+                $("#ddlVehicleNumber").focus();
+                return;
+            }
+
+          
+
+
+            $.ajax({
+                url: '@Url.Action("GetMaintainanceReport")',
+                 data: {
+                     FromDate: $("#txtFromDate").val(),
+                     ToDate: $("#txtToDate").val(),
+                     RegionId: $("#ddlRegion").val(),
+                     BranchId: $("#ddlBranch").val(),
+                     VechileNumber: $("#ddlVehicleNumber").val(),
+                 },
+                 dataType: "json",
+                 type: "POST",
+                 traditional: true,
+                 success: function (data) {
+                     $("#myDatatable").find("tr:not(:first)").remove();
+                     var trHTML = '';
+                     $.each(data, function (i, item) {
+                         trHTML += '<tr><td>' + data[i].RegionName + '</td>' +
+                                             '<td>' + data[i].BranchName + '</td>' +
+                                             '<td>' + data[i].VechileNumber + '</td>' +
+                                             '<td>' + data[i].Make + '</td>' +
+                                             '<td>' + data[i].ManufacturingYear + '</td>' +
+                                             '<td>' + data[i].NoOfTyres + '</td>' +
+                                             '<td>' + data[i].TyreAmount + '</td>' +
+                                             '<td>' + data[i].Battery + '</td>' +
+                                             '<td>' + data[i].Routine + '</td>' +
+                                             '<td>' + data[i].DentingPainting + '</td>' +
+                                             '<td>' + data[i].MinorRepairing + '</td>' +
+                                             '<td>' + data[i].SeatRepair + '</td>' +
+                                             '<td>' + data[i].SelfWork + '</td>' +
+                                             '<td>' + data[i].ElectricalWork + '</td>' +
+                                             '<td>' + data[i].ClutchRepairing + '</td>' +
+                                             '<td>' + data[i].Alternator + '</td>' +
+                                             '<td>' + data[i].LeafPattiSpring + '</td>' +
+                                             '<td>' + data[i].Suspension + '</td>' +
+                                             '<td>' + data[i].GearBox + '</td>' +
+                                             '<td>' + data[i].BreakWork + '</td>' +
+                                             '<td>' + data[i].EngineWork + '</td>' +
+                                             '<td>' + data[i].FuelPump + '</td>' +
+                                             '<td>' + data[i].Puncher + '</td>' +
+                                             '<td>' + data[i].OilTopUp + '</td>' +
+                                             '<td>' + data[i].RadiatorandWaterBody + '</td>' +
+                                             '<td>' + data[i].AxleWork + '</td>' +
+                                             '<td>' + data[i].DifferentialWork + '</td>' +
+                                             '<td>' + data[i].Turbo + '</td>' +
+                                             '<td>' + data[i].EcmSencer + '</td>' +
+                                             '<td>' + data[i].Accidental + '</td>' +
+                                             '<td>' + data[i].TotalValue + '</td>' +
+                                       '</tr>';
+                     });
+                     $('#myDatatable').append(trHTML);//To add the table row to table    
+                 },
+                 error: function (response) {
+                     alert(response.responseText);
+                 },
+                 failure: function (response) {
+                     alert(response.responseText);
+                 }
+             });
+        });
+    });
+</script>
+
+@*Function for KPL Details Starts from here*@
+
+@*On Button Click Hide Show*@
+<script>
+    $(document).ready(function () {
+        $("#KPLReport").click(function () {
+            $("#KPLDetails").toggle();
+            $("#RMDetails").hide();
+            $("#RepairDetails").hide();
+            $("#DaliyMisDetails").hide();
+        });
+        $("#ViewKPL").click(function () {
+            $("#KPLGridShow").toggle();
+        });
+        $("#changeKPL").click(function () {
+            $("#txtVehicleNumberKPL").toggle();
+            $("#ddlVehicleNumberKPL").toggle();
+        });
+    });
+</script>
+
+@* On Select Region fill Branch on KPL div *@
+<script>
+    $(document).ready(function () {
+       
+        if ('@Session["UserType"]' == 'User')
+        {
+            //$("#ddlRegionKPL").prop("selectedIndex", 0).attr("disabled", true);
+            //$("#ddlRegionKPL").prop("selectedIndex", 1);
+            $.ajax({
+                url: '@Url.Action("GetBranch")',
+                data: {
+                    RegionId: $("#ddlRegionKPL").val(),
+                },
+                dataType: "json",
+                type: "POST",
+                traditional: true,
+                success: function (data) {
+                    $("#ddlBranchKPL").html("");
+                    $("#ddlBranchKPL").append($('<option></option>').val("0").html("-- Select Branch --"));
+                    $.each(data, function (i, item) {
+                        $("#ddlBranchKPL").append($('<option></option>').val(item.BranchId).html(item.BranchName))
+                    });
+
+                    $("#ddlVehicleNumberKPL").html("");
+                    $("#ddlVehicleNumberKPL").append($('<option></option>').val("").html("-- Select Vehicle --"));
+                    $.each(data, function (i, item) {
+                        $("#ddlVehicleNumberKPL").append($('<option></option>').val(item.VehicleNo).html(item.VehicleNo))
+                    });
+                },
+                error: function (response) {
+                    alert(response.responseText);
+                },
+                failure: function (response) {
+                    alert(response.responseText);
+                }
+            });
+
+            return;
+        }
+        $("#ddlRegionKPL").change(function () {
+            $.ajax({
+                url: '@Url.Action("GetBranch")',
+                data: {
+                    RegionId: $("#ddlRegionKPL").val(),
+                },
+                dataType: "json",
+                type: "POST",
+                traditional: true,
+                success: function (data) {
+                    $("#ddlBranchKPL").html("");
+                    $("#ddlBranchKPL").append($('<option></option>').val("0").html("-- Select Branch --"));
+                    $.each(data, function (i, item) {
+                        $("#ddlBranchKPL").append($('<option></option>').val(item.BranchId).html(item.BranchName))
+                    });
+
+                    $("#ddlVehicleNumberKPL").html("");
+                    $("#ddlVehicleNumberKPL").append($('<option></option>').val("").html("-- Select Vehicle --"));
+                    $.each(data, function (i, item) {
+                        $("#ddlVehicleNumberKPL").append($('<option></option>').val(item.VehicleNo).html(item.VehicleNo))
+                    });
+                },
+                error: function (response) {
+                    alert(response.responseText);
+                },
+                failure: function (response) {
+                    alert(response.responseText);
+                }
+            });
+        });
+    });
+</script>
+
+@* On Select Branch fill Vechile Number on KPL Div *@
+<script>
+    $(document).ready(function () {
+        $("#ddlBranchKPL").change(function () {
+            $.ajax({
+                url: '@Url.Action("GetVehicle")',
+                data: {
+                    RegionId: $("#ddlRegionKPL").val(),
+                    BranchId: $("#ddlBranchKPL").val(),
+                },
+                dataType: "json",
+                type: "POST",
+                traditional: true,
+                success: function (data) {
+                    $("#ddlVehicleNumberKPL").html("");
+                    $("#ddlVehicleNumberKPL").append($('<option></option>').val("").html("-- Select Vehicle --"));
+                    $.each(data, function (i, item) {
+                        $("#ddlVehicleNumberKPL").append($('<option></option>').val(item.VehicleNo).html(item.VehicleNo))
+                    });
+                },
+                error: function (response) {
+                    alert(response.responseText);
+                },
+                failure: function (response) {
+                    alert(response.responseText);
+                }
+            });
+        });
+    });
+</script>
+
+@* On Show Click Details for KPL Details *@
+<script>
+    $(document).ready(function () {
+        $("#showKPLData").click(function () {
+            var Year = $("#cmbYear").val();
+            var Month = $("#cmbMonth").val();
+            var RegionId = $("#ddlRegionKPL").val();
+            var BranchId = $("#ddlBranchKPL").val();
+
+            if (RegionId == "") {
+                RegionId = 0;
+            }
+            if ($("#ddlBranchKPL").val() == "") {
+                BranchId = 0;
+            }
+
+            var VechileNumber = $("#ddlVehicleNumberKPL").val();
+
+            if ($("#cmbYear").val() == "") {
+                alert("Please Select Year");
+                $("#cmbYear").focus();
+                return;
+            }
+            if ($("#cmbMonth").val() == "") {
+                alert("Please Select Month");
+                $("#cmbMonth").focus();
+                return;
+            }
+
+            // alert(FromDate + "  " + ToDate + "  " + RegionId + "   " + BranchId + "  " + VechileNumber);
+            //if (FromDate != "" && ToDate != "" && RegionId != "" && BranchId != "" && VechileNumber != "") {
+            if (Year != "" && Month != "") {
+
+                $('#divMsg').show();
+                $.ajax({
+                    url: '@Url.Action("GetKPLReports")',
+                    dataType: 'json',
+                    type: 'post',
+                    data: {
+                        Year: Year,
+                        Month: Month,
+                        RegionId: RegionId,
+                        BranchId: BranchId,
+                        VechileNumber: VechileNumber
+                    },
+                    traditional: true,
+                    success: function (data) {
+                        $('#divMsg').hide();
+                        if (data[0].RegionName != null && data[0].RegionName != "") {
+                            //alert("It has the data");
+                            //alert(data[0].RegionName);
+                            $("#KPLGridShow").show();
+                            $("#KPLDatatable").find("tr:not(:first)").remove();
+                            var trHTML = '';
+
+                            $.each(data, function (i, item) {
+                                trHTML += '<tr><td>' + data[i].Month + '</td>' +
+                                '<td>' + data[i].RegionName + '</td>' +
+                                '<td>' + data[i].BranchName + '</td>' +
+                                '<td>' + data[i].VechileNumber + '</td>' +
+                                '<td>' + data[i].OpeningKM + '</td>' +
+                                '<td>' + data[i].ClosingKM + '</td>' +
+                                '<td>' + data[i].Make + '</td>' +
+                                '<td>' + data[i].Manufacturing_Year + '</td>' +
+                                '<td>' + data[i].FuelType + '</td>' +
+                                '<td>' + data[i].PetroCardNumber + '</td>' +
+                                '<td>' + data[i].OpeningFuel + '</td>' +
+                                '<td>' + data[i].FuelPuchasedInLtr + '</td>' +
+                                '<td>' + data[i].ClosingFuelLtr + '</td>' +
+                                '<td>' + data[i].FuelCombustion + '</td>' +
+                                '<td>' + data[i].BillingKM + '</td>' +
+                                '<td>' + data[i].NonBillingKM + '</td>' +
+                                '<td>' + data[i].TOTALKM + '</td>' +
+                                '<td>' + data[i].KMPL + '</td>' +
+                                '<td>' + data[i].BpNonBp + '</td>' +
+                                '<td>' + data[i].StdKmpl + '</td>' +
+                                '<td>' + data[i].TypeOfServices + '</td>' +
+                                '<td>' + data[i].RouteNumber + '</td>' +
+                                '<td>' + data[i].UnitName + '</td>' +
+                                '<td>' + data[i].FuelCostPerKM + '</td>' +
+                                '<td>' + data[i].FuelRateInRsPerLtr + '</td>' +
+                                '<td>' + data[i].FuelPurchasedInCash + '</td>' +
+                                '<td>' + data[i].FuelPuchasedThroughPetroCard + '</td>' +
+                                '<td>' + data[i].Remarks + '</td>' +
+                                '<td>' + data[i].ExtraFuelTakenByCard + '</td>' +
+                                '<td>' + data[i].ExtraAmountSwipedByCard + '</td>' +
+                                '<td>' + data[i].VendorName + '</td>' +
+                                '<td>' + data[i].DriverName + '</td>' +
+                                '<td>' + data[i].DriverPatId + '</td>' +
+                                '<td>' + data[i].ActualFuelTakenAsPerSTD_KPL + '</td>' +
+
+                                              '</tr>';
+
+                            });
+                            $('#KPLDatatable').append(trHTML);//To add the table row to table
+                        }
+
+                        else {
+                            //alert("No data present here");
+                            $("#KPLDatatable").find("tr:not(:first)").remove();
+                            var trHTML = '';
+                            $('#KPLDatatable').append(trHTML);//To add the table blank row to refresh the  table 
+                        }
+
+                    },
+                    error: function (response) {
+                        alert(" error");
+                        alert(response[0].RegionName);
+                    },
+                    failure: function (response) {
+                        alert(" failure error");
+                    }
+                })
+            }
+            else {
+                alert("Please select from date and to date to get the result");
+            }
+        })
+    })
+</script>
+
+@*Check for Branch that All vehicle data is not punched then Branch will not be able to download report*@
+<script>
+    $(document).ready(function () {
+        $("#ExportExcelKPL").click(function () {
+            //alert("Export");
+            var RegionId = $("#ddlRegionKPL").val();
+            var BranchId = $("#ddlBranchKPL").val();
+            $.ajax({
+                url: '@Url.Action("CheckTBranchVechileAndUploadVechile")',
+                type: 'post',
+                data: { RegionId: RegionId, BranchId: BranchId },
+                dataType: 'json',
+                traditional: true,
+                success: function (data)
+                {
+                    //alert(data[0].TotalVechileByBranch);
+                    var TotalVechile = data[0].TotalVechileByBranch;
+                    var UploadVechile = data[0].UploadVechleByBranch;
+                    if (TotalVechile == UploadVechile) {
+                        //alert("Matched");
+                        $("#DownloadKPLReportForm").submit();
+                    }
+                    else {
+                        alert("Not allowed to download the report because all vehicles data of this Branch is not uploaded\n" + "Total Vehicle=" + data[0].TotalVechileByBranch + "  Upload Vehicle=" + data[0].UploadVechleByBranch);
+                    }
+                },
+                error: function ()
+                {
+                    alert("error");
+                },
+                failure: function ()
+                {
+                    alert("Failure");
+                }
+            })
+
+        })
+    })
+</script>
+
+@* On Button Click Hide Show *@
+<script>
+    $(document).ready(function () {
+        $("#DailyMIS").click(function () {
+            $("#RMDetails").hide();
+            $("#KPLDetails").hide();
+            $("#RepairDetails").hide();
+            $("#DaliyMisDetails").toggle();
+
+        });
+        $("#ViewDaily").click(function () {
+            $("#SalesGridShow").toggle();
+        });
+        $("#change").click(function () {
+            $("#txtVehicleNumber").toggle();
+            $("#ddlVehicleNumber").toggle();
+        });
+    });
+</script>
+
+@*Getting all the branch by Region_id*@
+<script>
+    $(document).ready(function () {
+        $("#ddlDailyRegion").change(function () {
+
+            //var Region = ;
+            //alert(Region);
+            $.ajax({
+                url: '@Url.Action("GetBranch")',
+                type: "post",
+                data: { RegionId: $("#ddlDailyRegion").val() },
+                dataType: "json",
+                traditional: true,
+                success: function (data) {
+                    var mySelect = $('#ddlDailyBranch');
+
+                    mySelect.empty();
+                    var selectOption = '<option value="">Select Branch</option';
+                    //$("#cmbVechile").append(selectOption);
+                    $.each(data, function (i) {
+                        var optionhtml = '';
+                        optionhtml = '<option value="' + data[i].BranchId + '">' + data[i].BranchName + '</option>';
+
+                        $("#ddlDailyBranch").append(optionhtml);
+                    });
+
+                    mySelect.multiselect('rebuild');
+                },
+                error: function (response) {
+                    alert(response.responseText);
+                },
+                failure: function (response) {
+                    alert(response.responseText);
+                }
+            })
+        })
+    })
+</script>
+
+@* On Button Click Hide Show *@
+<script>
+    $(document).ready(function () {
+        $("#SalesReportDate").click(function () {
+            $("#RMDetails").hide();
+            $("#KPLDetails").hide();
+            $("#DaliyMisDetails").hide();
+            $("#RepairDetails").toggle();
+            $("#MaintainanceTaxDetails").hide();
+        });
+        $("#ViewDaily").click(function () {
+            $("#SalesGridShow").toggle();
+        });
+        $("#change").click(function () {
+            $("#txtVehicleNumber").toggle();
+            $("#ddlVehicleNumber").toggle();
+        });
+        
+    });
+</script>
+
+@* On Button Click Hide Show *@
+<script>
+    $(document).ready(function () {
+        $("#MainReport").click(function () {
+            $("#RMDetails").hide();
+            $("#KPLDetails").hide();
+            $("#DaliyMisDetails").hide();
+            $("#RepairDetails").hide();
+            $("#MaintainanceTaxDetails").toggle();
+
+        });
+        //$("#ViewDaily").click(function () {
+        //    $("#SalesGridShow").toggle();
+        //});
+        //$("#change").click(function () {
+        //    $("#txtVehicleNumber").toggle();
+        //    $("#ddlVehicleNumber").toggle();
+        //});
+
+    });
+</script>
+
+@* On Button Click Hide Show *@
+<script>
+    $(document).ready(function () {
+        $("#MonthlyDaily").click(function () {
+            $("#RMDetails").hide();
+            $("#KPLDetails").hide();
+            $("#DaliyMisDetails").hide();
+            $("#RepairDetails").hide();
+            $("#MaintainanceTaxDetails").hide();
+            $("#DailyMisDetails").toggle();
+
+        });
+        //$("#ViewDaily").click(function () {
+        //    $("#SalesGridShow").toggle();
+        //});
+        //$("#change").click(function () {
+        //    $("#txtVehicleNumber").toggle();
+        //    $("#ddlVehicleNumber").toggle();
+        //});
+
+    });
+</script>
+
+@* On Button Click Monthly MIS Report Show *@
+<script>
+    $(document).ready(function () {
+        $("#DMis").click(function () {
+            $("#RMDetails").hide();
+            $("#KPLDetails").hide();
+            $("#DaliyMisDetails").hide();
+            $("#RepairDetails").hide();
+            $("#MaintainanceTaxDetails").hide();
+            $("#DailyMisDetails").hide();
+            $("#DailyMisDetails").hide();
+            $("#MonthlyReport").toggle();
+
+        });
+        //$("#ViewDaily").click(function () {
+        //    $("#SalesGridShow").toggle();
+        //});
+        //$("#change").click(function () {
+        //    $("#txtVehicleNumber").toggle();
+        //    $("#ddlVehicleNumber").toggle();
+        //});
+
+    });
+</script>
+
+@* On Button Click Monthly MIS Report Show *@
+<script>
+    $(document).ready(function () {
+        $("#btnHiredVehicle").click(function () {
+            $("#RMDetails").hide();
+            $("#KPLDetails").hide();
+            $("#DaliyMisDetails").hide();
+            $("#RepairDetails").hide();
+            $("#MaintainanceTaxDetails").hide();
+            $("#DailyMisDetails").hide();
+            $("#DailyMisDetails").hide();
+            $("#MonthlyReport").hide();
+            $("#HiredReport").toggle();
+            
+        });
+        //$("#ViewDaily").click(function () {
+        //    $("#SalesGridShow").toggle();
+        //});
+        //$("#change").click(function () {
+        //    $("#txtVehicleNumber").toggle();
+        //    $("#ddlVehicleNumber").toggle();
+        //});
+
+    });
+</script>

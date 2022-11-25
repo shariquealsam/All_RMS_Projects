@@ -1,0 +1,285 @@
+﻿@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/Master.cshtml";
+}
+
+@*<h2>Index</h2>*@
+
+<!-- Latest compiled and minified CSS -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+
+<!-- jQuery library -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
+<!-- Latest compiled JavaScript -->
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.css">
+
+<script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.js"></script>
+
+<link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" />
+
+<link href="~/Css/bootstrap-multiselect.css" rel="stylesheet" />
+
+<script src="~/Js/bootstrap-multiselect.js"></script>
+@*<link href="~/Css/mdb.min.css" rel="stylesheet" />
+<link href="~/Css/style.css" rel="stylesheet" />
+<script src="~/Js/popper.min.js"></script>
+<script src="~/Js/mdb.min.js"></script>*@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Sales </title>
+</head>
+
+<body>
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-2">
+                <label for="uRegion" class="control-label">Region</label>
+                <input type="text" class="form-control" placeholder="Region Name" id="txtRegion" name="txtRegion" required="required" value="@ViewBag.RegionName" disabled/>
+            </div>
+            <div class="col-sm-2">
+                <label for="uBranch">Branch</label>
+                <select class="form-control" id="cmbBranch" name="cmbBranch" required>
+                    <option value="">-- Select Branch --</option>
+                    @foreach (var item1 in ViewBag.BranchDetails)
+                    {
+                        <option value="@item1.BranchId">@item1.BranchName</option>
+                    }
+                </select>
+
+            </div>
+            <div class="col-sm-3">
+                <label for="uVechile">Vechile Number</label>
+                <select class="form-control" id="cmbVechile" name="cmbVechile" required>
+                </select>
+                <script type="text/javascript">
+                    $(document).ready(function () {
+                        //Bank Dropdown Selectedchange event    
+                        $('[id*=cmbVechile]').multiselect({
+                            enableFiltering: true,
+                            enableCaseInsensitiveFiltering: true,
+                            includeSelectAllOption: false,
+                            includeSelectAllDivider: false,
+                            maxHeight: 260,
+                            buttonWidth: '280px',
+                            onChange: function () {
+                                $.ajax({
+                                    type: "POST",
+                                    url: '@Url.Action("GetVechileDetails")',
+                                    data: { VehicleNumber: $('#cmbVechile').val() },
+                                    dataType: "JSON",
+                                    success: function (data) {
+                                        $("#myDatatable").find("tr:not(:first)").remove();
+                                        var trHTML = '';
+                                        $.each(data, function (i, item) {
+
+                                            trHTML += '<tr><td>' + data[i].RegionName + '</td>' +
+                                                            '<td>' + data[i].BranchName + '</td>' +
+                                                            '<td>' + data[i].ChesisNo + '</td>' +
+                                                            '<td>' + data[i].VehicleNo + '</td>' +
+                                                            '<td>' + data[i].Make + '</td>' +
+                                                            '<td>' + data[i].Manufacturing_Year + '</td>' +
+                                                            '<td>' + data[i].FuelType + '</td>' +
+                                                            '<td>' + data[i].PetroCardNumber + '</td>' +
+                                                      '</tr>';
+                                        });
+                                        $('#myDatatable').append(trHTML);//To add the table row to table
+                                        $.ajax({
+                                            type: "POST",
+                                            url: '@Url.Action("GetSalesDetails")',
+                                            data: { VehicleNumber: $('#cmbVechile').val(), BranchID: $('#cmbBranch').val() },
+                                            dataType: "JSON",
+                                            success: function (data) {
+                                                if (data != "") {
+
+                                                }
+                                                else {
+
+                                                }
+
+                                                console.log(data);
+                                            },
+
+                                            error: function (result) {
+                                                alert(result.error.toString());
+                                            }
+                                        });
+                                    },
+
+                                    error: function (result) {
+                                        alert(result.error.toString());
+                                    }
+                                });
+                            },
+                        });
+                    });
+                </script>
+            </div>
+            <div class="col-sm-3">
+                <label for="uType" class="control-label" style="visibility: hidden">Vechile Number Count</label>
+                <button class="btn btn-primary">Count Details</button>
+            </div>
+            <div class="col-sm-2">
+                <label for="uType" class="control-label" style="visibility: hidden">Save</label>
+                <button class="btn btn-primary btn-block" id="SaveSalesDetails">Save</button>
+            </div>
+        </div>
+        <pre style="visibility: hidden"></pre>
+        <div class="row">
+            <div class="col-sm-12">
+                <table class="table table-responsive table-bordered table-hover table-striped" id="myDatatable" style="font-size: 13px;">
+                    <thead class="bg-primary">
+                        <tr>
+                            <th>Region</th>
+                            <th>Branch</th>
+                            <th>Chassis Number</th>
+                            <th>Vechile Number</th>
+                            <th>Make</th>
+                            <th>Manufacturing Year</th>
+                            <th>Fuel Type</th>
+                            <th>Petro Card Number</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <p></p>
+    <div class="container">
+        <div style="padding: 9.5px; margin: 0 0 10px; line-height: 1.42857143; color: #333; border: 1px solid #ccc; border-radius: 4px;">
+            <legend><span style="font-weight: bold; font-style: italic; font-size: 14px; color: #808080;">Master Details Below (By Fleet Team):</span></legend>
+            <div class="row">
+                <div class="col-sm-2">
+                    <label for="uOpeningKM" class="control-label">Opening KM</label>
+                    <input type="text" class="form-control" placeholder="Opening KM" id="txtOpeningKM" name="txtOpeningKM" required="required" disabled />
+                </div>
+                <div class="col-sm-2">
+                    <label for="uOpeningFuelLiter" class="control-label">Opening Fuel Liter</label>
+                    <input type="text" class="form-control" placeholder="Opening Fuel Liter" id="txtOpeningFuelLiter" name="txtOpeningFuelLiter" required="required" disabled />
+                </div>
+                <div class="col-sm-2">
+                    <label for="uSTDKMPL" class="control-label">STD KMPL</label>
+                    <input type="text" class="form-control" placeholder="STD KMPL" id="txtSTDKMPL" name="txtSTDKMPL" required="required" disabled />
+                </div>
+                <div class="col-sm-2">
+                    <label for="uBPNONBP" class="control-label">BP/NON BP</label>
+                    <input type="text" class="form-control" placeholder="BP/NON BP" id="txtBPNONBP" name="txtBPNONBP" required="required" disabled />
+                </div>
+                <div class="col-sm-2">
+                    <label for="uFuelCombustion" class="control-label">Fuel Combustion Ltr</label>
+                    <input type="text" class="form-control" placeholder="Fuel Combustion" id="txtFuelCombustion" name="txtFuelCombustion" required="required" disabled />
+                </div>
+                <div class="col-sm-2">
+                    <label for="uFuelPetroCard" class="control-label">Fuel Petro Card</label>
+                    <input type="text" class="form-control" placeholder="Fuel Type" id="txtFuelPetroCard" name="txtFuelPetroCard" required="required" disabled />
+                </div>
+            </div>
+        </div>
+        <p></p>
+        <div style="padding: 9.5px; margin: 0 0 10px; line-height: 1.42857143; color: #333; border: 1px solid #ccc; border-radius: 4px;">
+            <legend><span style="font-weight: bold; font-style: italic; font-size: 14px; color: #808080;">Branch Details Below (Need to be filled by user):</span></legend>
+            <div class="row">
+                <div class="col-sm-2">
+                    <label for="uClosingKM" class="control-label">Closing KM</label>
+                    <input type="text" class="form-control" placeholder="Closing KM" id="txtClosingKM" name="txtClosingKM" required="required" />
+                </div>
+                <div class="col-sm-2">
+                    <label for="uClosingFuelLiter" class="control-label">Closing Fuel Ltr</label>
+                    <input type="text" class="form-control" placeholder="Closing Fuel Liter" id="txtClosingFuelLiter" name="txtClosingFuelLiter" required="required" />
+                </div>
+                <div class="col-sm-2">
+                    <label for="uNonBillingKilometer" class="control-label">Non Billing KM</label>
+                    <input type="text" class="form-control" placeholder="Non Billing KM" id="txtNonBillingKilometer" name="txtNonBillingKilometer" required="required"  />
+                </div>
+                <div class="col-sm-2">
+                    <label for="uRouteNumber " class="control-label">Route Number </label>
+                    <input type="text" class="form-control" placeholder="Route Number " id="txtRouteNumber " name="txtRouteNumber " required="required"  />
+                </div>
+                <div class="col-sm-2">
+                    <label for="uUnitName" class="control-label">Unit Name</label>
+                    <input type="text" class="form-control" placeholder="Unit Name" id="txtUnitName" name="txtUnitName" required="required"  />
+                </div>
+                <div class="col-sm-2">
+                    <label for="uFuelPurchased" class="control-label">Fuel Purchased In Cash</label>
+                    <input type="text" class="form-control" placeholder="Fuel Purchase InCash" id="txtFuelPurchased" name="txtFuelPurchased" required="required"  />
+                </div>
+            </div>
+            <p></p>
+            <div class="row">
+                <div class="col-sm-2">
+                    <label for="uVendorName" class="control-label">Vendor Name</label>
+                    <select class="form-control" id="cmbVendorName" name="cmbVendorName" required>
+                        <option> -- Select -- </option>
+                        <option>Own</option>
+                        <option>Hired</option>
+                    </select>
+                </div>
+                <div class="col-sm-2">
+                    <label for="uDriverName" class="control-label">Driver Name</label>
+                    <input type="text" class="form-control" placeholder="Driver Name" id="txtDriverName" name="txtDriverName" required="required" />
+                </div>
+                <div class="col-sm-2">
+                    <label for="uDriverPatID" class="control-label">Driver PatID</label>
+                    <input type="text" class="form-control" placeholder="Driver PatID" id="txtDriverPatID" name="txtDriverPatID" required="required" />
+                </div>
+                 <div class="col-sm-2">
+                    <label for="uTypeofServices" class="control-label">Type of Services</label>
+                    <select class="form-control" id="cmbServices" name="cmbServices" required>
+                        <option> -- Select -- </option>
+                        <option>CIT</option>
+                        <option>DSB</option>
+                        <option>ATM</option>
+                    </select>
+                </div>
+                <div class="col-sm-2">
+                    <label for="uRemarks" class="control-label">Remarks</label>
+                    <input type="text" class="form-control" placeholder="Remarks" id="txtRemarks" name="txtRemarks" required="required" />
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>
+@*On Branch Change*@
+<script>
+    $(document).ready(function () {
+        $("#cmbBranch").change(function () {
+            $.ajax({
+                url: '@Url.Action("GetVechileList")',
+                data: {
+                    BranchId: $("#cmbBranch").val(),
+                },
+                dataType: "json",
+                type: "POST",
+                traditional: true,
+                success: function (data) {
+                    var mySelect = $('#cmbVechile');
+
+                    mySelect.empty();
+
+                    $.each(data, function (i) {
+                        var optionhtml = '';
+
+                        optionhtml = '<option value="' + data[i].VehicleNumber + '">' + data[i].VehicleNumber + '</option>';
+
+                        $("#cmbVechile").append(optionhtml);
+                    });
+
+                    mySelect.multiselect('rebuild');
+                },
+                error: function (response) {
+                    alert(response.responseText);
+                },
+                failure: function (response) {
+                    alert(response.responseText);
+                }
+            });
+        });
+    });
+</script>
